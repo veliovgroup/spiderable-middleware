@@ -1,0 +1,38 @@
+{
+  "name": "spiderable-middleware",
+  "version": "1.0.0",
+  "description": "Allow your JavaScript website to be crawled perfectly by search engines.",
+  "main": "./lib/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/VeliovGroup/spiderable-middleware.git"
+  },
+  "keywords": [
+    "middleware",
+    "spiderable",
+    "crawlble",
+    "prerender",
+    "ajax",
+    "seo",
+    "pushstate",
+    "angular",
+    "backbone",
+    "emberjs",
+    "meteor",
+    "meteorjs",
+    "express",
+    "connect"
+  ],
+  "author": "Dmitriy A. (http://veliovgroup.com)",
+  "license": "BSD 3-Clause",
+  "bugs": {
+    "url": "https://github.com/VeliovGroup/spiderable-middleware/issues"
+  },
+  "homepage": "https://github.com/VeliovGroup/spiderable-middleware",
+  "dependencies": {
+    "request": "^2.69.0"
+  }
+}
