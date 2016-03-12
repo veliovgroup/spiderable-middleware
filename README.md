@@ -11,7 +11,7 @@ This middleware tested and works like a charm with:
 
 All other frameworks which follows node's middleware convention - will work too!
 
-This package was developed to be used with [ostr.io](https://ostr.io) service. But it's not limited to and can proxy-pass requests to any other endpoint
+This package was developed to be used with [ostr.io](https://ostr.io) service. But it's not limited to, and can proxy-pass requests to any other endpoint.
 
 Installation
 =======
