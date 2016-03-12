@@ -110,7 +110,7 @@ To speed-up rendering, you can tell to Spiderable engine when your page is ready
 JavaScript redirects
 =======
 If you need to redirect browser/crawler inside your application, during the rendering (*imitate user is navigating*), you're free to use any of classic JS-redirects as well as your framework's navigation, or even `History.pushState()`
-```
+```js
 window.location.href = 'http://example.com/another/page';
 window.location.replace('http://example.com/another/page');
 
