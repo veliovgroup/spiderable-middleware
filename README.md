@@ -1,6 +1,8 @@
-Google, Facebook, Twitter, Yahoo, and Bing and all other crawlers and search engines are constantly trying to view your website. If your website build on top of JavaScript framework like, but not limited to - Angular, Backbone, Ember, Meteor all of those front-end solutions returns basic HTML-markup and script-tags to crawlers, but not content of your page. Mission of `spiderable-middleware` is boost your SEO experience without headache.
+Google, Facebook, Twitter, Yahoo, and Bing and all other crawlers and search engines are constantly trying to view your website. If your website build on top of JavaScript framework like, but not limited to - Angular, Backbone, Ember, Meteor all of those front-end solutions returns basic HTML-markup and script-tags to crawlers, but not content of your page. Mission of `spiderable-middleware` and [ostr.io](https://ostr.io) - is boost your SEO experience without headache.
 
 This middleware intercepts requests to your Node.js website from crawlers, and proxy-passes to the Spiderable (Prerender) Service, which returns static, rendered HTML.
+
+__Note__: *This package proxy-passes real HTTP Headers and response code, to reduce overwhelming requests, try to avoid HTTP-redirect headers, like* `Location` *and others. See how to [pass expected response code](https://github.com/VeliovGroup/spiderable-middleware#pass-real-response-code) and [handle JS-redirects](https://github.com/VeliovGroup/spiderable-middleware#javascript-redirects).*
 
 This middleware tested and works like a charm with:
  - [meteor](https://www.meteor.com/): [example](https://github.com/VeliovGroup/spiderable-middleware/blob/master/examples/meteor.middleware.js)
@@ -12,6 +14,18 @@ This middleware tested and works like a charm with:
 All other frameworks which follows node's middleware convention - will work too!
 
 This package was developed to be used with [ostr.io](https://ostr.io) service. But it's not limited to, and can proxy-pass requests to any other endpoint.
+
+ToC
+=======
+ - [Installation](https://github.com/VeliovGroup/spiderable-middleware#installation)
+ - [Basic usage](https://github.com/VeliovGroup/spiderable-middleware#basic-usage)
+ - [MeteorJS usage](https://github.com/VeliovGroup/spiderable-middleware#meteor-usage)
+ - [Pass real response code](https://github.com/VeliovGroup/spiderable-middleware#pass-real-response-code)
+ - [Speed-up rendering](https://github.com/VeliovGroup/spiderable-middleware#speed-up-rendering)
+ - [JavaScript redirects](https://github.com/VeliovGroup/spiderable-middleware#javascript-redirects)
+ - [API](https://github.com/VeliovGroup/spiderable-middleware#api)
+   - [Constructor](https://github.com/VeliovGroup/spiderable-middleware#constructor-new-spiderableopts)
+   - [Middleware](https://github.com/VeliovGroup/spiderable-middleware#spiderablehandlerreq-res-next)
 
 Installation
 =======
@@ -49,6 +63,61 @@ WebApp.connectHandlers.use(new Spiderable({
   auth: 'APIUser:APIPass'
 }));
 ```
+
+Pass real response code
+=======
+To pass expected response code from front-end JavaScript framework to browser/crawlers, you need to create specially formatted HTML-comment. This comment can be placed to any part of HTML-page, `head` or `body` tags is best place for it.
+
+Format (html):
+```html
+<!-- response:status-code=404 -->
+```
+
+Format (jade):
+```jade
+// response:status-code=404
+```
+
+It supports any standard or custom response codes:
+ - `201` - `<!-- response:status-code=201 -->`
+ - `401` - `<!-- response:status-code=401 -->`
+ - `403` - `<!-- response:status-code=403 -->`
+ - `499` - `<!-- response:status-code=499 -->` (*non-standard*)
+ - `500` - `<!-- response:status-code=500 -->`
+ - `514` - `<!-- response:status-code=514 -->` (*non-standard*)
+
+__Note__: *Reserved codes for internal service communications:* `494`, `490`
+
+Speed-up rendering
+=======
+To speed-up rendering, you can tell to Spiderable engine when your page is ready. Simply set `window.IS_RENDERED` to `false`, and once your page is ready set it to `true`. Like:
+
+```js
+<html>
+  <head>
+    <script>
+      window.IS_RENDERED = false;
+    </script>
+    <script type="text/javascript">
+      //Somewhere deep in your app-code:
+      window.IS_RENDERED = true;
+    </script>
+  </head>
+  <!-- ... -->
+</html>
+```
+
+JavaScript redirects
+=======
+If you need to redirect browser/crawler inside your application, during the rendering (*imitate user is navigating*), you're free to use any of classic JS-redirects as well as your framework's navigation, or even `History.pushState()`
+```
+window.location.href = 'http://example.com/another/page';
+window.location.replace('http://example.com/another/page');
+
+Router.go('/another/page'); // framework's navigation
+```
+__Note__: *Only 4 redirects is allowed during one request, after 4 redirects session will be terminated.*
+
 
 API
 =======
