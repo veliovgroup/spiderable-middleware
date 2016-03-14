@@ -1,5 +1,10 @@
+Spiderable middleware
+=======
 Google, Facebook, Twitter, Yahoo, and Bing and all other crawlers and search engines are constantly trying to view your website. If your website build on top of JavaScript framework like, but not limited to - Angular, Backbone, Ember, Meteor all of those front-end solutions returns basic HTML-markup and script-tags to crawlers, but not content of your page. Mission of `spiderable-middleware` and [ostr.io](https://ostr.io) - is boost your SEO experience without headache.
 
+
+About Package
+=======
 This middleware intercepts requests to your Node.js website from crawlers, and proxy-passes to the Spiderable (Prerender) Service, which returns static, rendered HTML.
 
 __Note__: *This package proxy-passes real HTTP Headers and response code, to reduce overwhelming requests, try to avoid HTTP-redirect headers, like* `Location` *and others. See how to [pass expected response code](https://github.com/VeliovGroup/spiderable-middleware#pass-real-response-code) and [handle JS-redirects](https://github.com/VeliovGroup/spiderable-middleware#javascript-redirects).*
