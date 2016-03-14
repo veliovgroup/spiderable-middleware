@@ -1,6 +1,6 @@
 {
   "name": "spiderable-middleware",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Allow your JavaScript website to be crawled perfectly by search engines.",
   "main": "./lib/index.js",
   "scripts": {
@@ -24,7 +24,9 @@
     "meteor",
     "meteorjs",
     "express",
-    "connect"
+    "connect",
+    "http",
+    "https"
   ],
   "author": "Dmitriy A. (http://veliovgroup.com)",
   "license": "BSD 3-Clause",
