@@ -29,12 +29,19 @@ ToC
 
 Installation
 =======
+NPM:
 ```shell
 npm install spiderable-middleware
 ```
 
+Meteor:
+```shell
+meteor add ostrio:spiderable-middleware
+```
+
 Basic usage
 =======
+See [all examples](https://github.com/VeliovGroup/spiderable-middleware/tree/master/examples).
 ```js
 var express    = require('express');
 var app        = express();
@@ -132,7 +139,7 @@ API
  - `opts.ignore` {*[String]*} - [Optional] Array of strings (case __sensitive__) with ignored routes. Note: it's based on first match, so route `/users` will cause ignoring of `/part/users/part`, `/users/_id` and `/list/of/users`, but not `/user/_id` or `/list/of/blocked-users`. Default `null`
 
 ```js
-var Spiderable = require('spiderable-middleware');
+var Spiderable = require('spiderable-middleware'); // Omit this line in Meteor
 var spiderable = new Spiderable({
   rootURL: 'http://example.com',
   serviceURL: 'https://trace.ostr.io',
