@@ -2,7 +2,7 @@ url     = require 'url'
 request = require 'request'
 
 module.exports = class Spiderable
-  constructor: (opts) ->
+  constructor: (opts = {}) ->
     {@serviceURL, @auth, bots, ignore, @rootURL} = opts
     @handler ?= @middleware
     @handle  ?= @middleware
@@ -39,7 +39,7 @@ module.exports = class Spiderable
     ]
     defBots      = defBots.concat bots if bots
     @botsRE      = new RegExp defBots.join('|'), 'i'
-    @auth       ?= ''
+    @auth       ?= process.env.SPIDERABLE_SERVICE_AUTH || process.env.PRERENDER_SERVICE_AUTH || ''
     ignore      ?= false
     @rootURL    ?= process.env.ROOT_URL
     @serviceURL ?= process.env.SPIDERABLE_SERVICE_URL || process.env.PRERENDER_SERVICE_URL || 'https://trace.ostr.io'
@@ -80,7 +80,7 @@ module.exports = class Spiderable
       urlObj.path  = urlObj.path.replace(/\/$/, '').replace /^\//, ''
 
       if urlObj.query.hasOwnProperty('_escaped_fragment_') and urlObj.query._escaped_fragment_.length
-        urlObj.path += '/' + urlObj.query._escaped_fragment_.replace /^\//, ''
+        urlObj.pathname += '/' + urlObj.query._escaped_fragment_.replace /^\//, ''
 
       reqUrl += '/' + urlObj.pathname
       reqUrl  = reqUrl.replace /([^:]\/)\/+/g, "$1"
@@ -92,7 +92,28 @@ module.exports = class Spiderable
           user: _as[0]
           pass: _as[1]
 
-      request.get(opts).pipe res
+      try
+        req.on 'error', (error) -> 
+          console.warn '[Spiderable-Middleware] [REQ] Unexpected error:', error
+          next()
+
+        res.on 'error', (error) -> 
+          console.warn '[Spiderable-Middleware] [RES] Unexpected error:', error
+          next()
+
+        request.get(opts, (error) -> 
+          if error
+            console.warn '[Spiderable-Middleware] [request.get] Error while connecting to external service:', error
+            next()
+        ).on('response', (response) ->
+          if response.statusCode is 401
+            console.warn '[Spiderable-Middleware] Can\'t authenticate! Please check you "auth" parameter and other settings.'
+        ).pipe(res).on 'error', (error) -> 
+          console.warn '[Spiderable-Middleware] Unexpected error:', error
+          next()
+      catch e
+        console.warn '[Spiderable-Middleware] Exception while connecting to external service:', e
+        next()
 
     else
       next()
