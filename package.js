@@ -1,7 +1,7 @@
 Package.describe({
   name: 'ostrio:spiderable-middleware',
   version: '1.0.1',
-  summary: 'Visitor\'s analytics tracking code for ostr.io service',
+  summary: 'Allow your JavaScript website to be crawled perfectly by search engines.',
   git: 'https://github.com/VeliovGroup/spiderable-middleware',
   documentation: 'README.md'
 });
