@@ -57,7 +57,7 @@ server{
 #      set $crawlable 0;
 #    }
 
-    resolver 8.8.8.8; # You may would like to change this to local DNS server
+    resolver 8.8.8.8; # You can change this to local DNS server
 
     if ($crawlable = 1) {
       access_log off;
