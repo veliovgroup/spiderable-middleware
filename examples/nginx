@@ -1,0 +1,68 @@
+server{
+###################
+# Yours own server configuration
+# As well as Phusion Passenger or MeteorUp configs
+###################
+  listen 80;
+  listen [::]:80;
+  server_name example.com ddp.example.com;
+  root /path/to/public;
+
+  add_header X-Content-Type-Options nosniff;
+  add_header X-Frame-Options DENY;
+
+###################
+# CRAWLABLE (pre-render) related configuration below
+###################
+  location / {
+    try_files $uri @crawlable;
+  }
+
+  location @crawlable {
+    # Do not forget to change _YOUR_AUTH_TOKEN_ to token you get from ostr.io
+    proxy_set_header Authorization "Basic _YOUR_AUTH_TOKEN_";
+
+    set $crawlable 0;
+    set $frargment '';
+    # Add/remove bots from this list if needed
+    if ($http_user_agent ~* "yahoo|bingbot|facebookexternalhit|twitterbot|rogerbot|linkedinbot|embedly|quora link preview|showyoubot|outbrain|pinterest|developers.google.com/+/web/snippet|slackbot|vkShare|W3C_Validator|redditbot|Applebot|WhatsApp|flipboard|yandex|google-structured-data-testing-tool|MJ12Bot|tweetmemeBot|baiduSpider|Mail\.RU_Bot|ahrefsBot|SiteLockSpider|visionutils") {
+      set $crawlable 1;
+    }
+
+    if ($args ~ _escaped_fragment_) {
+      set $crawlable 1;
+    }
+
+    if ($args ~ "_escaped_fragment_=(.+)") {
+      set $fragment /$1;
+    }
+
+    if ($uri ~ \.(js|css|xml|less|png|jpg|jpeg|gif|pdf|doc|txt|ico|rss|zip|mp3|rar|exe|wmv|doc|avi|ppt|mpg|mpeg|tif|wav|mov|psd|ai|xls|mp4|m4a|swf|dat|dmg|iso|flv|m4v|torrent|ttf|woff)$) {
+      set $crawlable 0;
+    }
+
+# UNCOMMENT IF NEEDED
+#    For Meteor, if DDP runs on different domain / subdomain
+#    And configured in same {server} block
+#    if ($server_name = ddp.example.com) {
+#      set $crawlable 0;
+#    }
+
+# UNCOMMENT IF NEEDED
+#    Required for Meteor, or any other solution based on top of sockjs / socket.js / socket.io
+#    Change "/sockjs/" path if needed
+#    Without this rule requests won't be rendered
+#    if ($request_uri ~* /sockjs/) {
+#      access_log off;
+#      set $crawlable 0;
+#    }
+
+    resolver 8.8.8.8; # You may would like to change this to local DNS server
+
+    if ($crawlable = 1) {
+      access_log off;
+      set $crawlable "trace.ostr.io";
+      proxy_pass https://$crawlable/?url=$scheme://$host$uri$fragment;
+    }
+  }
+}

@@ -26,7 +26,8 @@
     "express",
     "connect",
     "http",
-    "https"
+    "https",
+    "ostr.io"
   ],
   "author": "Dmitriy A. (http://veliovgroup.com)",
   "license": "BSD 3-Clause",

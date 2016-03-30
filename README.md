@@ -47,6 +47,20 @@ meteor add ostrio:spiderable-middleware
 Basic usage
 =======
 See [all examples](https://github.com/VeliovGroup/spiderable-middleware/tree/master/examples).
+
+First, add to your HTML template:
+```html
+<html>
+  <head>
+    <meta name="fragment" content="!">
+    <!-- ... -->
+  </head>
+  <body>
+    <!-- ... -->
+  </body>
+</html>
+```
+
 ```js
 var express    = require('express');
 var app        = express();
@@ -107,6 +121,7 @@ To speed-up rendering, you can tell to Spiderable engine when your page is ready
 ```html
 <html>
   <head>
+    <meta name="fragment" content="!">
     <script>
       window.IS_RENDERED = false;
     </script>
