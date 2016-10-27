@@ -14,6 +14,8 @@ server{
 ###################
 # CRAWLABLE (pre-render) related configuration below
 ###################
+  proxy_hide_header WWW-Authenticate;
+
   location / {
     try_files $uri @crawlable;
   }
@@ -25,7 +27,7 @@ server{
     set $crawlable 0;
     set $frargment '';
     # Add/remove bots from this list if needed
-    if ($http_user_agent ~* "yahoo|bingbot|facebookexternalhit|twitterbot|rogerbot|linkedinbot|embedly|quora link preview|showyoubot|outbrain|pinterest|developers.google.com/+/web/snippet|slackbot|vkShare|W3C_Validator|redditbot|Applebot|WhatsApp|flipboard|yandex|google-structured-data-testing-tool|MJ12Bot|tweetmemeBot|baiduSpider|Mail\.RU_Bot|ahrefsBot|SiteLockSpider|visionutils") {
+    if ($http_user_agent ~* "googlebot|yahoo|bingbot|facebookexternalhit|twitterbot|rogerbot|linkedinbot|embedly|quora link preview|showyoubot|outbrain|pinterest|developers.google.com/+/web/snippet|slackbot|vkShare|W3C_Validator|redditbot|Applebot|WhatsApp|flipboard|yandex|google-structured-data-testing-tool|MJ12Bot|tweetmemeBot|baiduSpider|Mail\.RU_Bot|ahrefsBot|SiteLockSpider|'visionutils|tumblr|bitlybot|SkypeUriPreview|nuzzel|Discordbot") {
       set $crawlable 1;
     }
 
@@ -38,6 +40,14 @@ server{
     }
 
     if ($uri ~ \.(js|css|xml|less|png|jpg|jpeg|gif|pdf|doc|txt|ico|rss|zip|mp3|rar|exe|wmv|doc|avi|ppt|mpg|mpeg|tif|wav|mov|psd|ai|xls|mp4|m4a|swf|dat|dmg|iso|flv|m4v|torrent|ttf|woff)$) {
+      set $crawlable 0;
+    }
+
+    if ($fragment ~ \.(js|css|xml|less|png|jpg|jpeg|gif|pdf|doc|txt|ico|rss|zip|mp3|rar|exe|wmv|doc|avi|ppt|mpg|mpeg|tif|wav|mov|psd|ai|xls|mp4|m4a|swf|dat|dmg|iso|flv|m4v|torrent|ttf|woff)$) {
+      set $crawlable 0;
+    }
+
+    if ($http_upgrade) {
       set $crawlable 0;
     }
 
@@ -61,7 +71,11 @@ server{
 
     if ($crawlable = 1) {
       access_log off;
-      set $crawlable "trace.ostr.io";
+# UNCOMMENT IF NEEDED
+#      Use to avoid duplicated headers set in this config above
+#      and returned from render request
+#      add_header X-Preprender-Status HIT;
+      set $crawlable "render.ostr.io";
       proxy_pass https://$crawlable/?url=$scheme://$host$uri$fragment;
     }
   }

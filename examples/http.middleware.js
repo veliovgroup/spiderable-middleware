@@ -3,7 +3,7 @@ var http       = require('http');
 var Spiderable = require('spiderable-middleware');
 var spiderable = new Spiderable({
   rootURL: 'http://example.com',
-  serviceURL: 'https://trace.ostr.io',
+  serviceURL: 'https://render.ostr.io',
   auth: 'APIUser:APIPass'
 });
 
