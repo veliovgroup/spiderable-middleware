@@ -36,13 +36,18 @@ module.exports = class Spiderable
       'ahrefsBot'
       'SiteLockSpider'
       'visionutils'
+      'tumblr'
+      'bitlybot'
+      'SkypeUriPreview'
+      'nuzzel'
+      'Discordbot'
     ]
     defBots      = defBots.concat bots if bots
     @botsRE      = new RegExp defBots.join('|'), 'i'
     @auth       ?= process.env.SPIDERABLE_SERVICE_AUTH || process.env.PRERENDER_SERVICE_AUTH || ''
     ignore      ?= false
     @rootURL    ?= process.env.ROOT_URL
-    @serviceURL ?= process.env.SPIDERABLE_SERVICE_URL || process.env.PRERENDER_SERVICE_URL || 'https://trace.ostr.io'
+    @serviceURL ?= process.env.SPIDERABLE_SERVICE_URL || process.env.PRERENDER_SERVICE_URL || 'https://render.ostr.io'
 
     unless @rootURL
       throw '[Spiderable-Middleware] {rootURL} or env variable ROOT_URL is not detected! But must be specified!'
@@ -75,11 +80,11 @@ module.exports = class Spiderable
     if @ignoreRE and @ignoreRE.test req.url
       hasIgnored = true
 
-    if (urlObj.query.hasOwnProperty('_escaped_fragment_') or @botsRE.test(req.headers['user-agent'])) and not hasIgnored
+    if (urlObj.query['_escaped_fragment_'] isnt undefined or @botsRE.test(req.headers['user-agent'])) and not hasIgnored
       reqUrl       = @rootURL
       urlObj.path  = urlObj.path.replace(/\/$/, '').replace /^\//, ''
 
-      if urlObj.query.hasOwnProperty('_escaped_fragment_') and urlObj.query._escaped_fragment_.length
+      if urlObj.query['_escaped_fragment_'] isnt undefined and urlObj.query._escaped_fragment_.length
         urlObj.pathname += '/' + urlObj.query._escaped_fragment_.replace /^\//, ''
 
       reqUrl += '/' + urlObj.pathname
