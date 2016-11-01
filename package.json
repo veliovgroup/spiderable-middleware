@@ -11,13 +11,15 @@
     "url": "git://github.com/VeliovGroup/spiderable-middleware.git"
   },
   "keywords": [
+    "_escaped_fragment_",
+    "crawl",
+    "SEO",
     "middleware",
     "spiderable",
     "crawlble",
     "prerender",
     "ajax",
     "seo",
-    "pushstate",
     "angular",
     "backbone",
     "emberjs",

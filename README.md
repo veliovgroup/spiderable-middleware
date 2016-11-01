@@ -1,11 +1,11 @@
 Spiderable middleware
 =======
-Google, Facebook, Twitter, Yahoo, and Bing and all other crawlers and search engines are constantly trying to view your website. If your website build on top of JavaScript framework like, but not limited to - Angular, Backbone, Ember, Meteor all of those front-end solutions returns basic HTML-markup and script-tags to crawlers, but not content of your page. Mission of `spiderable-middleware` and [ostr.io](https://ostr.io) - is boost your SEO experience without headache.
+Google, Facebook, Twitter, Yahoo, and Bing and all other crawlers and search engines are constantly trying to view your website. If your website build on top of JavaScript framework like, but not limited to - Angular, Backbone, Ember, Meteor all of those front-end solutions returns basic HTML-markup and script-tags to crawlers, but not content of your page. Mission of `spiderable-middleware` and [ostr.io](https://ostr.io) - is to boost your SEO experience without headache.
 
 
 About Package
 =======
-This middleware intercepts requests to your Node.js website from crawlers, and proxy-passes to the Spiderable (Prerender) Service, which returns static, rendered HTML.
+This package acts as middleware and intercepts requests to your Node.js app from crawlers. Then proxy-passes to the Spiderable (Prerender) Service, which returns static, rendered HTML.
 
 __Note__: *This package proxy-passes real HTTP Headers and response code, to reduce overwhelming requests, try to avoid HTTP-redirect headers, like* `Location` *and others. See how to [pass expected response code](https://github.com/VeliovGroup/spiderable-middleware#pass-real-response-code) and [handle JS-redirects](https://github.com/VeliovGroup/spiderable-middleware#javascript-redirects).*
 
@@ -16,7 +16,7 @@ This middleware was tested and works like a charm with:
  - [vanilla http(s) server](https://nodejs.org/api/http.html): [example](https://github.com/VeliovGroup/spiderable-middleware/blob/master/examples/http.middleware.js)
  - See [all examples](https://github.com/VeliovGroup/spiderable-middleware/tree/master/examples)
 
-All other frameworks which follows node's middleware convention - will work too!
+All other frameworks which follows node's middleware convention - will work too.
 
 This package was originally developed for [ostr.io](https://ostr.io) service. But it's not limited to, and can proxy-pass requests to any other endpoint.
 
@@ -67,7 +67,7 @@ var app        = express();
 var Spiderable = require('spiderable-middleware');
 var spiderable = new Spiderable({
   rootURL: 'http://example.com',
-  serviceURL: 'https://trace.ostr.io',
+  serviceURL: 'https://render.ostr.io',
   auth: 'APIUser:APIPass'
 });
 
@@ -85,7 +85,7 @@ Meteor usage
 
 WebApp.connectHandlers.use(new Spiderable({
   rootURL: 'http://example.com',
-  serviceURL: 'https://trace.ostr.io',
+  serviceURL: 'https://render.ostr.io',
   auth: 'APIUser:APIPass'
 }));
 ```
@@ -104,7 +104,7 @@ Format (jade):
 // response:status-code=404
 ```
 
-It supports any standard or custom response codes:
+Package supports any standard or custom response codes:
  - `201` - `<!-- response:status-code=201 -->`
  - `401` - `<!-- response:status-code=401 -->`
  - `403` - `<!-- response:status-code=403 -->`
@@ -112,11 +112,11 @@ It supports any standard or custom response codes:
  - `500` - `<!-- response:status-code=500 -->`
  - `514` - `<!-- response:status-code=514 -->` (*non-standard*)
 
-__Note__: *Reserved codes for internal service communications:* `494`, `490`. *Don't use them!*
+__Note__: *Reserved codes for internal service communications:* `49[0-9]`.
 
 Speed-up rendering
 =======
-To speed-up rendering, you can tell to Spiderable engine when your page is ready. Simply set `window.IS_RENDERED` to `false`, and once your page is ready set it to `true`. Like:
+To speed-up rendering, you __should__ tell to Spiderable engine when your page is ready. Simply set `window.IS_RENDERED` to `false`, and once your page is ready set it to `true`. Like:
 
 ```html
 <html>
@@ -125,12 +125,14 @@ To speed-up rendering, you can tell to Spiderable engine when your page is ready
     <script>
       window.IS_RENDERED = false;
     </script>
+  </head>
+  <body>
+    <!-- ... -->
     <script type="text/javascript">
       //Somewhere deep in your app-code:
       window.IS_RENDERED = true;
     </script>
-  </head>
-  <!-- ... -->
+  </body>
 </html>
 ```
 
@@ -152,7 +154,7 @@ API
 ##### *Constructor* `new Spiderable([opts])`
 
  - `opts` {*Object*} - Configuration options
- - `opts.serviceURL` {*String*} - Valid URL to Spiderable endpoint (local or foreign). Default: `https://trace.ostr.io`. Can be set via environment variables: `SPIDERABLE_SERVICE_URL` or `PRERENDER_SERVICE_URL`
+ - `opts.serviceURL` {*String*} - Valid URL to Spiderable endpoint (local or foreign). Default: `https://render.ostr.io`. Can be set via environment variables: `SPIDERABLE_SERVICE_URL` or `PRERENDER_SERVICE_URL`
  - `opts.rootURL` {*String*} - Valid root URL of your website. Can be set via environment variable: `ROOT_URL` (*common for meteor*)
  - `opts.auth` {*String*} - [Optional] Auth string in next format: `user:pass`. Can be set via environment variables: `SPIDERABLE_SERVICE_AUTH` or `PRERENDER_SERVICE_AUTH`. Default `null`
  - `opts.bots` {*[String]*} - [Optional] Array of strings (case insensitive) with additional User-Agent names of crawlers you would like to intercept. See default [bot's names](https://github.com/VeliovGroup/spiderable-middleware/blob/master/src/index.coffee#L9)
@@ -162,7 +164,7 @@ API
 var Spiderable = require('spiderable-middleware'); // Omit this line in Meteor
 var spiderable = new Spiderable({
   rootURL: 'http://example.com',
-  serviceURL: 'https://trace.ostr.io',
+  serviceURL: 'https://render.ostr.io',
   auth: 'APIUser:APIPass'
 });
 ```

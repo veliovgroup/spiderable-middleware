@@ -80,11 +80,11 @@ module.exports = class Spiderable
     if @ignoreRE and @ignoreRE.test req.url
       hasIgnored = true
 
-    if (urlObj.query['_escaped_fragment_'] isnt undefined or @botsRE.test(req.headers['user-agent'])) and not hasIgnored
+    if (urlObj.query._escaped_fragment_ isnt undefined or @botsRE.test(req.headers['user-agent'])) and not hasIgnored
       reqUrl       = @rootURL
       urlObj.path  = urlObj.path.replace(/\/$/, '').replace /^\//, ''
 
-      if urlObj.query['_escaped_fragment_'] isnt undefined and urlObj.query._escaped_fragment_.length
+      if urlObj.query._escaped_fragment_ isnt undefined and urlObj.query._escaped_fragment_.length
         urlObj.pathname += '/' + urlObj.query._escaped_fragment_.replace /^\//, ''
 
       reqUrl += '/' + urlObj.pathname
