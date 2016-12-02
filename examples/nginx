@@ -74,7 +74,7 @@ server{
 # UNCOMMENT IF NEEDED
 #      Use to avoid duplicated headers set in this config above
 #      and returned from render request
-#      add_header X-Preprender-Status HIT;
+#      add_header X-Prerender-Status HIT;
       set $crawlable "render.ostr.io";
       proxy_pass https://$crawlable/?url=$scheme://$host$uri$fragment;
     }
