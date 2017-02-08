@@ -24,8 +24,19 @@ server{
     # Do not forget to change _YOUR_AUTH_TOKEN_ to token you get from ostr.io
     proxy_set_header Authorization "Basic _YOUR_AUTH_TOKEN_";
 
+    proxy_read_timeout    200s;
+    proxy_connect_timeout 200s;
+    proxy_send_timeout    200s;
+
     set $crawlable 0;
     set $frargment '';
+    set $orig_uri  $request_uri;
+
+    # Avoid dead loop and drop get query
+    if ($orig_uri ~ "^(.*)\?(.*)$") {
+      set $orig_uri $1;
+    }
+
     # Add/remove bots from this list if needed
     if ($http_user_agent ~* "googlebot|yahoo|bingbot|facebookexternalhit|twitterbot|rogerbot|linkedinbot|embedly|quora link preview|showyoubot|outbrain|pinterest|developers.google.com/+/web/snippet|slackbot|vkShare|W3C_Validator|redditbot|Applebot|WhatsApp|flipboard|yandex|google-structured-data-testing-tool|MJ12Bot|tweetmemeBot|baiduSpider|Mail\.RU_Bot|ahrefsBot|SiteLockSpider|'visionutils|tumblr|bitlybot|SkypeUriPreview|nuzzel|Discordbot") {
       set $crawlable 1;
@@ -67,7 +78,7 @@ server{
 #      set $crawlable 0;
 #    }
 
-    resolver 8.8.8.8; # You can change this to local DNS server
+    resolver 8.8.4.4 8.8.8.8 valid=300s; # You can change this to local DNS server
 
     if ($crawlable = 1) {
       access_log off;
@@ -76,7 +87,7 @@ server{
 #      and returned from render request
 #      add_header X-Prerender-Status HIT;
       set $crawlable "render.ostr.io";
-      proxy_pass https://$crawlable/?url=$scheme://$host$uri$fragment;
+      proxy_pass https://$crawlable/?url=$scheme://$host$orig_uri$fragment;
     }
   }
 }
