@@ -1,3 +1,6 @@
+package.js
+lib/meteor-tests.js
+lib/meteor.js
 examples
 examples/*
 node_modules
