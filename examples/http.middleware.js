@@ -10,7 +10,7 @@ var spiderable = new Spiderable({
 var requestListener = function(req, res) {
   spiderable.handler(req, res, function(){
     res.writeHead(200, {'Content-Type': 'text/plain; charset=UTF-8'});
-    res.end("Hello vanilla NodeJS!");
+    res.end('Hello vanilla NodeJS!');
   });
 };
 
