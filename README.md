@@ -1,11 +1,11 @@
 Spiderable middleware
 =======
-Google, Facebook, Twitter, Yahoo, and Bing and all other crawlers and search engines are constantly trying to view your website. If your website build on top of JavaScript framework like, but not limited to - Angular, Backbone, Ember, Meteor all of those front-end solutions returns basic HTML-markup and script-tags to crawlers, but not content of your page. Mission of `spiderable-middleware` and [ostr.io](https://ostr.io) - is to boost your SEO experience without headache.
+Google, Facebook, Twitter, Yahoo, and Bing and all other crawlers and search engines are constantly trying to view your website. If your website build on top of JavaScript framework like, but not limited to - Angular, Backbone, Ember, Meteor, React, MEAN most of front-end solutions returns basic HTML-markup and script-tags to crawlers, but not content of your page. Mission of `spiderable-middleware` and [ostr.io](https://ostr.io) - is to boost your SEO experience without headache.
 
 
 About Package
 =======
-This package acts as middleware and intercepts requests to your Node.js app from crawlers. Then proxy-passes to the Spiderable (Prerender) Service, which returns static, rendered HTML.
+This package acts as middleware and intercepts requests to your Node.js application from crawlers. All requests proxy-passes to the Spiderable (Prerender) Service, which returns static, rendered HTML.
 
 __Note__: *This package proxy-passes real HTTP Headers and response code, to reduce overwhelming requests, try to avoid HTTP-redirect headers, like* `Location` *and others. See how to [pass expected response code](https://github.com/VeliovGroup/spiderable-middleware#pass-real-response-code) and [handle JS-redirects](https://github.com/VeliovGroup/spiderable-middleware#javascript-redirects).*
 
@@ -16,15 +16,15 @@ This middleware was tested and works like a charm with:
  - [vanilla http(s) server](https://nodejs.org/api/http.html): [example](https://github.com/VeliovGroup/spiderable-middleware/blob/master/examples/http.middleware.js)
  - See [all examples](https://github.com/VeliovGroup/spiderable-middleware/tree/master/examples)
 
-All other frameworks which follows node's middleware convention - will work too.
+All other frameworks which follows Node's middleware convention - will work too.
 
-This package was originally developed for [ostr.io](https://ostr.io) service. But it's not limited to, and can proxy-pass requests to any other endpoint.
+This package was originally developed for [ostr.io](https://ostr.io) service. But it's not limited to, and can proxy-pass requests to any other rendering-endpoint.
 
 ToC
 =======
  - [Installation](https://github.com/VeliovGroup/spiderable-middleware#installation)
  - [Basic usage](https://github.com/VeliovGroup/spiderable-middleware#basic-usage)
- - [MeteorJS usage](https://github.com/VeliovGroup/spiderable-middleware#meteor-usage)
+ - [MeteorJS usage](https://github.com/VeliovGroup/spiderable-middleware#meteor-specific-usage)
  - [Pass real response code](https://github.com/VeliovGroup/spiderable-middleware#pass-real-response-code)
  - [Speed-up rendering](https://github.com/VeliovGroup/spiderable-middleware#speed-up-rendering)
  - [JavaScript redirects](https://github.com/VeliovGroup/spiderable-middleware#javascript-redirects)
@@ -41,6 +41,7 @@ npm install spiderable-middleware
 
 Meteor:
 ```shell
+meteor add webapp
 meteor add ostrio:spiderable-middleware
 ```
 
@@ -48,7 +49,7 @@ Basic usage
 =======
 See [all examples](https://github.com/VeliovGroup/spiderable-middleware/tree/master/examples).
 
-First, add to your HTML template:
+First, add `fragment` meta-tag to your HTML template:
 ```html
 <html>
   <head>
@@ -62,26 +63,29 @@ First, add to your HTML template:
 ```
 
 ```js
-var express    = require('express');
-var app        = express();
-var Spiderable = require('spiderable-middleware');
-var spiderable = new Spiderable({
+const express    = require('express');
+const app        = express();
+const Spiderable = require('spiderable-middleware');
+const spiderable = new Spiderable({
   rootURL: 'http://example.com',
   serviceURL: 'https://render.ostr.io',
   auth: 'APIUser:APIPass'
 });
 
-app.use(spiderable.handler).get('/', function (req, res) {
+app.use(spiderable.handler).get('/', (req, res) => {
   res.send('Hello World');
 });
 
 app.listen(3000);
 ```
 
-Meteor usage
+Meteor specific usage
 =======
 ```js
+// meteor add webapp
 // meteor add ostrio:spiderable-middleware
+
+import Spiderable from 'meteor/ostrio:spiderable-middleware';
 
 WebApp.connectHandlers.use(new Spiderable({
   rootURL: 'http://example.com',
@@ -161,8 +165,13 @@ API
  - `opts.ignore` {*[String]*} - [Optional] Array of strings (case __sensitive__) with ignored routes. Note: it's based on first match, so route `/users` will cause ignoring of `/part/users/part`, `/users/_id` and `/list/of/users`, but not `/user/_id` or `/list/of/blocked-users`. Default `null`
 
 ```js
-var Spiderable = require('spiderable-middleware'); // Omit this line in Meteor
-var spiderable = new Spiderable({
+// CommonJS
+// const Spiderable = require('spiderable-middleware');
+
+// Meteor.js
+// import Spiderable from 'meteor/ostrio:spiderable-middleware';
+
+const spiderable = new Spiderable({
   rootURL: 'http://example.com',
   serviceURL: 'https://render.ostr.io',
   auth: 'APIUser:APIPass'
@@ -179,10 +188,10 @@ app.use(spiderable.handler);
 WebApp.connectHandlers.use(spiderable);
 
 //HTTP(s) Server
-http.createServer(function(req, res) {
-  spiderable.handler(req, res, function(){
+http.createServer((req, res) => {
+  spiderable.handler(req, res, () => {
     // Callback, triggered if this request
-    // is not a subject of spiderable prerendering
+    // is not a subject of spiderable pre-rendering
     res.writeHead(200, {'Content-Type': 'text/plain; charset=UTF-8'});
     res.end("Hello vanilla NodeJS!");
     // Or do something else ...

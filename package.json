@@ -1,6 +1,6 @@
 {
   "name": "spiderable-middleware",
-  "version": "1.0.2",
+  "version": "1.1.0",
   "description": "Allow your JavaScript website to be crawled perfectly by search engines.",
   "main": "./lib/index.js",
   "scripts": {
@@ -38,6 +38,6 @@
   },
   "homepage": "https://github.com/VeliovGroup/spiderable-middleware",
   "dependencies": {
-    "request": "^2.76.0"
+    "request": "^2.80.0"
   }
 }
