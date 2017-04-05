@@ -8,5 +8,5 @@ spiderable = new Spiderable
 
 app.use(spiderable.handler).get '/', (req, res) ->
   res.send 'Hello World'
-  
+
 app.listen 3000

@@ -1,4 +1,4 @@
-server{
+server {
 ###################
 # Yours own server configuration
 # As well as Phusion Passenger or MeteorUp configs
@@ -38,7 +38,7 @@ server{
     }
 
     # Add/remove bots from this list if needed
-    if ($http_user_agent ~* "googlebot|yahoo|bingbot|facebookexternalhit|twitterbot|rogerbot|linkedinbot|embedly|quora link preview|showyoubot|outbrain|pinterest|developers.google.com/+/web/snippet|slackbot|vkShare|W3C_Validator|redditbot|Applebot|WhatsApp|flipboard|yandex|google-structured-data-testing-tool|MJ12Bot|tweetmemeBot|baiduSpider|Mail\.RU_Bot|ahrefsBot|SiteLockSpider|'visionutils|tumblr|bitlybot|SkypeUriPreview|nuzzel|Discordbot") {
+    if ($http_user_agent ~* "googlebot|yahoo|bingbot|facebookexternalhit|twitterbot|rogerbot|linkedinbot|embedly|quora link preview|showyoubot|outbrain|pinterest|developers.google.com/+/web/snippet|slackbot|vkShare|W3C_Validator|redditbot|Applebot|WhatsApp|flipboard|yandex|google-structured-data-testing-tool|MJ12Bot|tweetmemeBot|baiduSpider|Mail\.RU_Bot|ahrefsBot|SiteLockSpider|visionutils|tumblr|bitlybot|SkypeUriPreview|nuzzel|Discordbot|OdklBot") {
       set $crawlable 1;
     }
 
