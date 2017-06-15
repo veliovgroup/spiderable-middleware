@@ -9,7 +9,7 @@ server {
   root /path/to/public;
 
   ###################
-  # CRAWLABLE (pre-render) related configuration below
+  # Below is Crawlable (Prerendering) related configuration
   ###################
   proxy_hide_header WWW-Authenticate;
 
@@ -21,7 +21,7 @@ server {
 
   location @crawlable {
     set $crawlable 0;
-    set $fragment '';
+    set $fragment  '';
     set $orig_uri  $request_uri;
 
     # Avoid dead loop and drop get query
@@ -73,32 +73,34 @@ server {
     # Required for Meteor, or any other solution based on top of sockjs / socket.js / socket.io
     # Change "/sockjs/" path if needed
     # Without this rule requests won't be rendered
-    # if ($request_uri /sockjs/) {
+    # if ($request_uri ~* /sockjs/) {
     #   set $crawlable 0;
     # }
   
     # Minimize amount of forwarded headers
     proxy_pass_request_headers off;
     # !Very important and required:
-    proxy_set_header   Host $proxy_host;
-    proxy_set_header   Connection "close"; # Recommended
+    proxy_set_header Host $proxy_host;
+    proxy_set_header Connection "close"; # Recommended
+    ########
     # Do not forget to change _YOUR_AUTH_TOKEN_ to token you get from ostr.io
-    proxy_set_header   Authorization "Basic _YOUR_AUTH_TOKEN_";
+    ########
+    proxy_set_header Authorization "Basic _YOUR_AUTH_TOKEN_";
     # Optional headers you wish to pass to your app:
-    # proxy_set_header  Cache-Control $http_cache_control;
-    # proxy_set_header  Pragma $http_pragma;
-    # proxy_set_header  Cache-Control $http_cache_control;
-    # proxy_set_header  Accept $http_accept;
-    # proxy_set_header  Accept-Encoding $http_accept_encoding;
-    # proxy_set_header  Accept-Language $http_accept_language;
+    # proxy_set_header Cache-Control $http_cache_control;
+    # proxy_set_header Pragma $http_pragma;
+    # proxy_set_header Cache-Control $http_cache_control;
+    # proxy_set_header Accept $http_accept;
+    # proxy_set_header Accept-Encoding $http_accept_encoding;
+    # proxy_set_header Accept-Language $http_accept_language;
 
     # Disable keepalive support, it's not needed for Prerendering
     # For more info read: http://nginx.org/en/docs/http/ngx_http_proxy_module.html#proxy_http_version
     proxy_http_version 1.0;
 
-    # You can change this to local DNS server
-    # And this can be moved to nginx.conf
-    # Add ipv6=off if your server has no IPv6 support
+    # You can change resolver to local DNS server
+    # And resolver can be moved to nginx.conf
+    # Add ipv6=off if your server has no IPv6 support, ex.: `resolver 8.8.4.4 8.8.8.8 valid=300s ipv6=off;`
     resolver 8.8.4.4 8.8.8.8 valid=300s;
     resolver_timeout 15s;
 
