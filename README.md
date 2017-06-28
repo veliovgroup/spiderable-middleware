@@ -108,7 +108,7 @@ Format (jade):
 // response:status-code=404
 ```
 
-PThis package support all standard and custom status codes:
+This package support all standard and custom status codes:
  - `201` - `<!-- response:status-code=201 -->`
  - `401` - `<!-- response:status-code=401 -->`
  - `403` - `<!-- response:status-code=403 -->`
