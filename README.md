@@ -25,7 +25,7 @@ ToC
  - [Installation](https://github.com/VeliovGroup/spiderable-middleware#installation)
  - [Basic usage](https://github.com/VeliovGroup/spiderable-middleware#basic-usage)
  - [MeteorJS usage](https://github.com/VeliovGroup/spiderable-middleware#meteor-specific-usage)
- - [Pass real response code](https://github.com/VeliovGroup/spiderable-middleware#pass-real-response-code)
+ - [Return genuine status code](https://github.com/VeliovGroup/spiderable-middleware#return-genuine-status-code)
  - [Speed-up rendering](https://github.com/VeliovGroup/spiderable-middleware#speed-up-rendering)
  - [JavaScript redirects](https://github.com/VeliovGroup/spiderable-middleware#javascript-redirects)
  - [API](https://github.com/VeliovGroup/spiderable-middleware#api)
