@@ -1,13 +1,13 @@
 Spiderable middleware
 =======
-Google, Facebook, Twitter, Yahoo, and Bing and all other crawlers and search engines are constantly trying to view your website. If your website build on top of JavaScript framework like, but not limited to - Angular, Backbone, Ember, Meteor, React, MEAN most of front-end solutions returns basic HTML-markup and script-tags to crawlers, but not content of your page. Mission of `spiderable-middleware` and [ostr.io](https://ostr.io) - is to boost your SEO experience without headache.
+Google, Facebook, Twitter, Yahoo, and Bing and all other crawlers and search engines are constantly trying to view your website. If your website is built on top of the JavaScript framework like, but not limited to - Angular, Backbone, Ember, Meteor, React, MEAN most of the front-end solutions returns basic HTML-markup and script-tags to crawlers, but not content of your page. The mission of `spiderable-middleware` and [ostr.io](https://ostr.io) - is to boost your SEO experience without a headache.
 
 
 About Package
 =======
-This package acts as middleware and intercepts requests to your Node.js application from crawlers. All requests proxy-passes to the Spiderable (Prerender) Service, which returns static, rendered HTML.
+This package acts as middleware and intercepts requests to your Node.js application from web crawlers. All requests proxy passed to the Spiderable (Prerender) Service, which returns static, rendered HTML.
 
-__Note__: *This package proxy-passes real HTTP Headers and response code, to reduce overwhelming requests, try to avoid HTTP-redirect headers, like* `Location` *and others. See how to [pass expected response code](https://github.com/VeliovGroup/spiderable-middleware#pass-real-response-code) and [handle JS-redirects](https://github.com/VeliovGroup/spiderable-middleware#javascript-redirects).*
+__Note__: *This package proxy pass real HTTP headers and response code, to reduce overwhelming requests, try to avoid HTTP-redirect headers, like* `Location` *and others. Read how to [return expected status code](https://github.com/VeliovGroup/spiderable-middleware#pass-real-response-code) and [handle JS-redirects](https://github.com/VeliovGroup/spiderable-middleware#javascript-redirects).*
 
 This middleware was tested and works like a charm with:
  - [meteor](https://www.meteor.com/): [example](https://github.com/VeliovGroup/spiderable-middleware/blob/master/examples/meteor.middleware.js)
@@ -16,7 +16,7 @@ This middleware was tested and works like a charm with:
  - [vanilla http(s) server](https://nodejs.org/api/http.html): [example](https://github.com/VeliovGroup/spiderable-middleware/blob/master/examples/http.middleware.js)
  - See [all examples](https://github.com/VeliovGroup/spiderable-middleware/tree/master/examples)
 
-All other frameworks which follows Node's middleware convention - will work too.
+All other frameworks which follow Node's middleware convention - will work too.
 
 This package was originally developed for [ostr.io](https://ostr.io) service. But it's not limited to, and can proxy-pass requests to any other rendering-endpoint.
 
@@ -94,9 +94,9 @@ WebApp.connectHandlers.use(new Spiderable({
 }));
 ```
 
-Pass real response code
+Return genuine status code
 =======
-To pass expected response code from front-end JavaScript framework to browser/crawlers, you need to create specially formatted HTML-comment. This comment can be placed to any part of HTML-page. `head` or `body` tags is best place for it.
+To pass expected response code from front-end JavaScript framework to browser/crawlers, you need to create specially formatted HTML-comment. This comment can be placed in any part of HTML-page. `head` or `body` tag is the best place for it.
 
 Format (html):
 ```html
@@ -108,7 +108,7 @@ Format (jade):
 // response:status-code=404
 ```
 
-Package supports any standard or custom response codes:
+PThis package support all standard and custom status codes:
  - `201` - `<!-- response:status-code=201 -->`
  - `401` - `<!-- response:status-code=401 -->`
  - `403` - `<!-- response:status-code=403 -->`
@@ -120,7 +120,7 @@ __Note__: *Reserved codes for internal service communications:* `49[0-9]`.
 
 Speed-up rendering
 =======
-To speed-up rendering, you __should__ tell to Spiderable engine when your page is ready. Simply set `window.IS_RENDERED` to `false`, and once your page is ready set it to `true`. Like:
+To speed-up rendering, you __should__ tell to Spiderable engine when your page is ready. Set `window.IS_RENDERED` to `false`, and once your page is ready set this variable to `true`. Example:
 
 ```html
 <html>
@@ -142,14 +142,14 @@ To speed-up rendering, you __should__ tell to Spiderable engine when your page i
 
 JavaScript redirects
 =======
-If you need to redirect browser/crawler inside your application, during the rendering (*imitate navigation*), you're free to use any of classic JS-redirects as well as your framework's navigation, or even `History.pushState()`
+If you need to redirect browser/crawler inside your application, while a page is loading (*imitate navigation*), you're free to use any of classic JS-redirects as well as your framework's navigation, or `History.pushState()`
 ```js
 window.location.href = 'http://example.com/another/page';
 window.location.replace('http://example.com/another/page');
 
 Router.go('/another/page'); // framework's navigation
 ```
-__Note__: *Only 4 redirects is allowed during one request, after 4 redirects session will be terminated.*
+__Note__: *Only 4 redirects are allowed during one request after 4 redirects session will be terminated.*
 
 
 API
@@ -159,10 +159,10 @@ API
 
  - `opts` {*Object*} - Configuration options
  - `opts.serviceURL` {*String*} - Valid URL to Spiderable endpoint (local or foreign). Default: `https://render.ostr.io`. Can be set via environment variables: `SPIDERABLE_SERVICE_URL` or `PRERENDER_SERVICE_URL`
- - `opts.rootURL` {*String*} - Valid root URL of your website. Can be set via environment variable: `ROOT_URL` (*common for meteor*)
- - `opts.auth` {*String*} - [Optional] Auth string in next format: `user:pass`. Can be set via environment variables: `SPIDERABLE_SERVICE_AUTH` or `PRERENDER_SERVICE_AUTH`. Default `null`
- - `opts.bots` {*[String]*} - [Optional] Array of strings (case insensitive) with additional User-Agent names of crawlers you would like to intercept. See default [bot's names](https://github.com/VeliovGroup/spiderable-middleware/blob/master/lib/index.js#L22)
- - `opts.ignore` {*[String]*} - [Optional] Array of strings (case __sensitive__) with ignored routes. Note: it's based on first match, so route `/users` will cause ignoring of `/part/users/part`, `/users/_id` and `/list/of/users`, but not `/user/_id` or `/list/of/blocked-users`. Default `null`
+ - `opts.rootURL` {*String*} - Valid root URL of your website. Can be set via an environment variable: `ROOT_URL` (*common for meteor*)
+ - `opts.auth` {*String*} - [Optional] Auth string in next format: `user:pass`. Can be set via an environment variables: `SPIDERABLE_SERVICE_AUTH` or `PRERENDER_SERVICE_AUTH`. Default `null`
+ - `opts.bots` {*[String]*} - [Optional] An array of strings (case insensitive) with additional User-Agent names of crawlers you would like to intercept. See default [bot's names](https://github.com/VeliovGroup/spiderable-middleware/blob/master/lib/index.js#L22)
+ - `opts.ignore` {*[String]*} - [Optional] An array of strings (case __sensitive__) with ignored routes. Note: it's based on first match, so route `/users` will cause ignoring of `/part/users/part`, `/users/_id` and `/list/of/users`, but not `/user/_id` or `/list/of/blocked-users`. Default `null`
 
 ```js
 // CommonJS
@@ -191,7 +191,7 @@ WebApp.connectHandlers.use(spiderable);
 http.createServer((req, res) => {
   spiderable.handler(req, res, () => {
     // Callback, triggered if this request
-    // is not a subject of spiderable pre-rendering
+    // is not a subject of spiderable prerendering
     res.writeHead(200, {'Content-Type': 'text/plain; charset=UTF-8'});
     res.end("Hello vanilla NodeJS!");
     // Or do something else ...
