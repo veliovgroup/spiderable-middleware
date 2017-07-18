@@ -1,6 +1,6 @@
 {
   "name": "spiderable-middleware",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "Allow your JavaScript website to be crawled perfectly by search engines.",
   "main": "./lib/index.js",
   "scripts": {
