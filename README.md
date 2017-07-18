@@ -7,7 +7,7 @@ About Package
 =======
 This package acts as middleware and intercepts requests to your Node.js application from web crawlers. All requests proxy passed to the Spiderable (Prerender) Service, which returns static, rendered HTML.
 
-__Note__: *This package proxy pass real HTTP headers and response code, to reduce overwhelming requests, try to avoid HTTP-redirect headers, like* `Location` *and others. Read how to [return genuine status code](https://github.com/VeliovGroup/spiderable-middleware#return-genuine-status-code) and [handle JS-redirects](https://github.com/VeliovGroup/spiderable-middleware#javascript-redirects).*
+__Note__: *This package proxies real HTTP headers and response code, to reduce overwhelming requests, try to avoid HTTP-redirect headers, like* `Location` *and others. Read how to [return genuine status code](https://github.com/VeliovGroup/spiderable-middleware#return-genuine-status-code) and [handle JS-redirects](https://github.com/VeliovGroup/spiderable-middleware#javascript-redirects).*
 
 This middleware was tested and works like a charm with:
  - [meteor](https://www.meteor.com/): [example](https://github.com/VeliovGroup/spiderable-middleware/blob/master/examples/meteor.middleware.js)
