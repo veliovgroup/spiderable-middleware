@@ -1,6 +1,6 @@
 Spiderable middleware
 =======
-Google, Facebook, Twitter, Yahoo, and Bing and all other crawlers and search engines are constantly trying to view your website. If your website is built on top of the JavaScript framework like, but not limited to - Angular, Backbone, Ember, Meteor, React, MEAN most of the front-end solutions returns basic HTML-markup and script-tags to crawlers, but not content of your page. The mission of `spiderable-middleware` and [ostr.io](https://ostr.io) - is to boost your SEO experience without a headache.
+Google, Facebook, Twitter, Yahoo, and Bing and all other crawlers and search engines are constantly trying to view your website. If your website is built on top of the JavaScript framework like, but not limited to - Angular, Backbone, Ember, Meteor, React, MEAN most of the front-end solutions returns basic HTML-markup and script-tags to crawlers, but not content of your page. The mission of `spiderable-middleware` and [ostr.io](https://ostr.io) are to boost your SEO experience without a headache.
 
 
 About Package
@@ -116,11 +116,11 @@ This package support all standard and custom status codes:
  - `500` - `<!-- response:status-code=500 -->`
  - `514` - `<!-- response:status-code=514 -->` (*non-standard*)
 
-__Note__: *Reserved codes for internal service communications:* `49[0-9]`.
+__Note__: *Reserved status codes for internal service communications:* `49[0-9]`.
 
 Speed-up rendering
 =======
-To speed-up rendering, you __should__ tell to Spiderable engine when your page is ready. Set `window.IS_RENDERED` to `false`, and once your page is ready set this variable to `true`. Example:
+To speed-up rendering, you __should__ tell to the Spiderable engine when your page is ready. Set `window.IS_RENDERED` to `false`, and once your page is ready set this variable to `true`. Example:
 
 ```html
 <html>
