@@ -32,8 +32,8 @@ ToC
    - [Constructor](https://github.com/VeliovGroup/spiderable-middleware#constructor-new-spiderableopts)
    - [Middleware](https://github.com/VeliovGroup/spiderable-middleware#spiderablehandlerreq-res-next)
  - [Running Tests](https://github.com/VeliovGroup/spiderable-middleware#running-tests)
-   - [Node.js/Mocha](https://github.com/VeliovGroup/spiderable-middleware#node-mocha)
-   - [Meteor/Tinytest](https://github.com/VeliovGroup/spiderable-middleware#meteor-tinytest)
+   - [Node.js/Mocha](https://github.com/VeliovGroup/spiderable-middleware#nodejsmocha)
+   - [Meteor/Tinytest](https://github.com/VeliovGroup/spiderable-middleware#meteortinytest)
 
 Installation
 =======
