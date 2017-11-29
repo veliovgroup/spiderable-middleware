@@ -8,7 +8,7 @@ var spiderable = new Spiderable({
   auth: 'APIUser:APIPass'
 });
 
-app.use(spiderable.handler).get('/', function (req, res) {
+app.use(spiderable.handler.bind(spiderable)).get('/', function (req, res) {
   res.send('Hello World');
 });
 

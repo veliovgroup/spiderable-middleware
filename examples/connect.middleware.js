@@ -9,7 +9,7 @@ var spiderable = new Spiderable({
   auth: 'APIUser:APIPass'
 });
 
-app.use(spiderable.handler).use(function (req, res) {
+app.use(spiderable.handler.bind(spiderable)).use(function (req, res) {
   res.end('Hello from Connect!\n');
 });
 
