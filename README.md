@@ -3,8 +3,8 @@ Spiderable middleware
 Google, Facebook, Twitter, Yahoo, and Bing and all other crawlers and search engines are constantly trying to view your website. If your website is built on top of the JavaScript framework like, but not limited to - Angular, Backbone, Ember, Meteor, React, MEAN most of the front-end solutions returns basic HTML-markup and script-tags to crawlers, but not content of your page. The mission of `spiderable-middleware` and [ostr.io](https://ostr.io) are to boost your SEO experience without a headache.
 
 
-About Package
-=======
+## About Package
+
 This package acts as middleware and intercepts requests to your Node.js application from web crawlers. All requests proxy passed to the Spiderable (Prerender) Service, which returns static, rendered HTML.
 
 __Note__: *This package proxies real HTTP headers and response code, to reduce overwhelming requests, try to avoid HTTP-redirect headers, like* `Location` *and others. Read how to [return genuine status code](https://github.com/VeliovGroup/spiderable-middleware#return-genuine-status-code) and [handle JS-redirects](https://github.com/VeliovGroup/spiderable-middleware#javascript-redirects).*
@@ -20,8 +20,7 @@ All other frameworks which follow Node's middleware convention - will work too.
 
 This package was originally developed for [ostr.io](https://ostr.io) service. But it's not limited to, and can proxy-pass requests to any other rendering-endpoint.
 
-ToC
-=======
+## ToC
  - [Installation](https://github.com/VeliovGroup/spiderable-middleware#installation)
  - [Basic usage](https://github.com/VeliovGroup/spiderable-middleware#basic-usage)
  - [MeteorJS usage](https://github.com/VeliovGroup/spiderable-middleware#meteor-specific-usage)
@@ -35,21 +34,21 @@ ToC
    - [Node.js/Mocha](https://github.com/VeliovGroup/spiderable-middleware#nodejsmocha)
    - [Meteor/Tinytest](https://github.com/VeliovGroup/spiderable-middleware#meteortinytest)
 
-Installation
-=======
-NPM:
+## Installation
+
+##### NPM:
 ```shell
 npm install spiderable-middleware
 ```
 
-Meteor:
+##### Meteor:
 ```shell
 meteor add webapp
 meteor add ostrio:spiderable-middleware
 ```
 
-Basic usage
-=======
+## Basic usage
+
 See [all examples](https://github.com/VeliovGroup/spiderable-middleware/tree/master/examples).
 
 First, add `fragment` meta-tag to your HTML template:
@@ -82,8 +81,8 @@ app.use(spiderable.handler).get('/', (req, res) => {
 app.listen(3000);
 ```
 
-Meteor specific usage
-=======
+## Meteor specific usage
+
 ```js
 // meteor add webapp
 // meteor add ostrio:spiderable-middleware
@@ -97,8 +96,7 @@ WebApp.connectHandlers.use(new Spiderable({
 }));
 ```
 
-Return genuine status code
-=======
+## Return genuine status code
 To pass expected response code from front-end JavaScript framework to browser/crawlers, you need to create specially formatted HTML-comment. This comment can be placed in any part of HTML-page. `head` or `body` tag is the best place for it.
 
 Format (html):
@@ -121,8 +119,8 @@ This package support all standard and custom status codes:
 
 __Note__: *Reserved status codes for internal service communications:* `49[0-9]`.
 
-Speed-up rendering
-=======
+## Speed-up rendering
+
 To speed-up rendering, you __should__ tell to the Spiderable engine when your page is ready. Set `window.IS_RENDERED` to `false`, and once your page is ready set this variable to `true`. Example:
 
 ```html
@@ -143,8 +141,8 @@ To speed-up rendering, you __should__ tell to the Spiderable engine when your pa
 </html>
 ```
 
-JavaScript redirects
-=======
+## JavaScript redirects
+
 If you need to redirect browser/crawler inside your application, while a page is loading (*imitate navigation*), you're free to use any of classic JS-redirects as well as your framework's navigation, or `History.pushState()`
 ```js
 window.location.href = 'http://example.com/another/page';
@@ -155,8 +153,7 @@ Router.go('/another/page'); // framework's navigation
 __Note__: *Only 4 redirects are allowed during one request after 4 redirects session will be terminated.*
 
 
-API
-=======
+## API
 
 ##### *Constructor* `new Spiderable([opts])`
 
@@ -202,8 +199,8 @@ http.createServer((req, res) => {
 }).listen(3000);
 ```
 
-Running Tests
-=======
+## Running Tests
+
  1. Clone this package
  2. In Terminal (*Console*) go to directory where package is cloned
  3. Then run:
