@@ -1,10 +1,10 @@
 {
   "name": "spiderable-middleware",
-  "version": "1.2.2",
+  "version": "1.2.3",
   "description": "Allow your JavaScript website to be crawled perfectly by search engines.",
   "main": "./lib/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha"
   },
   "repository": {
     "type": "git",
@@ -40,5 +40,11 @@
   "homepage": "https://github.com/VeliovGroup/spiderable-middleware",
   "dependencies": {
     "request": "^2.83.0"
+  },
+  "devDependencies": {
+    "mocha": "^4.0.1",
+    "chai": "^4.1.2",
+    "underscore": "^1.8.3",
+    "spiderable-middleware": "file://./"
   }
 }
