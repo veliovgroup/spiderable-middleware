@@ -31,6 +31,9 @@ ToC
  - [API](https://github.com/VeliovGroup/spiderable-middleware#api)
    - [Constructor](https://github.com/VeliovGroup/spiderable-middleware#constructor-new-spiderableopts)
    - [Middleware](https://github.com/VeliovGroup/spiderable-middleware#spiderablehandlerreq-res-next)
+ - [Running Tests](https://github.com/VeliovGroup/spiderable-middleware#running-tests)
+   - [Node.js/Mocha](https://github.com/VeliovGroup/spiderable-middleware#node-mocha)
+   - [Meteor/Tinytest](https://github.com/VeliovGroup/spiderable-middleware#meteor-tinytest)
 
 Installation
 =======
@@ -197,4 +200,22 @@ http.createServer((req, res) => {
     // Or do something else ...
   });
 }).listen(3000);
+```
+
+Running Tests
+=======
+ 1. Clone this package
+ 2. In Terminal (*Console*) go to directory where package is cloned
+ 3. Then run:
+
+##### Node.js/Mocha
+```shell
+ROOT_URL=http://127.0.0.1:3003 npm test
+# http://127.0.0.1:3003 can be changed to any local address, PORT is required!
+```
+
+##### Meteor/Tinytest
+```shell
+meteor test-packages ./ --port 3003
+# PORT is required, and can be changed to any local open port
 ```
