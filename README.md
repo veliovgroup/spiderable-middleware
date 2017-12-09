@@ -82,6 +82,8 @@ app.use(spiderable.handler).get('/', (req, res) => {
 app.listen(3000);
 ```
 
+We provide various options for `serviceURL` as "[Rendering Endpoints](https://github.com/VeliovGroup/ostrio/blob/master/docs/prerendering/rendering-endpoints.md)", each has its own features, to fit every project needs.
+
 ## Meteor specific usage
 
 ```js
