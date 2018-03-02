@@ -8,6 +8,10 @@
      - Version of `Node.js`, `NPM` and/or `Meteor` you're experiencing this issue
      - If you're getting an error (exception), please provide full error log (output in console) as file or screenshot
 
+### I had an issue and I've solved it on my own:
+ - Provide a description of steps that you've followed to solve the problem
+ - Provide links to websites and/or pages with the information that helped you (*if there are any*)
+
 ### I have a suggestion:
  1. PRs are always welcome - [send a PR](https://github.com/VeliovGroup/spiderable-middleware/compare)
  2. If you're can not send a PR for some reason:
