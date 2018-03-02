@@ -12,23 +12,32 @@ const { it, describe } = require('mocha');
 const appExpress = express();
 const appConnect = connect();
 
-const url        = urlUtil.parse(process.env.ROOT_URL);
-url.port         = parseInt(url.port || 3003);
-const urlConnect = urlUtil.parse(process.env.ROOT_URL.replace(`:${url.port}`, `:${url.port + 1}`));
-const urlExpress = urlUtil.parse(process.env.ROOT_URL.replace(`:${url.port}`, `:${url.port + 2}`));
+if (!process.env.ROOT_URL) {
+  throw new Error('ROOT_URL env.var is not defined! Please run test with ROOT_URL, like `ROOT_URL=http://localhost:3000 npm test`');
+}
+
+const url         = urlUtil.parse(process.env.ROOT_URL);
+url.port          = parseInt(url.port || 3003);
+const staticFileName = 'test.pdf';
+const respVanilla = 'Hello from vanilla NodeJS!\n';
+const urlConnect  = urlUtil.parse(process.env.ROOT_URL.replace(`:${url.port}`, `:${url.port + 1}`));
+const respConnect = 'Hello from Connect!\n';
+const urlExpress  = urlUtil.parse(process.env.ROOT_URL.replace(`:${url.port}`, `:${url.port + 2}`));
+const respExpress = 'Hello from Express!\n';
+const auth        = process.env.AUTH || 'test:test';
 
 const prerenders = {
   vanilla: new Spiderable({
     rootURL: urlUtil.format(url),
-    auth: 'test:test'
+    auth: auth
   }),
   express: new Spiderable({
     rootURL: urlUtil.format(urlExpress),
-    auth: 'test:test'
+    auth: auth
   }),
   connect: new Spiderable({
     rootURL: urlUtil.format(urlConnect),
-    auth: 'test:test'
+    auth: auth
   }),
 };
 
@@ -36,19 +45,19 @@ const prerenders = {
 http.createServer(function (req, res) {
   prerenders.vanilla.handler(req, res, () => {
     res.writeHead(200, {'Content-Type': 'text/plain; charset=UTF-8'});
-    res.end('Hello vanilla NodeJS!');
+    res.end(respVanilla);
   });
 }).listen(url.port);
 
 // Connect package
 appConnect.use(prerenders.connect.handler.bind(prerenders.connect)).use(function (req, res) {
-  res.end('Hello from Connect!\n');
+  res.end(respConnect);
 });
 http.createServer(appConnect).listen(urlConnect.port);
 
 // Express package
 appExpress.use(prerenders.express.handler.bind(prerenders.express)).get('/', function (req, res) {
-  res.send('Hello World');
+  res.send(respExpress);
 });
 appExpress.listen(urlExpress.port);
 
@@ -99,6 +108,24 @@ describe('Check Prerendering & Middleware Setup', function () {
     });
   });
 
+  it('Vanilla node.js HTTP server [static file]', function (done) {
+    request({
+      url: urlUtil.format(url) + staticFileName,
+      method: 'GET',
+      headers: {
+        'User-Agent': 'GoogleBot'
+      }
+    }, (error, resp, body) => {
+      assert.isTrue(!error, 'no error');
+      if (!error) {
+        assert.isTrue(resp.statusCode === 200, 'status code is 200');
+        assert.isFalse(_.has(resp.headers, 'x-prerender-id'), 'Has no "x-prerender-id" header');
+        assert.isTrue(body === respVanilla, 'Body returned from Vanilla node.js server');
+      }
+      done();
+    });
+  });
+
   it('Express HTTP server', function (done) {
     request({
       url: urlUtil.format(urlExpress),
@@ -119,6 +146,24 @@ describe('Check Prerendering & Middleware Setup', function () {
     });
   });
 
+  it('Express HTTP server [static file]', function (done) {
+    request({
+      url: urlUtil.format(urlExpress) + staticFileName,
+      method: 'GET',
+      headers: {
+        'User-Agent': 'GoogleBot'
+      }
+    }, (error, resp, body) => {
+      assert.isTrue(!error, 'no error');
+      if (!error) {
+        assert.isTrue(resp.statusCode === 404, 'status code is 404');
+        assert.isFalse(_.has(resp.headers, 'x-prerender-id'), 'Has no "x-prerender-id" header');
+        assert.isTrue(!!~body.indexOf(staticFileName), 'Body returned from Express module, and has file name');
+      }
+      done();
+    });
+  });
+
   it('Connect server', function (done) {
     request({
       url: urlUtil.format(urlConnect),
@@ -134,6 +179,24 @@ describe('Check Prerendering & Middleware Setup', function () {
         assert.isTrue(!!~resp.headers['x-prerender-id'].indexOf('TEST'), '"x-prerender-id" is TEST');
         assert.isTrue(!!~body.indexOf('[PASSED]'), 'Test response has "[PASSED]" keyword');
         assert.isTrue(!!~body.indexOf(urlUtil.format(urlConnect)), 'Test response has valid source URL keyword');
+      }
+      done();
+    });
+  });
+
+  it('Connect server [static file]', function (done) {
+    request({
+      url: urlUtil.format(urlConnect) + staticFileName,
+      method: 'GET',
+      headers: {
+        'User-Agent': 'GoogleBot'
+      }
+    }, (error, resp, body) => {
+      assert.isTrue(!error, 'no error');
+      if (!error) {
+        assert.isTrue(resp.statusCode === 200, 'status code is 200');
+        assert.isFalse(_.has(resp.headers, 'x-prerender-id'), 'Has no "x-prerender-id" header');
+        assert.isTrue(body === respConnect, 'Body returned from Connect module');
       }
       done();
     });
