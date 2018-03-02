@@ -1,6 +1,6 @@
 {
   "name": "spiderable-middleware",
-  "version": "1.2.3",
+  "version": "1.2.4",
   "description": "Allow your JavaScript website to be crawled perfectly by search engines.",
   "main": "./lib/index.js",
   "scripts": {
@@ -42,11 +42,11 @@
     "request": "^2.83.0"
   },
   "devDependencies": {
-    "mocha": "^4.0.1",
+    "mocha": "^5.0.1",
     "chai": "^4.1.2",
     "underscore": "^1.8.3",
     "express": "^4.16.2",
-    "connect": "^3.6.5 ",
+    "connect": "^3.6.6 ",
     "spiderable-middleware": "file://./"
   }
 }
