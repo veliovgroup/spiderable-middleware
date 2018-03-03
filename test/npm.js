@@ -4,7 +4,7 @@ const urlUtil    = require('url');
 const request    = require('request');
 const connect    = require('connect');
 const express    = require('express');
-const Spiderable = require('spiderable-middleware');
+const Spiderable = require('../lib/index.js');
 
 const { assert }       = require('chai');
 const { it, describe } = require('mocha');

@@ -1,5 +1,5 @@
 package.js
-lib/meteor-tests.js
+test/meteor.js
 lib/meteor.js
 examples
 examples/*
