@@ -20,7 +20,7 @@ ejson@1.1.0
 geojson-utils@1.0.10
 http@1.4.0
 id-map@1.1.0
-local-test:ostrio:spiderable-middleware@1.2.4
+local-test:ostrio:spiderable-middleware@1.2.5
 logging@1.1.19
 meteor@1.8.2
 minimongo@1.4.3
@@ -31,7 +31,7 @@ mongo-dev-server@1.1.0
 mongo-id@1.0.6
 npm-mongo@2.2.33
 ordered-dict@1.1.0
-ostrio:spiderable-middleware@1.2.4
+ostrio:spiderable-middleware@1.2.5
 promise@0.10.1
 random@1.1.0
 reload@1.2.0
