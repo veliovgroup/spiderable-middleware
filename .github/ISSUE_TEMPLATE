@@ -1,22 +1,29 @@
-### I'm having an issue:
+# Issue Template
+
+## I'm having an issue
+
   - Give an expressive description of what is went wrong
   - Version of `spiderable-middleware` you're experiencing this issue
   - Is it NPM or Meteor (Atmosphere) package version?
   - Version of `Node.js`, `NPM` and/or `Meteor` you're experiencing this issue
   - If you're getting an error (exception), please provide full error log (output in console) as file or screenshot
 
-### I had an issue and I've solved it on my own:
+## I had an issue and I've solved it on my own
+
   - Provide a description of steps that you've followed to solve the problem
   - Provide links to websites and/or pages with the information that helped you (*if there are any*)
 
-### I have a suggestion:
+## I have a suggestion
+
   - Describe your feature / request
   - How you're going to use it? Give a usage example(s)
 
-### Documentation is missing something or incorrect (have typos, etc.):
+## Documentation is missing something or incorrect (have typos, etc.)
+
   - Give a short description what you have changed/added and why
   - Make sure you're using correct markdown markup
   - Make sure all code blocks starts with triple ``` (*backtick*) and have a syntax tag, for more read [this docs](https://help.github.com/articles/creating-and-highlighting-code-blocks/#syntax-highlighting)
   - Post addition/changes as issue ticket, we will manage it
+
      
 ## Thank you for contribution, and do not forget to get rid of this default message
