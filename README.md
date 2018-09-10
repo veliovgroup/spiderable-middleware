@@ -11,6 +11,7 @@ This package acts as middleware and intercepts requests to your Node.js applicat
 
 This middleware was tested and works like a charm with:
 
+  - [AMP](#amp-support)
   - [meteor](https://www.meteor.com/): [example](https://github.com/VeliovGroup/spiderable-middleware/blob/master/examples/meteor.middleware.js)
   - [express](https://www.npmjs.com/package/express): [example](https://github.com/VeliovGroup/spiderable-middleware/blob/master/examples/express.middleware.js)
   - [connect](https://www.npmjs.com/package/connect): [example](https://github.com/VeliovGroup/spiderable-middleware/blob/master/examples/connect.middleware.js)
@@ -233,6 +234,28 @@ http.createServer((req, res) => {
   });
 }).listen(3000);
 ```
+
+## AMP Support
+
+To properly serve pages for [Accelerated Mobile Pages](https://www.ampproject.org) (AMP) we support following URI schemes:
+
+```shell
+# Regular URIs:
+https://example.com/index.html
+https://example.com/articles/article-title.html
+https://example.com/articles/article-uniq-id/article-slug
+
+# AMP optimized URIs (prefix):
+https://example.com/amp/index.html
+https://example.com/amp/articles/article-title.html
+https://example.com/amp/articles/article-uniq-id/article-slug
+
+# AMP optimized URIs (extension):
+https://example.com/amp/index.amp.html
+https://example.com/amp/articles/article-title.amp.html
+```
+
+All URLs with `.amp.` extension and `/amp/` prefix will be optimized for AMP.
 
 ## Running Tests
 
