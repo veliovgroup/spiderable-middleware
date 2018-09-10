@@ -11,7 +11,6 @@ This package acts as middleware and intercepts requests to your Node.js applicat
 
 This middleware was tested and works like a charm with:
 
-  - [AMP](#amp-support)
   - [meteor](https://www.meteor.com/): [example](https://github.com/VeliovGroup/spiderable-middleware/blob/master/examples/meteor.middleware.js)
   - [express](https://www.npmjs.com/package/express): [example](https://github.com/VeliovGroup/spiderable-middleware/blob/master/examples/express.middleware.js)
   - [connect](https://www.npmjs.com/package/connect): [example](https://github.com/VeliovGroup/spiderable-middleware/blob/master/examples/connect.middleware.js)
@@ -30,6 +29,7 @@ This package was originally developed for [ostr.io](https://ostr.io) service. Bu
   - [Return genuine status code](https://github.com/VeliovGroup/spiderable-middleware#return-genuine-status-code)
   - [Speed-up rendering](https://github.com/VeliovGroup/spiderable-middleware#speed-up-rendering)
   - [JavaScript redirects](https://github.com/VeliovGroup/spiderable-middleware#javascript-redirects)
+  - [AMP Support](#amp-support)
   - [API](https://github.com/VeliovGroup/spiderable-middleware#api)
     - [Constructor](https://github.com/VeliovGroup/spiderable-middleware#constructor-new-spiderableopts)
     - [Middleware](https://github.com/VeliovGroup/spiderable-middleware#spiderablehandlerreq-res-next)
