@@ -2,9 +2,19 @@
 
 Google, Facebook, Twitter, Yahoo, and Bing and all other crawlers and search engines are constantly trying to view your website. If your website is built on top of the JavaScript framework like, but not limited to - Angular, Backbone, Ember, Meteor, React, MEAN most of the front-end solutions returns basic HTML-markup and script-tags to crawlers, but not content of your page. The mission of `spiderable-middleware` and [ostr.io](https://ostr.io) are to boost your SEO experience without a headache.
 
+## Why Pre-render?
+
+- 🕸 Execute JavaScript, as web-crawlers and search engines can't run JS code;
+- 🏃‍♂️ Boost response rate and decrease response time with caching;
+- 🚀 Optimized HTML markup for best SEO score;
+- 🖥 Support for PWAs and SPAs;
+- ❤️ Search engines and social network crawlers love straightforward and pre-rendered pages;
+- 📱 Consistent link previews in messaging apps, like iMessage, Messages, Facebook, Slack, Telegram, WhatsApp, Viber, VK, Twitter, etc.;
+- 💻 Image, title, and description previews for posted links at social networks, like Facebook, Twitter, VK and others.
+
 ## About Package
 
-This package acts as middleware and intercepts requests to your Node.js application from web crawlers. All requests proxy passed to the Spiderable (Prerender) Service, which returns static, rendered HTML.
+This package acts as middleware and intercepts requests to your Node.js application from web crawlers. All requests proxy passed to the Prerendering Service, which returns static, rendered HTML.
 
   - __Note__: *This package proxies real HTTP headers and response code, to reduce overwhelming requests, try to avoid HTTP-redirect headers, like* `Location` *and others. Read how to [return genuine status code](https://github.com/VeliovGroup/spiderable-middleware#return-genuine-status-code) and [handle JS-redirects](https://github.com/VeliovGroup/spiderable-middleware#javascript-redirects).*
   - __Note__: This is __server only package__. For isomorphic environments, *like Meteor.js*, this package should be imported/initialized only at server code base.
@@ -29,7 +39,8 @@ This package was originally developed for [ostr.io](https://ostr.io) service. Bu
   - [Return genuine status code](https://github.com/VeliovGroup/spiderable-middleware#return-genuine-status-code)
   - [Speed-up rendering](https://github.com/VeliovGroup/spiderable-middleware#speed-up-rendering)
   - [JavaScript redirects](https://github.com/VeliovGroup/spiderable-middleware#javascript-redirects)
-  - [AMP Support](#amp-support)
+  - [AMP Support](https://github.com/VeliovGroup/spiderable-middleware#amp-support)
+  - [Rendering Endpoints](https://github.com/VeliovGroup/spiderable-middleware#rendering-endpoints)
   - [API](https://github.com/VeliovGroup/spiderable-middleware#api)
     - [Constructor](https://github.com/VeliovGroup/spiderable-middleware#constructor-new-spiderableopts)
     - [Middleware](https://github.com/VeliovGroup/spiderable-middleware#spiderablehandlerreq-res-next)
@@ -256,6 +267,16 @@ https://example.com/amp/articles/article-title.amp.html
 ```
 
 All URLs with `.amp.` extension and `/amp/` prefix will be optimized for AMP.
+
+## Rendering Endpoints
+
+- __render (*default*)__ - `https://render.ostr.io` - This endpoint has "optimal" settings, and should fit 98% cases. Respects cache headers of both Crawler and your server;
+- __render-bypass (*devel/debug*)__ - `https://render-bypass.ostr.io` - This endpoint has bypass caching mechanism (*almost no cache*). Use it if you're experiencing an issue, or during development, to make sure you're not running into the intermediate cache. You're safe to use this endpoint in production, but it may result in higher usage and response time.
+- __render-cache (*under attack*)__ - `https://render-cache.ostr.io` - This endpoint has the most aggressive caching mechanism. Use it if you're looking for the shortest response time, and don't really care about outdated pages in cache for 6-12 hours
+
+To change default endpoint, grab [integration examples code](https://github.com/VeliovGroup/spiderable-middleware/tree/master/examples) and replace `render.ostr.io`, with endpoint of your choice. For NPM/Meteor integration change value of [`serviceURL`](https://github.com/VeliovGroup/spiderable-middleware#basic-usage) option.
+
+__Note:__ Described differences in caching behavior is only about intermediate proxy caching, `Cache-Control` header will be always set to the value defined in "Cache TTL". Cached results at the "Prerendering Engine" end can be [purged at any time](https://github.com/VeliovGroup/ostrio/blob/master/docs/prerendering/cache-purge.md).
 
 ## Running Tests
 
