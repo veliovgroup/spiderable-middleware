@@ -1,6 +1,6 @@
 Package.describe({
   name: 'ostrio:spiderable-middleware',
-  version: '1.3.3',
+  version: '1.3.4',
   summary: 'Allow your JavaScript website to be crawled perfectly by search engines.',
   git: 'https://github.com/VeliovGroup/spiderable-middleware',
   documentation: 'README.md'
@@ -19,5 +19,5 @@ Package.onTest(function(api) {
 });
 
 Npm.depends({
-  'spiderable-middleware': '1.3.3'
+  'spiderable-middleware': '1.3.4'
 });
