@@ -18,16 +18,16 @@ This package acts as middleware and intercepts requests to your Node.js applicat
 
 We made this package with developers in mind. It's well written in a very simple way, hackable, and easily tunable to meet your needs, can be used to turn dynamic pages into rendered, cached, and lightweight static pages, just set `botsUA` to `['.*']`. This is the best option to offload servers unless a website gets updated more than once in 4 hours.
 
-  - __Note__: *This package proxies real HTTP headers and response code, to reduce overwhelming requests, try to avoid HTTP-redirect headers, like* `Location` *and others. Read how to [return genuine status code](https://github.com/VeliovGroup/spiderable-middleware#return-genuine-status-code) and [handle JS-redirects](https://github.com/VeliovGroup/spiderable-middleware#javascript-redirects).*
-  - __Note__: This is __server only package__. For isomorphic environments, *like Meteor.js*, this package should be imported/initialized only at server code base.
+- __Note__: *This package proxies real HTTP headers and response code, to reduce overwhelming requests, try to avoid HTTP-redirect headers, like* `Location` *and others. Read how to [return genuine status code](https://github.com/VeliovGroup/spiderable-middleware#return-genuine-status-code) and [handle JS-redirects](https://github.com/VeliovGroup/spiderable-middleware#javascript-redirects).*
+- __Note__: This is __server only package__. For isomorphic environments, *like Meteor.js*, this package should be imported/initialized only at server code base.
 
 This middleware was tested and works like a charm with:
 
-  - [meteor](https://www.meteor.com/): [example](https://github.com/VeliovGroup/spiderable-middleware/blob/master/examples/meteor.middleware.js)
-  - [express](https://www.npmjs.com/package/express): [example](https://github.com/VeliovGroup/spiderable-middleware/blob/master/examples/express.middleware.js)
-  - [connect](https://www.npmjs.com/package/connect): [example](https://github.com/VeliovGroup/spiderable-middleware/blob/master/examples/connect.middleware.js)
-  - [vanilla http(s) server](https://nodejs.org/api/http.html): [example](https://github.com/VeliovGroup/spiderable-middleware/blob/master/examples/http.middleware.js)
-  - See [all examples](https://github.com/VeliovGroup/spiderable-middleware/tree/master/examples)
+- [meteor](https://www.meteor.com/): [example](https://github.com/VeliovGroup/spiderable-middleware/blob/master/examples/meteor.middleware.js)
+- [express](https://www.npmjs.com/package/express): [example](https://github.com/VeliovGroup/spiderable-middleware/blob/master/examples/express.middleware.js)
+- [connect](https://www.npmjs.com/package/connect): [example](https://github.com/VeliovGroup/spiderable-middleware/blob/master/examples/connect.middleware.js)
+- [vanilla http(s) server](https://nodejs.org/api/http.html): [example](https://github.com/VeliovGroup/spiderable-middleware/blob/master/examples/http.middleware.js)
+- See [all examples](https://github.com/VeliovGroup/spiderable-middleware/tree/master/examples)
 
 All other frameworks which follow Node's middleware convention - will work too.
 
@@ -35,22 +35,22 @@ This package was originally developed for [ostr.io](https://ostr.io) service. Bu
 
 ## ToC
 
-  - [Installation](https://github.com/VeliovGroup/spiderable-middleware#installation)
-  - [Basic usage](https://github.com/VeliovGroup/spiderable-middleware#basic-usage)
-  - [MeteorJS usage](https://github.com/VeliovGroup/spiderable-middleware#meteor-specific-usage)
-  - [Return genuine status code](https://github.com/VeliovGroup/spiderable-middleware#return-genuine-status-code)
-  - [Speed-up rendering](https://github.com/VeliovGroup/spiderable-middleware#speed-up-rendering)
-  - [Detect request from Prerendering engine during runtime](https://github.com/VeliovGroup/spiderable-middleware#detect-request-from-prerendering-engine-during-runtime)
-  - [Detect request from Prerendering engine during runtime](https://github.com/VeliovGroup/spiderable-middleware#detect-request-from-prerendering-engine-in-meteorjs)
-  - [JavaScript redirects](https://github.com/VeliovGroup/spiderable-middleware#javascript-redirects)
-  - [AMP Support](https://github.com/VeliovGroup/spiderable-middleware#amp-support)
-  - [Rendering Endpoints](https://github.com/VeliovGroup/spiderable-middleware#rendering-endpoints)
-  - [API](https://github.com/VeliovGroup/spiderable-middleware#api)
-    - [Constructor](https://github.com/VeliovGroup/spiderable-middleware#constructor-new-spiderableopts)
-    - [Middleware](https://github.com/VeliovGroup/spiderable-middleware#spiderablehandlerreq-res-next)
-  - [Running Tests](https://github.com/VeliovGroup/spiderable-middleware#running-tests)
-    - [Node.js/Mocha](https://github.com/VeliovGroup/spiderable-middleware#nodejsmocha)
-    - [Meteor/Tinytest](https://github.com/VeliovGroup/spiderable-middleware#meteortinytest)
+- [Installation](https://github.com/VeliovGroup/spiderable-middleware#installation)
+- [Basic usage](https://github.com/VeliovGroup/spiderable-middleware#basic-usage)
+- [MeteorJS usage](https://github.com/VeliovGroup/spiderable-middleware#meteor-specific-usage)
+- [Return genuine status code](https://github.com/VeliovGroup/spiderable-middleware#return-genuine-status-code)
+- [Speed-up rendering](https://github.com/VeliovGroup/spiderable-middleware#speed-up-rendering)
+- [Detect request from Prerendering engine during runtime](https://github.com/VeliovGroup/spiderable-middleware#detect-request-from-prerendering-engine-during-runtime)
+- [Detect request from Prerendering engine during runtime](https://github.com/VeliovGroup/spiderable-middleware#detect-request-from-prerendering-engine-in-meteorjs)
+- [JavaScript redirects](https://github.com/VeliovGroup/spiderable-middleware#javascript-redirects)
+- [AMP Support](https://github.com/VeliovGroup/spiderable-middleware#amp-support)
+- [Rendering Endpoints](https://github.com/VeliovGroup/spiderable-middleware#rendering-endpoints)
+- [API](https://github.com/VeliovGroup/spiderable-middleware#api)
+  - [Constructor](https://github.com/VeliovGroup/spiderable-middleware#constructor-new-spiderableopts)
+  - [Middleware](https://github.com/VeliovGroup/spiderable-middleware#spiderablehandlerreq-res-next)
+- [Running Tests](https://github.com/VeliovGroup/spiderable-middleware#running-tests)
+  - [Node.js/Mocha](https://github.com/VeliovGroup/spiderable-middleware#nodejsmocha)
+  - [Meteor/Tinytest](https://github.com/VeliovGroup/spiderable-middleware#meteortinytest)
 
 ## Installation
 
@@ -181,16 +181,16 @@ if (window.IS_PRERENDERING) {
 __Note__: `window.IS_PRERENDERING` might be `undefined` on initial page load, and may change during runtime. That's why we recommend to pre-define a setter for `IS_PRERENDERING`:
 
 ```js
-let _is_prerendering = false;
+let _isPrerendering = false;
 Object.defineProperty(window, 'IS_PRERENDERING', {
   set(val) {
-    _is_prerendering = val;
-    if (_is_prerendering === true) {
+    _isPrerendering = val;
+    if (_isPrerendering === true) {
       // This request is coming from Prerendering engine
     }
   },
   get() {
-    return _is_prerendering;
+    return _isPrerendering;
   }
 });
 ```
@@ -200,6 +200,9 @@ Object.defineProperty(window, 'IS_PRERENDERING', {
 Prerendering engine will set `window.IS_PRERENDERING` global variable to `true`. As in Meteor everything should be reactive, let's bound it with `ReactiveVar`:
 
 ```js
+import { Template }    from 'meteor/templating';
+import { ReactiveVar } from 'meteor/reactive-var';
+
 const IS_PRERENDERING = new ReactiveVar(false);
 Object.defineProperty(window, 'IS_PRERENDERING', {
   set(val) {
@@ -235,14 +238,14 @@ __Note__: *Only 4 redirects are allowed during one request after 4 redirects ses
 
 ### *Constructor* `new Spiderable([opts])`
 
-  - `opts` {*Object*} - Configuration options
-  - `opts.serviceURL` {*String*} - Valid URL to Spiderable endpoint (local or foreign). Default: `https://render.ostr.io`. Can be set via environment variables: `SPIDERABLE_SERVICE_URL` or `PRERENDER_SERVICE_URL`
-  - `opts.rootURL` {*String*} - Valid root URL of your website. Can be set via an environment variable: `ROOT_URL` (*common for meteor*)
-  - `opts.auth` {*String*} - [Optional] Auth string in next format: `user:pass`. Can be set via an environment variables: `SPIDERABLE_SERVICE_AUTH` or `PRERENDER_SERVICE_AUTH`. Default `null`
-  - `opts.botsUA` {*[String]*} - [Optional] An array of strings (case insensitive) with additional User-Agent names of crawlers you would like to intercept. See default [bot's names](https://github.com/VeliovGroup/spiderable-middleware/blob/master/lib/index.js#L106). Set to `['.*']` to match all browsers and robots, to serve static pages to all users/visitors
-  - `opts.ignore` {*[String]*} - [Optional] An array of strings (case __sensitive__) with ignored routes. Note: it's based on first match, so route `/users` will cause ignoring of `/part/users/part`, `/users/_id` and `/list/of/users`, but not `/user/_id` or `/list/of/blocked-users`. Default `null`
-  - `opts.only` {*[String|RegExp]*} - [Optional] An array of strings (case __sensitive__) or regular expressions (*could be mixed*). Define __exclusive__ route rules for prerendering. Could be used with `opts.onlyRE` rules. __Note:__ To define "safe" rules as {*RegExp*} it should start with `^` and end with `$` symbols, examples: `[/^\/articles\/?$/, /^\/article/[A-z0-9]{16}\/?$/]`
-  - `opts.onlyRE` {*RegExp*} - [Optional] Regular Expression with __exclusive__ route rules for prerendering. Could be used with `opts.only` rules
+- `opts` {*Object*} - Configuration options
+- `opts.serviceURL` {*String*} - Valid URL to Spiderable endpoint (local or foreign). Default: `https://render.ostr.io`. Can be set via environment variables: `SPIDERABLE_SERVICE_URL` or `PRERENDER_SERVICE_URL`
+- `opts.rootURL` {*String*} - Valid root URL of your website. Can be set via an environment variable: `ROOT_URL` (*common for meteor*)
+- `opts.auth` {*String*} - [Optional] Auth string in next format: `user:pass`. Can be set via an environment variables: `SPIDERABLE_SERVICE_AUTH` or `PRERENDER_SERVICE_AUTH`. Default `null`
+- `opts.botsUA` {*[String]*} - [Optional] An array of strings (case insensitive) with additional User-Agent names of crawlers you would like to intercept. See default [bot's names](https://github.com/VeliovGroup/spiderable-middleware/blob/master/lib/index.js#L106). Set to `['.*']` to match all browsers and robots, to serve static pages to all users/visitors
+- `opts.ignore` {*[String]*} - [Optional] An array of strings (case __sensitive__) with ignored routes. Note: it's based on first match, so route `/users` will cause ignoring of `/part/users/part`, `/users/_id` and `/list/of/users`, but not `/user/_id` or `/list/of/blocked-users`. Default `null`
+- `opts.only` {*[String|RegExp]*} - [Optional] An array of strings (case __sensitive__) or regular expressions (*could be mixed*). Define __exclusive__ route rules for prerendering. Could be used with `opts.onlyRE` rules. __Note:__ To define "safe" rules as {*RegExp*} it should start with `^` and end with `$` symbols, examples: `[/^\/articles\/?$/, /^\/article/[A-z0-9]{16}\/?$/]`
+- `opts.onlyRE` {*RegExp*} - [Optional] Regular Expression with __exclusive__ route rules for prerendering. Could be used with `opts.only` rules
 
 __Note:__ *Setting* `.onlyRE` *and/or* `.only` *rules are highly recommended. Otherwise, all routes, including randomly generated by bots will be subject of Prerendering and may cause unexpectedly higher usage.*
 
@@ -334,9 +337,9 @@ __Note:__ Described differences in caching behavior is only about intermediate p
 
 ## Running Tests
 
- 1. Clone this package
- 2. In Terminal (*Console*) go to directory where package is cloned
- 3. Then run:
+1. Clone this package
+2. In Terminal (*Console*) go to directory where package is cloned
+3. Then run:
 
 ### Node.js/Mocha
 
@@ -356,3 +359,7 @@ ROOT_URL=http://127.0.0.1:3003 npm test
 meteor test-packages ./ --port 3003
 # PORT is required, and can be changed to any local open port
 ```
+
+## Get $5 off pre-rendering service
+
+Get $5 off the second purchase, use [this link](https://ostr.io/signup/gCZWjiBScePWrnnDr) to sign up. *Valid only for new users.*
