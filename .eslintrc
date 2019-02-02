@@ -1,9 +1,13 @@
 {
   "parser": "babel-eslint",
+  "parserOptions": {
+    "sourceType": "module"
+  },
   "env": {
     "node": true
   },
   "globals": { },
+  "ecmaFeatures": {},
   "rules": {
     "strict": [2, "never"],
     "no-shadow": 2,
@@ -71,10 +75,6 @@
     "no-with": 2,
     "wrap-iife": [2, "any"],
     "yoda": 2,
-
-/**
- * Style
- */
     "indent": [2, 2],
     "brace-style": [2,
       "1tbs", {
