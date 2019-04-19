@@ -16,6 +16,8 @@ Google, Facebook, Twitter, Yahoo, and Bing and all other crawlers and search eng
 
 This package acts as middleware and intercepts requests to your Node.js application from web crawlers. All requests proxy passed to the Prerendering Service, which returns static, rendered HTML.
 
+__This is SERVER only package. For NPM make sure you're importing library only in Node.js. For Meteor.js please make sure library imported and executed only on SERVER.__
+
 We made this package with developers in mind. It's well written in a very simple way, hackable, and easily tunable to meet your needs, can be used to turn dynamic pages into rendered, cached, and lightweight static pages, just set `botsUA` to `['.*']`. This is the best option to offload servers unless a website gets updated more than once in 4 hours.
 
 - __Note__: *This package proxies real HTTP headers and response code, to reduce overwhelming requests, try to avoid HTTP-redirect headers, like* `Location` *and others. Read how to [return genuine status code](https://github.com/VeliovGroup/spiderable-middleware#return-genuine-status-code) and [handle JS-redirects](https://github.com/VeliovGroup/spiderable-middleware#javascript-redirects).*
@@ -86,6 +88,8 @@ First, add `fragment` meta-tag to your HTML template:
 ```
 
 ```js
+// Make sure this code isn't exported to the Browser bundle
+// and executed only on SERVER (Node.js)
 const express    = require('express');
 const app        = express();
 const Spiderable = require('spiderable-middleware');
@@ -109,6 +113,9 @@ We provide various options for `serviceURL` as "[Rendering Endpoints](https://gi
 ```js
 // meteor add webapp
 // meteor add ostrio:spiderable-middleware
+// Make sure this code is execute only on SERVER
+// Use if (Meteor.isServer) {/*...*/} blocks
+// or place this code under `/server/` directory
 import { WebApp } from 'meteor/webapp';
 import Spiderable from 'meteor/ostrio:spiderable-middleware';
 
