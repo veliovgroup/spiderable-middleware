@@ -1,9 +1,10 @@
-package.js
-test/meteor.js
-lib/meteor.js
-examples
-examples/*
-node_modules
+.DS_Store
+.github
 .npm
 .versions
-.github
+examples
+examples/*
+lib/meteor.js
+node_modules
+package.js
+test/meteor.js
