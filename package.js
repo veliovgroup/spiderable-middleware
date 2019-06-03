@@ -1,6 +1,6 @@
 Package.describe({
   name: 'ostrio:spiderable-middleware',
-  version: '1.3.6',
+  version: '1.4.0',
   summary: 'Allow your JavaScript website to be crawled perfectly by search engines.',
   git: 'https://github.com/VeliovGroup/spiderable-middleware',
   documentation: 'README.md'
@@ -9,7 +9,7 @@ Package.describe({
 Package.onUse((api) => {
   api.versionsFrom('1.6.1');
   api.use('ecmascript', 'server');
-  api.mainModule('lib/meteor.js', 'server');
+  api.mainModule('lib/index.js', 'server');
 });
 
 Package.onTest((api) => {
@@ -19,5 +19,5 @@ Package.onTest((api) => {
 });
 
 Npm.depends({
-  'spiderable-middleware': '1.3.6'
+  'request-libcurl': '1.0.1'
 });
