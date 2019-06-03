@@ -46,6 +46,7 @@ const testURLs = {
 
 const prerenders = {
   vanilla: new Spiderable({
+    debug: true,
     rootURL: urlUtil.format(url),
     auth: auth,
     only: only,
@@ -53,6 +54,7 @@ const prerenders = {
     ignore: ignore
   }),
   express: new Spiderable({
+    debug: true,
     rootURL: urlUtil.format(urlExpress),
     auth: auth,
     only: only,
@@ -60,6 +62,7 @@ const prerenders = {
     ignore: ignore
   }),
   connect: new Spiderable({
+    debug: true,
     rootURL: urlUtil.format(urlConnect),
     auth: auth,
     only: only,
