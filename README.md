@@ -249,7 +249,8 @@ __Note__: *Only 4 redirects are allowed during one request after 4 redirects ses
 - `opts.serviceURL` {*String*} - Valid URL to Spiderable endpoint (local or foreign). Default: `https://render.ostr.io`. Can be set via environment variables: `SPIDERABLE_SERVICE_URL` or `PRERENDER_SERVICE_URL`
 - `opts.rootURL` {*String*} - Valid root URL of your website. Can be set via an environment variable: `ROOT_URL` (*common for meteor*)
 - `opts.auth` {*String*} - [Optional] Auth string in next format: `user:pass`. Can be set via an environment variables: `SPIDERABLE_SERVICE_AUTH` or `PRERENDER_SERVICE_AUTH`. Default `null`
-- `opts.botsUA` {*[String]*} - [Optional] An array of strings (case insensitive) with additional User-Agent names of crawlers you would like to intercept. See default [bot's names](https://github.com/VeliovGroup/spiderable-middleware/blob/master/lib/index.js#L106). Set to `['.*']` to match all browsers and robots, to serve static pages to all users/visitors
+- `opts.botsUA` {*[String]*} - [Optional] An array of strings (case insensitive) with additional User-Agent names of crawlers you would like to intercept. See default [bot's names](https://github.com/VeliovGroup/spiderable-middleware/blob/master/lib/index.js#L119). Set to `['.*']` to match all browsers and robots, to serve static pages to all users/visitors
+- `opts.ignoredHeaders` {*[String]*} - [Optional] An array of strings (case insensitive) with HTTP header names to exclude from response. See default [list of ignored headers](https://github.com/VeliovGroup/spiderable-middleware/blob/master/lib/index.js#L121). Set to `['.*']` to match all browsers and robots, to serve static pages to all users/visitors
 - `opts.ignore` {*[String]*} - [Optional] An array of strings (case __sensitive__) with ignored routes. Note: it's based on first match, so route `/users` will cause ignoring of `/part/users/part`, `/users/_id` and `/list/of/users`, but not `/user/_id` or `/list/of/blocked-users`. Default `null`
 - `opts.only` {*[String|RegExp]*} - [Optional] An array of strings (case __sensitive__) or regular expressions (*could be mixed*). Define __exclusive__ route rules for prerendering. Could be used with `opts.onlyRE` rules. __Note:__ To define "safe" rules as {*RegExp*} it should start with `^` and end with `$` symbols, examples: `[/^\/articles\/?$/, /^\/article/[A-z0-9]{16}\/?$/]`
 - `opts.onlyRE` {*RegExp*} - [Optional] Regular Expression with __exclusive__ route rules for prerendering. Could be used with `opts.only` rules
@@ -260,7 +261,7 @@ __Note:__ *Setting* `.onlyRE` *and/or* `.only` *rules are highly recommended. Ot
 // CommonJS
 // const Spiderable = require('spiderable-middleware');
 
-// Meteor.js
+// ES6 import
 // import Spiderable from 'meteor/ostrio:spiderable-middleware';
 
 const spiderable = new Spiderable({
