@@ -16,7 +16,7 @@ const prerendering = new Spiderable({
   ignore: ['/user', '/billing', '/article/100', '/post/HhstejsJKH123jJi']
 });
 
-const re         = {
+const re = {
   trailingSlash: /\/$/,
   beginningSlash: /^\//,
 };
