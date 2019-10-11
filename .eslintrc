@@ -7,7 +7,6 @@
     "node": true
   },
   "globals": { },
-  "ecmaFeatures": {},
   "rules": {
     "strict": [2, "never"],
     "no-shadow": 2,
