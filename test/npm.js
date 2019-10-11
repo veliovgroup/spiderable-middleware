@@ -115,7 +115,7 @@ describe('Has botsRE property', () => {
 
 describe('Check Prerendering & Middleware Setup', function () {
   this.slow(9000);
-  this.timeout(15000);
+  this.timeout(20000);
 
   it('Vanilla node.js HTTP server', function (done) {
     request({
@@ -234,7 +234,7 @@ describe('Check Prerendering & Middleware Setup', function () {
 
 describe('Check valid path rules', function () {
   this.slow(9000);
-  this.timeout(15000);
+  this.timeout(20000);
 
   _.each(testURLs.valid, (testUrl) => {
     const _testUrl = testUrl.replace(re.beginningSlash, '');
@@ -302,8 +302,8 @@ describe('Check valid path rules', function () {
 });
 
 describe('Check ignored path rules', function () {
-  this.slow(9000);
-  this.timeout(15000);
+  this.slow(5000);
+  this.timeout(10000);
 
   _.each(testURLs.invalid, (testUrl) => {
     const _testUrl = testUrl.replace(re.beginningSlash, '');
