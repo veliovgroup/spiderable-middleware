@@ -111,10 +111,12 @@ We provide various options for `serviceURL` as "[Rendering Endpoints](https://gi
 ## Meteor specific usage
 
 ```js
+// Install necessary packages:
 // meteor add webapp
 // meteor add ostrio:spiderable-middleware
-// Make sure this code is execute only on SERVER
-// Use if (Meteor.isServer) {/*...*/} blocks
+
+// Make sure this code executed only on SERVER
+// Use `if (Meteor.isServer) {/*...*/}` blocks
 // or place this code under `/server/` directory
 import { WebApp } from 'meteor/webapp';
 import Spiderable from 'meteor/ostrio:spiderable-middleware';
@@ -341,12 +343,12 @@ All URLs with `.amp.` extension and `/amp/` prefix will be optimized for AMP.
 
 To change default endpoint, grab [integration examples code](https://github.com/VeliovGroup/spiderable-middleware/tree/master/examples) and replace `render.ostr.io`, with endpoint of your choice. For NPM/Meteor integration change value of [`serviceURL`](https://github.com/VeliovGroup/spiderable-middleware#basic-usage) option.
 
-__Note:__ Described differences in caching behavior is only about intermediate proxy caching, `Cache-Control` header will be always set to the value defined in "Cache TTL". Cached results at the "Prerendering Engine" end can be [purged at any time](https://github.com/VeliovGroup/ostrio/blob/master/docs/prerendering/cache-purge.md).
+__Note:__ Described differences in caching behavior related to intermediate proxy caching, `Cache-Control` header will be always set to the value defined in "Cache TTL". Cached results at the "Prerendering Engine" end can be [purged at any time](https://github.com/VeliovGroup/ostrio/blob/master/docs/prerendering/cache-purge.md).
 
 ## Running Tests
 
 1. Clone this package
-2. In Terminal (*Console*) go to directory where package is cloned
+2. In Terminal (*Console*) go to directory where package was cloned
 3. Then run:
 
 ### Node.js/Mocha
