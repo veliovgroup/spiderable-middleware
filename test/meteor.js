@@ -51,10 +51,10 @@ Meteor.startup(function(){
         test.isTrue(!error);
         if (!error) {
           test.isTrue(resp.statusCode === 200, 'Page received with correct statusCode');
-          test.isTrue(_.has(resp.headers, 'x-prerender-id'), 'Response has "x-prerender-id" header');
-          test.isTrue(!!~resp.headers['x-prerender-id'].indexOf('TEST'), 'Value of "x-prerender-id" is correctly set');
-          test.isTrue(!!~resp.content.indexOf('[PASSED]'), 'Response has correct body content');
-          test.isTrue(!!~resp.content.indexOf(process.env.ROOT_URL), 'Response has correct ping-back URL');
+          test.isTrue(resp.headers && !!resp.headers['x-prerender-id'], 'Response has "x-prerender-id" header');
+          test.isTrue(resp.headers['x-prerender-id'] && resp.headers['x-prerender-id'].includes('TEST'), 'Value of "x-prerender-id" is correctly set');
+          test.isTrue(resp.content.includes('[PASSED]'), 'Response has correct body content');
+          test.isTrue(resp.content.includes(process.env.ROOT_URL), 'Response has correct ping-back URL');
         }
         next();
       });
@@ -69,7 +69,7 @@ Meteor.startup(function(){
         test.isTrue(!error);
         if (!error) {
           test.isTrue(resp.statusCode === 200, 'File received with correct statusCode');
-          test.isFalse(_.has(resp.headers, 'x-prerender-id'), 'Has no "x-prerender-id" header');
+          test.isFalse(resp.headers && !!resp.headers['x-prerender-id'], 'Has no "x-prerender-id" header');
           test.isTrue(resp.headers['content-type'] === 'image/png', 'Content type is properly set');
         }
         next();
@@ -87,10 +87,10 @@ Meteor.startup(function(){
           test.isTrue(!error);
           if (!error) {
             test.isTrue(resp.statusCode === 200, 'Page received with correct statusCode');
-            test.isTrue(_.has(resp.headers, 'x-prerender-id'), 'Response has "x-prerender-id" header');
-            test.isTrue(!!~resp.headers['x-prerender-id'].indexOf('TEST'), 'Value of "x-prerender-id" is correctly set');
-            test.isTrue(!!~resp.content.indexOf('[PASSED]'), 'Response has correct body content');
-            test.isTrue(!!~resp.content.indexOf(process.env.ROOT_URL + _testUrl), 'Response has correct ping-back URL');
+            test.isTrue(resp.headers && !!resp.headers['x-prerender-id'], 'Response has "x-prerender-id" header');
+            test.isTrue(resp.headers['x-prerender-id'] && resp.headers['x-prerender-id'].includes('TEST'), 'Value of "x-prerender-id" is correctly set');
+            test.isTrue(resp.content.includes('[PASSED]'), 'Response has correct body content');
+            test.isTrue(resp.content.includes(process.env.ROOT_URL + _testUrl), 'Response has correct ping-back URL');
           }
           next();
         });
@@ -108,8 +108,8 @@ Meteor.startup(function(){
           test.isTrue(!error);
           if (!error) {
             test.isTrue(resp.statusCode === 200, 'File received with correct statusCode');
-            test.isFalse(_.has(resp.headers, 'x-prerender-id'), 'Has no "x-prerender-id" header');
-            test.isTrue(!!~resp.content.indexOf('__meteor_runtime_config__'), 'Response has correct body content');
+            test.isFalse(resp.headers && !!resp.headers['x-prerender-id'], 'Has no "x-prerender-id" header');
+            test.isTrue(resp.content.includes('__meteor_runtime_config__'), 'Response has correct body content');
           }
           next();
         });
