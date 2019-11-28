@@ -114,8 +114,8 @@ describe('Has botsRE property', () => {
 });
 
 describe('Check Prerendering & Middleware Setup', function () {
-  this.slow(9000);
-  this.timeout(20000);
+  this.slow(7000);
+  this.timeout(14000);
 
   it('Vanilla node.js HTTP server', function (done) {
     request({
@@ -128,10 +128,10 @@ describe('Check Prerendering & Middleware Setup', function () {
       assert.isTrue(!error, 'no error');
       if (!error) {
         assert.isTrue(resp.statusCode === 200, 'status code is 200');
-        assert.isTrue(_.has(resp.headers, 'x-prerender-id'), 'has "x-prerender-id" header');
-        assert.isTrue(!!~resp.headers['x-prerender-id'].indexOf('TEST'), '"x-prerender-id" is TEST');
-        assert.isTrue(!!~body.indexOf('[PASSED]'), 'Test response has "[PASSED]" keyword');
-        assert.isTrue(!!~body.indexOf(process.env.ROOT_URL), 'Test response has valid source URL keyword');
+        assert.isTrue(resp.headers && !!resp.headers['x-prerender-id'], 'has "x-prerender-id" header');
+        assert.isTrue(resp.headers['x-prerender-id'] && resp.headers['x-prerender-id'].includes('TEST'), '"x-prerender-id" is TEST');
+        assert.isTrue(body.includes('[PASSED]'), 'Test response has "[PASSED]" keyword');
+        assert.isTrue(body.includes(process.env.ROOT_URL), 'Test response has valid source URL keyword');
       }
       done();
     });
@@ -148,7 +148,7 @@ describe('Check Prerendering & Middleware Setup', function () {
       assert.isTrue(!error, 'no error');
       if (!error) {
         assert.isTrue(resp.statusCode === 200, 'status code is 200');
-        assert.isFalse(_.has(resp.headers, 'x-prerender-id'), 'Has no "x-prerender-id" header');
+        assert.isFalse(resp.headers && !!resp.headers['x-prerender-id'], 'Has no "x-prerender-id" header');
         assert.isTrue(body === respVanilla, 'Body returned from Vanilla node.js server');
       }
       done();
@@ -166,10 +166,10 @@ describe('Check Prerendering & Middleware Setup', function () {
       assert.isTrue(!error, 'no error');
       if (!error) {
         assert.isTrue(resp.statusCode === 200, 'status code is 200');
-        assert.isTrue(_.has(resp.headers, 'x-prerender-id'), 'has "x-prerender-id" header');
-        assert.isTrue(!!~resp.headers['x-prerender-id'].indexOf('TEST'), '"x-prerender-id" is TEST');
-        assert.isTrue(!!~body.indexOf('[PASSED]'), 'Test response has "[PASSED]" keyword');
-        assert.isTrue(!!~body.indexOf(urlUtil.format(urlExpress)), 'Test response has valid source URL keyword');
+        assert.isTrue(resp.headers && !!resp.headers['x-prerender-id'], 'has "x-prerender-id" header');
+        assert.isTrue(resp.headers['x-prerender-id'] && resp.headers['x-prerender-id'].includes('TEST'), '"x-prerender-id" is TEST');
+        assert.isTrue(body.includes('[PASSED]'), 'Test response has "[PASSED]" keyword');
+        assert.isTrue(body.includes(urlUtil.format(urlExpress)), 'Test response has valid source URL keyword');
       }
       done();
     });
@@ -186,7 +186,7 @@ describe('Check Prerendering & Middleware Setup', function () {
       assert.isTrue(!error, 'no error');
       if (!error) {
         assert.isTrue(resp.statusCode === 200, 'status code is 200');
-        assert.isFalse(_.has(resp.headers, 'x-prerender-id'), 'Has no "x-prerender-id" header');
+        assert.isFalse(resp.headers && !! resp.headers['x-prerender-id'], 'Has no "x-prerender-id" header');
         assert.isTrue(body === respExpress, 'Body returned from Connect module');
       }
       done();
@@ -204,10 +204,10 @@ describe('Check Prerendering & Middleware Setup', function () {
       assert.isTrue(!error, 'no error');
       if (!error) {
         assert.isTrue(resp.statusCode === 200, 'status code is 200');
-        assert.isTrue(_.has(resp.headers, 'x-prerender-id'), 'has "x-prerender-id" header');
-        assert.isTrue(!!~resp.headers['x-prerender-id'].indexOf('TEST'), '"x-prerender-id" is TEST');
-        assert.isTrue(!!~body.indexOf('[PASSED]'), 'Test response has "[PASSED]" keyword');
-        assert.isTrue(!!~body.indexOf(urlUtil.format(urlConnect)), 'Test response has valid source URL keyword');
+        assert.isTrue(resp.headers && !!resp.headers['x-prerender-id'], 'has "x-prerender-id" header');
+        assert.isTrue(resp.headers['x-prerender-id'] && resp.headers['x-prerender-id'].includes('TEST'), '"x-prerender-id" is TEST');
+        assert.isTrue(body.includes('[PASSED]'), 'Test response has "[PASSED]" keyword');
+        assert.isTrue(body.includes(urlUtil.format(urlConnect)), 'Test response has valid source URL keyword');
       }
       done();
     });
@@ -224,7 +224,7 @@ describe('Check Prerendering & Middleware Setup', function () {
       assert.isTrue(!error, 'no error');
       if (!error) {
         assert.isTrue(resp.statusCode === 200, 'status code is 200');
-        assert.isFalse(_.has(resp.headers, 'x-prerender-id'), 'Has no "x-prerender-id" header');
+        assert.isFalse(resp.headers && !!resp.headers['x-prerender-id'], 'Has no "x-prerender-id" header');
         assert.isTrue(body === respConnect, 'Body returned from Connect module');
       }
       done();
@@ -233,8 +233,8 @@ describe('Check Prerendering & Middleware Setup', function () {
 });
 
 describe('Check valid path rules', function () {
-  this.slow(9000);
-  this.timeout(20000);
+  this.slow(18000);
+  this.timeout(32000);
 
   _.each(testURLs.valid, (testUrl) => {
     const _testUrl = testUrl.replace(re.beginningSlash, '');
@@ -250,10 +250,10 @@ describe('Check valid path rules', function () {
         assert.isTrue(!error, 'no error');
         if (!error) {
           assert.isTrue(resp.statusCode === 200, 'status code is 200');
-          assert.isTrue(_.has(resp.headers, 'x-prerender-id'), 'has "x-prerender-id" header');
-          assert.isTrue(!!~resp.headers['x-prerender-id'].indexOf('TEST'), '"x-prerender-id" is TEST');
-          assert.isTrue(!!~body.indexOf('[PASSED]'), 'Test response has "[PASSED]" keyword');
-          assert.isTrue(!!~body.indexOf(urlUtil.format(url) + _testUrl), 'Test response has valid source URL keyword');
+          assert.isTrue(resp.headers && !!resp.headers['x-prerender-id'], 'has "x-prerender-id" header');
+          assert.isTrue(resp.headers['x-prerender-id'] && resp.headers['x-prerender-id'].includes('TEST'), '"x-prerender-id" is TEST');
+          assert.isTrue(body.includes('[PASSED]'), 'Test response has "[PASSED]" keyword');
+          assert.isTrue(body.includes(urlUtil.format(url) + _testUrl), 'Test response has valid source URL keyword');
         }
         done();
       });
@@ -270,10 +270,10 @@ describe('Check valid path rules', function () {
         assert.isTrue(!error, 'no error');
         if (!error) {
           assert.isTrue(resp.statusCode === 200, 'status code is 200');
-          assert.isTrue(_.has(resp.headers, 'x-prerender-id'), 'has "x-prerender-id" header');
-          assert.isTrue(!!~resp.headers['x-prerender-id'].indexOf('TEST'), '"x-prerender-id" is TEST');
-          assert.isTrue(!!~body.indexOf('[PASSED]'), 'Test response has "[PASSED]" keyword');
-          assert.isTrue(!!~body.indexOf(urlUtil.format(urlExpress) + _testUrl), 'Test response has valid source URL keyword');
+          assert.isTrue(resp.headers && !!resp.headers['x-prerender-id'], 'has "x-prerender-id" header');
+          assert.isTrue(resp.headers['x-prerender-id'] && resp.headers['x-prerender-id'].includes('TEST'), '"x-prerender-id" is TEST');
+          assert.isTrue(body.includes('[PASSED]'), 'Test response has "[PASSED]" keyword');
+          assert.isTrue(body.includes(urlUtil.format(urlExpress) + _testUrl), 'Test response has valid source URL keyword');
         }
         done();
       });
@@ -290,10 +290,10 @@ describe('Check valid path rules', function () {
         assert.isTrue(!error, 'no error');
         if (!error) {
           assert.isTrue(resp.statusCode === 200, 'status code is 200');
-          assert.isTrue(_.has(resp.headers, 'x-prerender-id'), 'has "x-prerender-id" header');
-          assert.isTrue(!!~resp.headers['x-prerender-id'].indexOf('TEST'), '"x-prerender-id" is TEST');
-          assert.isTrue(!!~body.indexOf('[PASSED]'), 'Test response has "[PASSED]" keyword');
-          assert.isTrue(!!~body.indexOf(urlUtil.format(urlConnect) + _testUrl), 'Test response has valid source URL keyword');
+          assert.isTrue(resp.headers && !!resp.headers['x-prerender-id'], 'has "x-prerender-id" header');
+          assert.isTrue(resp.headers['x-prerender-id'] && resp.headers['x-prerender-id'].includes('TEST'), '"x-prerender-id" is TEST');
+          assert.isTrue(body.includes('[PASSED]'), 'Test response has "[PASSED]" keyword');
+          assert.isTrue(body.includes(urlUtil.format(urlConnect) + _testUrl), 'Test response has valid source URL keyword');
         }
         done();
       });
@@ -302,8 +302,8 @@ describe('Check valid path rules', function () {
 });
 
 describe('Check ignored path rules', function () {
-  this.slow(5000);
-  this.timeout(10000);
+  this.slow(2000);
+  this.timeout(4000);
 
   _.each(testURLs.invalid, (testUrl) => {
     const _testUrl = testUrl.replace(re.beginningSlash, '');
@@ -319,7 +319,7 @@ describe('Check ignored path rules', function () {
         assert.isTrue(!error, 'no error');
         if (!error) {
           assert.isTrue(resp.statusCode === 200, 'status code is 200');
-          assert.isFalse(_.has(resp.headers, 'x-prerender-id'), 'Has no "x-prerender-id" header');
+          assert.isFalse(resp.headers && !!resp.headers['x-prerender-id'], 'Has no "x-prerender-id" header');
           assert.isTrue(body === respVanilla, 'Body returned from Connect module');
         }
         done();
@@ -337,7 +337,7 @@ describe('Check ignored path rules', function () {
         assert.isTrue(!error, 'no error');
         if (!error) {
           assert.isTrue(resp.statusCode === 200, 'status code is 200');
-          assert.isFalse(_.has(resp.headers, 'x-prerender-id'), 'Has no "x-prerender-id" header');
+          assert.isFalse(resp.headers && !!resp.headers['x-prerender-id'], 'Has no "x-prerender-id" header');
           assert.isTrue(body === respExpress, 'Body returned from Connect module');
         }
         done();
@@ -355,7 +355,7 @@ describe('Check ignored path rules', function () {
         assert.isTrue(!error, 'no error');
         if (!error) {
           assert.isTrue(resp.statusCode === 200, 'status code is 200');
-          assert.isFalse(_.has(resp.headers, 'x-prerender-id'), 'Has no "x-prerender-id" header');
+          assert.isFalse(resp.headers && !!resp.headers['x-prerender-id'], 'Has no "x-prerender-id" header');
           assert.isTrue(body === respConnect, 'Body returned from Connect module');
         }
         done();
