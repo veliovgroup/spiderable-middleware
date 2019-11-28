@@ -1,11 +1,15 @@
+*.md
 .DS_Store
+.eslintcache
 .eslintrc
 .github
+.meteor
 .npm
 .versions
 examples
 examples/*
 lib/meteor.js
 node_modules
+npm-debug.log*
 package.js
 test/meteor.js
