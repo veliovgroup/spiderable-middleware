@@ -1,6 +1,6 @@
 {
   "name": "spiderable-middleware",
-  "version": "1.4.4",
+  "version": "1.4.5",
   "description": "Perfect SEO for JavaScript websites. Pre-rendering — it's just like SSR, but with no coding and simple integration",
   "main": "./lib/index.js",
   "scripts": {
