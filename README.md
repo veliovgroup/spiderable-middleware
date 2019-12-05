@@ -395,6 +395,9 @@ npm install --save-dev
 npm install --save
 # Run tests:
 ROOT_URL=http://127.0.0.1:3003 npm test
+
+# Run same tests with extra-logging
+DEBUG=true ROOT_URL=http://127.0.0.1:3003 npm test
 # http://127.0.0.1:3003 can be changed to any local address, PORT is required!
 ```
 
@@ -402,6 +405,9 @@ ROOT_URL=http://127.0.0.1:3003 npm test
 
 ```shell
 meteor test-packages ./ --port 3003
+
+# Run same tests with extra-logging
+DEBUG=true meteor test-packages ./ --port 3003
 # PORT is required, and can be changed to any local open port
 ```
 
