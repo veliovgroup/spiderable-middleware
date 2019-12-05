@@ -43,13 +43,14 @@ This package was originally developed for [ostr.io](https://ostr.io) service. Bu
 - [Return genuine status code](https://github.com/VeliovGroup/spiderable-middleware#return-genuine-status-code)
 - [Speed-up rendering](https://github.com/VeliovGroup/spiderable-middleware#speed-up-rendering)
 - [Detect request from Prerendering engine during runtime](https://github.com/VeliovGroup/spiderable-middleware#detect-request-from-prerendering-engine-during-runtime)
-- [Detect request from Prerendering engine during runtime](https://github.com/VeliovGroup/spiderable-middleware#detect-request-from-prerendering-engine-in-meteorjs)
+- [Detect request from Prerendering engine during __Meteor/Blaze__ runtime](https://github.com/VeliovGroup/spiderable-middleware#detect-request-from-prerendering-engine-in-meteorjs)
 - [JavaScript redirects](https://github.com/VeliovGroup/spiderable-middleware#javascript-redirects)
 - [AMP Support](https://github.com/VeliovGroup/spiderable-middleware#amp-support)
 - [Rendering Endpoints](https://github.com/VeliovGroup/spiderable-middleware#rendering-endpoints)
 - [API](https://github.com/VeliovGroup/spiderable-middleware#api)
   - [Constructor](https://github.com/VeliovGroup/spiderable-middleware#constructor-new-spiderableopts)
   - [Middleware](https://github.com/VeliovGroup/spiderable-middleware#spiderablehandlerreq-res-next)
+- [Debugging](https://github.com/VeliovGroup/spiderable-middleware#debugging)
 - [Running Tests](https://github.com/VeliovGroup/spiderable-middleware#running-tests)
   - [Node.js/Mocha](https://github.com/VeliovGroup/spiderable-middleware#nodejsmocha)
   - [Meteor/Tinytest](https://github.com/VeliovGroup/spiderable-middleware#meteortinytest)
@@ -179,11 +180,11 @@ To speed-up rendering, you __should__ tell to the Spiderable engine when your pa
 
 ## Detect request from Prerendering engine during runtime
 
-Prerendering engine will set `window.IS_PRERENDERING` global variable to `true`. Detecting request from prerendering engine might be as easy as:
+Pre-rendering engine will set `window.IS_PRERENDERING` global variable to `true`. Detecting request from pre-rendering engine might be as easy as:
 
 ```js
 if (window.IS_PRERENDERING) {
-  // This request is coming from Prerendering engine
+  // This request is coming from Pre-rendering engine
 }
 ```
 
@@ -195,7 +196,7 @@ Object.defineProperty(window, 'IS_PRERENDERING', {
   set(val) {
     _isPrerendering = val;
     if (_isPrerendering === true) {
-      // This request is coming from Prerendering engine
+      // This request is coming from Pre-rendering engine
     }
   },
   get() {
@@ -206,7 +207,7 @@ Object.defineProperty(window, 'IS_PRERENDERING', {
 
 ## Detect request from Prerendering engine in Meteor.js
 
-Prerendering engine will set `window.IS_PRERENDERING` global variable to `true`. As in Meteor everything should be reactive, let's bound it with `ReactiveVar`:
+Pre-rendering engine will set `window.IS_PRERENDERING` global variable to `true`. As in Meteor/Blaze everything should be reactive, let's bound it with `ReactiveVar`:
 
 ```js
 import { Template }    from 'meteor/templating';
@@ -252,18 +253,22 @@ __Note__: *Only 4 redirects are allowed during one request after 4 redirects ses
 - `opts.rootURL` {*String*} - Valid root URL of your website. Can be set via an environment variable: `ROOT_URL` (*common for meteor*)
 - `opts.auth` {*String*} - [Optional] Auth string in next format: `user:pass`. Can be set via an environment variables: `SPIDERABLE_SERVICE_AUTH` or `PRERENDER_SERVICE_AUTH`. Default `null`
 - `opts.botsUA` {*[String]*} - [Optional] An array of strings (case insensitive) with additional User-Agent names of crawlers you would like to intercept. See default [bot's names](https://github.com/VeliovGroup/spiderable-middleware/blob/master/lib/index.js#L119). Set to `['.*']` to match all browsers and robots, to serve static pages to all users/visitors
-- `opts.ignoredHeaders` {*[String]*} - [Optional] An array of strings (case insensitive) with HTTP header names to exclude from response. See default [list of ignored headers](https://github.com/VeliovGroup/spiderable-middleware/blob/master/lib/index.js#L121). Set to `['.*']` to match all browsers and robots, to serve static pages to all users/visitors
+- `opts.ignoredHeaders` {*[String]*} - [Optional] An array of strings (case insensitive) with HTTP header names to exclude from response. See default [list of ignored headers](https://github.com/VeliovGroup/spiderable-middleware/blob/master/lib/index.js#L121). Set to `['.*']` to ignore all headers
 - `opts.ignore` {*[String]*} - [Optional] An array of strings (case __sensitive__) with ignored routes. Note: it's based on first match, so route `/users` will cause ignoring of `/part/users/part`, `/users/_id` and `/list/of/users`, but not `/user/_id` or `/list/of/blocked-users`. Default `null`
-- `opts.only` {*[String|RegExp]*} - [Optional] An array of strings (case __sensitive__) or regular expressions (*could be mixed*). Define __exclusive__ route rules for prerendering. Could be used with `opts.onlyRE` rules. __Note:__ To define "safe" rules as {*RegExp*} it should start with `^` and end with `$` symbols, examples: `[/^\/articles\/?$/, /^\/article/[A-z0-9]{16}\/?$/]`
-- `opts.onlyRE` {*RegExp*} - [Optional] Regular Expression with __exclusive__ route rules for prerendering. Could be used with `opts.only` rules
+- `opts.only` {*[String|RegExp]*} - [Optional] An array of strings (case __sensitive__) or regular expressions (*could be mixed*). Define __exclusive__ route rules for pre-rendering. Could be used with `opts.onlyRE` rules. __Note:__ To define "safe" rules as {*RegExp*} it should start with `^` and end with `$` symbols, examples: `[/^\/articles\/?$/, /^\/article/[A-z0-9]{16}\/?$/]`
+- `opts.onlyRE` {*RegExp*} - [Optional] Regular Expression with __exclusive__ route rules for pre-rendering. Could be used with `opts.only` rules
+- `opts.requestOptions` {*Object*} - [Optional] Options for request module (like: `timeout`, `debug`, `proxy`), for all available options see [`request-libcurl` API docs](https://github.com/VeliovGroup/request-extra#request-options)
 
-__Note:__ *Setting* `.onlyRE` *and/or* `.only` *rules are highly recommended. Otherwise, all routes, including randomly generated by bots will be subject of Prerendering and may cause unexpectedly higher usage.*
+__Note:__ *Setting* `.onlyRE` *and/or* `.only` *rules are highly recommended. Otherwise, all routes, including randomly generated by bots will be subject of Pre-rendering and may cause unexpectedly higher usage.*
 
 ```js
 // CommonJS
 // const Spiderable = require('spiderable-middleware');
 
 // ES6 import
+// import Spiderable from 'spiderable-middleware';
+
+// ES6 import (Meteor.js)
 // import Spiderable from 'meteor/ostrio:spiderable-middleware';
 
 const spiderable = new Spiderable({
@@ -305,7 +310,7 @@ WebApp.connectHandlers.use(spiderable);
 http.createServer((req, res) => {
   spiderable.handler(req, res, () => {
     // Callback, triggered if this request
-    // is not a subject of spiderable prerendering
+    // is not a subject of spiderable pre-rendering
     res.writeHead(200, {'Content-Type': 'text/plain; charset=UTF-8'});
     res.end('Hello vanilla NodeJS!');
     // Or do something else ...
@@ -343,7 +348,37 @@ All URLs with `.amp.` extension and `/amp/` prefix will be optimized for AMP.
 
 To change default endpoint, grab [integration examples code](https://github.com/VeliovGroup/spiderable-middleware/tree/master/examples) and replace `render.ostr.io`, with endpoint of your choice. For NPM/Meteor integration change value of [`serviceURL`](https://github.com/VeliovGroup/spiderable-middleware#basic-usage) option.
 
-__Note:__ Described differences in caching behavior related to intermediate proxy caching, `Cache-Control` header will be always set to the value defined in "Cache TTL". Cached results at the "Prerendering Engine" end can be [purged at any time](https://github.com/VeliovGroup/ostrio/blob/master/docs/prerendering/cache-purge.md).
+__Note:__ Described differences in caching behavior related to intermediate proxy caching, `Cache-Control` header will be always set to the value defined in "Cache TTL". Cached results at the "Pre-rendering Engine" end can be [purged at any time](https://github.com/VeliovGroup/ostrio/blob/master/docs/prerendering/cache-purge.md).
+
+## Debugging
+
+To make sure a server can reach our rendering endpoint run cURL command or send request via Node.js to (*replace example.com with your domain name*) `https://test:test@render-bypass.ostr.io/?url=http://example.com`.
+
+In this example we're using `render-bypass.ostr.io` endpoint to avoid any possible cached results, [read more about rendering endpoints](https://github.com/VeliovGroup/spiderable-middleware#rendering-endpoints). As API credentials we're using `test:test`, this part of URL can be replaced with `auth` option from Node.js example. Your API credentials and instructions can be found at the very bottom of [Pre-rendering Panel](https://ostr.io/service/prerender) of a host, click on "Integration Guide".
+
+```shell
+# cURL example:
+curl -v https://test:test@render-bypass.ostr.io/?url=http://example.com
+```
+
+```js
+// Node.js example:
+const https = require('https');
+
+https.get('https://test:test@render-bypass.ostr.io/?url=http://example.com', (resp) => {
+  let data = '';
+
+  resp.on('data', (chunk) => {
+    data += chunk.toString('utf8');
+  });
+
+  resp.on('end', () => {
+    console.log(data);
+  });
+}).on('error', (error) => {
+  console.error(error);
+});
+```
 
 ## Running Tests
 
@@ -370,6 +405,6 @@ meteor test-packages ./ --port 3003
 # PORT is required, and can be changed to any local open port
 ```
 
-## Get $5 off pre-rendering service
+## Get $50 off pre-rendering service
 
-Get $5 off the second purchase, use [this link](https://ostr.io/signup/gCZWjiBScePWrnnDr) to sign up. *Valid only for new users.*
+Get $50 off the second purchase, use [this link](https://ostr.io/signup/gCZWjiBScePWrnnDr) to sign up. *Valid only for new users.*
