@@ -2,7 +2,7 @@ import { _ }      from 'meteor/underscore';
 import { HTTP }   from 'meteor/http';
 import { Meteor } from 'meteor/meteor';
 import { WebApp } from 'meteor/webapp';
-import Spiderable from 'meteor/ostrio:spiderable-middleware';
+import Spiderable from '../lib/index.js';
 
 const prerendering = new Spiderable({
   rootURL: process.env.ROOT_URL,
