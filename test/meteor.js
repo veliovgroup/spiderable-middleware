@@ -13,7 +13,12 @@ const prerendering = new Spiderable({
     /^\/article\/[0-9]{1,3}\/?$/
   ],
   onlyRE: /^(\/|\/posts|\/post\/[A-z0-9]{16})\/?$/,
-  ignore: ['/user', '/billing', '/article/100', '/post/HhstejsJKH123jJi']
+  ignore: ['/user', '/billing', '/article/100', '/post/HhstejsJKH123jJi'],
+  serviceURL: 'https://render-bypass.ostr.io',
+  requestOptions: {
+    debug: process.env.DEBUG === 'true' ? true : false,
+    keepAlive: true
+  }
 });
 
 const re = {

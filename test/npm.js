@@ -46,28 +46,37 @@ const testURLs = {
 
 const prerenders = {
   vanilla: new Spiderable({
-    debug: true,
     rootURL: urlUtil.format(url),
     auth: auth,
     only: only,
     onlyRE: onlyRE,
-    ignore: ignore
+    ignore: ignore,
+    serviceURL: 'https://render-bypass.ostr.io',
+    requestOptions: {
+      debug: process.env.DEBUG === 'true' ? true : false
+    }
   }),
   express: new Spiderable({
-    debug: true,
     rootURL: urlUtil.format(urlExpress),
     auth: auth,
     only: only,
     onlyRE: onlyRE,
-    ignore: ignore
+    ignore: ignore,
+    serviceURL: 'https://render-bypass.ostr.io',
+    requestOptions: {
+      debug: process.env.DEBUG === 'true' ? true : false
+    }
   }),
   connect: new Spiderable({
-    debug: true,
     rootURL: urlUtil.format(urlConnect),
     auth: auth,
     only: only,
     onlyRE: onlyRE,
-    ignore: ignore
+    ignore: ignore,
+    serviceURL: 'https://render-bypass.ostr.io',
+    requestOptions: {
+      debug: process.env.DEBUG === 'true' ? true : false
+    }
   })
 };
 
