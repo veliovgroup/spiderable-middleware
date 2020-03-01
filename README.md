@@ -10,6 +10,7 @@ Google, Facebook, Twitter, Yahoo, and Bing and all other crawlers and search eng
 - 🖥 Support for PWAs and SPAs;
 - ❤️ Search engines and social network crawlers love straightforward and pre-rendered pages;
 - 📱 Consistent link previews in messaging apps, like iMessage, Messages, Facebook, Slack, Telegram, WhatsApp, Viber, VK, Twitter, etc.;
+- 📱 Support for mobile-crawlers (*ssssobile screen size*);
 - 💻 Image, title, and description previews for posted links at social networks, like Facebook, Twitter, VK and others.
 
 ## About Package
@@ -60,7 +61,7 @@ This package was originally developed for [ostr.io](https://ostr.io) service. Bu
 ### NPM:
 
 ```shell
-npm install spiderable-middleware
+npm install spiderable-middleware --save
 ```
 
 ### Meteor:
@@ -147,12 +148,12 @@ Format (jade):
 
 This package support all standard and custom status codes:
 
-  - `201` - `<!-- response:status-code=201 -->`
-  - `401` - `<!-- response:status-code=401 -->`
-  - `403` - `<!-- response:status-code=403 -->`
-  - `499` - `<!-- response:status-code=499 -->` (*non-standard*)
-  - `500` - `<!-- response:status-code=500 -->`
-  - `514` - `<!-- response:status-code=514 -->` (*non-standard*)
+- `201` - `<!-- response:status-code=201 -->`
+- `401` - `<!-- response:status-code=401 -->`
+- `403` - `<!-- response:status-code=403 -->`
+- `499` - `<!-- response:status-code=499 -->`
+- `500` - `<!-- response:status-code=500 -->`
+- `514` - `<!-- response:status-code=514 -->` (*non-standard*)
 
 __Note__: *Reserved status codes for internal service communications:* `49[0-9]`.
 
