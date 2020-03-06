@@ -8,7 +8,7 @@ Google, Facebook, Twitter, Yahoo, and Bing and all other crawlers and search eng
 - 🏃‍♂️ Boost response rate and decrease response time with caching;
 - 🚀 Optimized HTML markup for best SEO score;
 - 🖥 Support for PWAs and SPAs;
-- 📱 Support for mobile-crawlers (*mbile screen size*);
+- 📱 Support for mobile-like crawlers;
 - 💅 Support [`styled-components`](https://styled-components.com);
 - ⚡️ Support [AMP (Accelerated Mobile Pages)](https://www.ampproject.org);
 - ❤️ Search engines and social network crawlers love straightforward and pre-rendered pages;
