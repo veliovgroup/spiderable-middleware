@@ -8,9 +8,11 @@ Google, Facebook, Twitter, Yahoo, and Bing and all other crawlers and search eng
 - 🏃‍♂️ Boost response rate and decrease response time with caching;
 - 🚀 Optimized HTML markup for best SEO score;
 - 🖥 Support for PWAs and SPAs;
+- 📱 Support for mobile-crawlers (*mbile screen size*);
+- 💅 Support [`styled-components`](https://styled-components.com);
+- ⚡️ Support [AMP (Accelerated Mobile Pages)](https://www.ampproject.org);
 - ❤️ Search engines and social network crawlers love straightforward and pre-rendered pages;
 - 📱 Consistent link previews in messaging apps, like iMessage, Messages, Facebook, Slack, Telegram, WhatsApp, Viber, VK, Twitter, etc.;
-- 📱 Support for mobile-crawlers (*ssssobile screen size*);
 - 💻 Image, title, and description previews for posted links at social networks, like Facebook, Twitter, VK and others.
 
 ## About Package
@@ -43,8 +45,8 @@ This package was originally developed for [ostr.io](https://ostr.io) service. Bu
 - [MeteorJS usage](https://github.com/VeliovGroup/spiderable-middleware#meteor-specific-usage)
 - [Return genuine status code](https://github.com/VeliovGroup/spiderable-middleware#return-genuine-status-code)
 - [Speed-up rendering](https://github.com/VeliovGroup/spiderable-middleware#speed-up-rendering)
-- [Detect request from Prerendering engine during runtime](https://github.com/VeliovGroup/spiderable-middleware#detect-request-from-prerendering-engine-during-runtime)
-- [Detect request from Prerendering engine during __Meteor/Blaze__ runtime](https://github.com/VeliovGroup/spiderable-middleware#detect-request-from-prerendering-engine-in-meteorjs)
+- [Detect request from Prerendering engine during runtime](https://github.com/VeliovGroup/spiderable-middleware#detect-request-from-pre-rendering-engine-during-runtime)
+- [Detect request from Prerendering engine during __Meteor/Blaze__ runtime](https://github.com/VeliovGroup/spiderable-middleware#detect-request-from-pre-rendering-engine-in-meteorjs)
 - [JavaScript redirects](https://github.com/VeliovGroup/spiderable-middleware#javascript-redirects)
 - [AMP Support](https://github.com/VeliovGroup/spiderable-middleware#amp-support)
 - [Rendering Endpoints](https://github.com/VeliovGroup/spiderable-middleware#rendering-endpoints)
@@ -132,26 +134,27 @@ WebApp.connectHandlers.use(new Spiderable({
 
 ## Return genuine status code
 
-To pass expected response code from front-end JavaScript framework to browser/crawlers, you need to create specially formatted HTML-comment. This comment can be placed in any part of HTML-page. `head` or `body` tag is the best place for it.
+To pass expected response code from front-end JavaScript framework to browser/crawlers, you need to create specially formatted HTML-comment. This comment __can be placed in any part of HTML-page__. `head` or `body` tag is the best place for it.
 
-Format (html):
+### Format
+
+__html__:
 
 ```html
 <!-- response:status-code=404 -->
 ```
 
-Format (jade):
+__jade__:
 
 ```jade
 // response:status-code=404
 ```
 
-This package support all standard and custom status codes:
+This package support __any__ standard and custom status codes:
 
 - `201` - `<!-- response:status-code=201 -->`
 - `401` - `<!-- response:status-code=401 -->`
 - `403` - `<!-- response:status-code=403 -->`
-- `499` - `<!-- response:status-code=499 -->`
 - `500` - `<!-- response:status-code=500 -->`
 - `514` - `<!-- response:status-code=514 -->` (*non-standard*)
 
@@ -179,9 +182,9 @@ To speed-up rendering, you __should__ tell to the Spiderable engine when your pa
 </html>
 ```
 
-## Detect request from Prerendering engine during runtime
+## Detect request from Pre-rendering engine during runtime
 
-Pre-rendering engine will set `window.IS_PRERENDERING` global variable to `true`. Detecting request from pre-rendering engine might be as easy as:
+Pre-rendering engine will set `window.IS_PRERENDERING` global variable to `true`. Detecting requests from pre-rendering engine are as easy as:
 
 ```js
 if (window.IS_PRERENDERING) {
@@ -189,24 +192,24 @@ if (window.IS_PRERENDERING) {
 }
 ```
 
-__Note__: `window.IS_PRERENDERING` might be `undefined` on initial page load, and may change during runtime. That's why we recommend to pre-define a setter for `IS_PRERENDERING`:
+__Note__: `window.IS_PRERENDERING` can be `undefined` on initial page load, and may change during runtime. That's why we recommend to pre-define a setter for `IS_PRERENDERING`:
 
 ```js
-let _isPrerendering = false;
+let isPrerendering = false;
 Object.defineProperty(window, 'IS_PRERENDERING', {
   set(val) {
-    _isPrerendering = val;
-    if (_isPrerendering === true) {
+    isPrerendering = val;
+    if (isPrerendering === true) {
       // This request is coming from Pre-rendering engine
     }
   },
   get() {
-    return _isPrerendering;
+    return isPrerendering;
   }
 });
 ```
 
-## Detect request from Prerendering engine in Meteor.js
+## Detect request from Pre-rendering engine in Meteor.js
 
 Pre-rendering engine will set `window.IS_PRERENDERING` global variable to `true`. As in Meteor/Blaze everything should be reactive, let's bound it with `ReactiveVar`:
 
@@ -214,23 +217,23 @@ Pre-rendering engine will set `window.IS_PRERENDERING` global variable to `true`
 import { Template }    from 'meteor/templating';
 import { ReactiveVar } from 'meteor/reactive-var';
 
-const IS_PRERENDERING = new ReactiveVar(false);
+const isPrerendering = new ReactiveVar(window.IS_PRERENDERING || false);
 Object.defineProperty(window, 'IS_PRERENDERING', {
   set(val) {
-    IS_PRERENDERING.set(val);
+    isPrerendering.set(val);
   },
   get() {
-    return IS_PRERENDERING.get();
+    return isPrerendering.get();
   }
 });
 
 // Make globally available Blaze helper,
 // Feel free to omit this line in case if you're not using Blaze
 // or going to handle logic in JavaScript part
-Template.registerHelper('IS_PRERENDERING', () => IS_PRERENDERING.get());
+Template.registerHelper('IS_PRERENDERING', () => isPrerendering.get());
 ```
 
-__Note__: `window.IS_PRERENDERING` might be `undefined` on initial page load, and may change during runtime.
+__Note__: `window.IS_PRERENDERING` can be `undefined` on initial page load, and may change during runtime.
 
 ## JavaScript redirects
 

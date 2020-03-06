@@ -112,6 +112,7 @@ server {
       # Use to avoid duplicated headers defined in other rules
       # add_header X-Prerender-Status HIT;
       set $crawlable "render.ostr.io";
+      proxy_set_header User-Agent $http_user_agent;
       # Change $scheme to 'https', for http -> https proxy
       proxy_pass https://$crawlable/?url=$scheme://$host$orig_uri$fragment;
     }
