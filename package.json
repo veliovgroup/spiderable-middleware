@@ -1,6 +1,6 @@
 {
   "name": "spiderable-middleware",
-  "version": "1.5.1",
+  "version": "1.6.0",
   "description": "Perfect SEO for JavaScript websites. Pre-rendering — it's just like SSR with simple integration and no coding",
   "main": "./lib/index.js",
   "scripts": {
@@ -45,7 +45,7 @@
     "chai": "^4.2.0",
     "connect": "^3.7.0",
     "express": "^4.17.1",
-    "mocha": "^7.1.2",
+    "mocha": "^7.2.0",
     "request": "^2.88.2",
     "underscore": "^1.10.2"
   }
