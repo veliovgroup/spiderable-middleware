@@ -28,16 +28,16 @@ const only = [
   /^\/articles\/?$/,
   /^\/article\/[0-9]{1,3}\/?$/
 ];
-const onlyRE         = /^(\/|\/posts|\/post\/[A-z0-9]{16})\/?$/;
-const ignore         = ['/user', '/billing', '/article/100', '/post/HhstejsJKH123jJi'];
-const respVanilla    = 'Hello from vanilla NodeJS!\n';
+const onlyRE      = /^(\/|\/posts|\/post\/[A-z0-9]{16})\/?$/;
+const ignore      = ['/user', '/billing', '/article/100', '/post/HhstejsJKH123jJi'];
+const respVanilla = 'Hello from vanilla NodeJS!\n';
 
-const urlConnect        = urlUtil.parse(process.env.ROOT_URL.replace(`:${url.port}`, `:${url.port + 1}`));
-const respConnect       = 'Hello from Connect!\n';
+const urlConnect  = urlUtil.parse(process.env.ROOT_URL.replace(`:${url.port}`, `:${url.port + 1}`));
+const respConnect = 'Hello from Connect!\n';
 
-const urlExpress        = urlUtil.parse(process.env.ROOT_URL.replace(`:${url.port}`, `:${url.port + 5}`));
-const respExpress       = 'Hello from Express!\n';
-const auth              = process.env.AUTH || 'test:test';
+const urlExpress  = urlUtil.parse(process.env.ROOT_URL.replace(`:${url.port}`, `:${url.port + 5}`));
+const respExpress = 'Hello from Express!\n';
+const auth        = process.env.AUTH || 'test:test';
 
 const testURLs = {
   valid: ['', '/', '/articles', '/articles/', '/article/1', '/article/11', '/article/111/', '/posts', '/posts/', '/post/HhstejsJKH123jJ6', '/post/HhstejsJKH123jJ6/'],
