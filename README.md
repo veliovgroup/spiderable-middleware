@@ -11,6 +11,7 @@ Google, Facebook, Twitter, Yahoo, and Bing and all other crawlers and search eng
 - 📱 Support for mobile-like crawlers;
 - 💅 Support [`styled-components`](https://styled-components.com);
 - ⚡️ Support [AMP (Accelerated Mobile Pages)](https://www.ampproject.org);
+- 🤓 Works with `Content-Security-Policy` and other "complicated" front-end security;
 - ❤️ Search engines and social network crawlers love straightforward and pre-rendered pages;
 - 📱 Consistent link previews in messaging apps, like iMessage, Messages, Facebook, Slack, Telegram, WhatsApp, Viber, VK, Twitter, etc.;
 - 💻 Image, title, and description previews for posted links at social networks, like Facebook, Twitter, VK and others.
@@ -60,6 +61,8 @@ This package was originally developed for [ostr.io](https://ostr.io) service. Bu
 
 ## Installation
 
+This package is distributed via NPM for Node.js and Atmosphere for Meteor.js. Although it is safe to use NPM distributed version in Meteor backend.
+
 ### NPM:
 
 ```shell
@@ -73,7 +76,12 @@ meteor add webapp
 meteor add ostrio:spiderable-middleware
 ```
 
-## Basic usage
+
+## Usage
+
+Get ready in a few lines of code
+
+### Basic usage
 
 See [all examples](https://github.com/VeliovGroup/spiderable-middleware/tree/master/examples).
 
@@ -110,9 +118,9 @@ app.use(spiderable.handler).get('/', (req, res) => {
 app.listen(3000);
 ```
 
-We provide various options for `serviceURL` as "[Rendering Endpoints](https://github.com/VeliovGroup/ostrio/blob/master/docs/prerendering/rendering-endpoints.md)", each has its own features, to fit every project needs.
+We provide various options for `serviceURL` as "[Rendering Endpoints](https://github.com/VeliovGroup/ostrio/blob/master/docs/prerendering/rendering-endpoints.md)", each endpoint has its own features to fit every project needs.
 
-## Meteor specific usage
+### Meteor specific usage
 
 ```js
 // Install necessary packages:
