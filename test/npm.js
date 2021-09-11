@@ -53,7 +53,7 @@ const prerenders = {
     ignore: ignore,
     serviceURL: 'https://render-bypass.ostr.io',
     requestOptions: {
-      debug: process.env.DEBUG === 'true' ? true : false
+      debug: process.env.DEBUG === 'true'
     }
   }),
   express: new Spiderable({
@@ -64,7 +64,7 @@ const prerenders = {
     ignore: ignore,
     serviceURL: 'https://render-bypass.ostr.io',
     requestOptions: {
-      debug: process.env.DEBUG === 'true' ? true : false
+      debug: process.env.DEBUG === 'true'
     }
   }),
   connect: new Spiderable({
@@ -75,7 +75,7 @@ const prerenders = {
     ignore: ignore,
     serviceURL: 'https://render-bypass.ostr.io',
     requestOptions: {
-      debug: process.env.DEBUG === 'true' ? true : false
+      debug: process.env.DEBUG === 'true'
     }
   })
 };

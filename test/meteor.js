@@ -16,7 +16,7 @@ const prerendering = new Spiderable({
   ignore: ['/user', '/billing', '/article/100', '/post/HhstejsJKH123jJi'],
   serviceURL: 'https://render-bypass.ostr.io',
   requestOptions: {
-    debug: process.env.DEBUG === 'true' ? true : false,
+    debug: process.env.DEBUG === 'true',
     keepAlive: true
   }
 });
