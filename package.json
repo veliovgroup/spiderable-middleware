@@ -1,6 +1,6 @@
 {
   "name": "spiderable-middleware",
-  "version": "1.6.2",
+  "version": "1.6.3",
   "description": "Perfect SEO for JavaScript websites. Pre-rendering — it's just like SSR with simple integration and no coding",
   "main": "./lib/index.js",
   "scripts": {
@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/VeliovGroup/spiderable-middleware.git"
+    "url": "git://github.com/veliovgroup/spiderable-middleware.git"
   },
   "keywords": [
     "_escaped_fragment_",
@@ -32,21 +32,21 @@
     "https",
     "ostr.io"
   ],
-  "homepage": "https://github.com/VeliovGroup/spiderable-middleware",
+  "homepage": "https://github.com/veliovgroup/spiderable-middleware",
   "author": "dr.dimitru (https://veliovgroup.com)",
   "license": "BSD-3-Clause",
   "bugs": {
-    "url": "https://github.com/VeliovGroup/spiderable-middleware/issues"
+    "url": "https://github.com/veliovgroup/spiderable-middleware/issues"
   },
   "dependencies": {
-    "request-libcurl": "^2.2.1"
+    "request-libcurl": "^2.3.2"
   },
   "devDependencies": {
-    "chai": "^4.2.0",
+    "chai": "^4.3.4",
     "connect": "^3.7.0",
     "express": "^4.17.1",
-    "mocha": "^8.1.1",
+    "mocha": "^9.1.1",
     "request": "^2.88.2",
-    "underscore": "^1.10.2"
+    "underscore": "^1.13.1"
   }
 }
