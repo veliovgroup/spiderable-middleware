@@ -65,13 +65,13 @@ This package is distributed via NPM for Node.js and Atmosphere for Meteor.js. Al
 
 ### NPM:
 
-```shell
+```sh
 npm install spiderable-middleware --save
 ```
 
 ### Meteor:
 
-```shell
+```sh
 meteor add webapp
 meteor add ostrio:spiderable-middleware
 ```
@@ -335,7 +335,7 @@ http.createServer((req, res) => {
 
 To properly serve pages for [Accelerated Mobile Pages](https://www.ampproject.org) (AMP) we support following URI schemes:
 
-```shell
+```sh
 # Regular URIs:
 https://example.com/index.html
 https://example.com/articles/article-title.html
@@ -369,7 +369,7 @@ To make sure a server can reach our rendering endpoint run cURL command or send 
 
 In this example we're using `render-bypass.ostr.io` endpoint to avoid any possible cached results, [read more about rendering endpoints](https://github.com/veliovgroup/spiderable-middleware#rendering-endpoints). As API credentials we're using `test:test`, this part of URL can be replaced with `auth` option from Node.js example. Your API credentials and instructions can be found at the very bottom of [Pre-rendering Panel](https://ostr.io/service/prerender) of a host, click on "Integration Guide".
 
-```shell
+```sh
 # cURL example:
 curl -v https://test:test@render-bypass.ostr.io/?url=http://example.com
 ```
@@ -401,7 +401,7 @@ https.get('https://test:test@render-bypass.ostr.io/?url=http://example.com', (re
 
 ### Node.js/Mocha
 
-```shell
+```sh
 # Install development NPM dependencies:
 npm install --save-dev
 # Install NPM dependencies:
@@ -416,7 +416,7 @@ DEBUG=true ROOT_URL=http://127.0.0.1:3003 npm test
 
 ### Meteor/Tinytest
 
-```shell
+```sh
 meteor test-packages ./ --port 3003
 
 # Run same tests with extra-logging
