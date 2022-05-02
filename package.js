@@ -1,6 +1,6 @@
 Package.describe({
   name: 'ostrio:spiderable-middleware',
-  version: '1.6.3',
+  version: '1.6.4',
   summary: 'Allow JavaScript websites to be perfectly crawled and indexed by search engines (SEO)',
   git: 'https://github.com/veliovgroup/spiderable-middleware',
   documentation: 'README.md'
@@ -19,5 +19,5 @@ Package.onTest((api) => {
 });
 
 Npm.depends({
-  'request-libcurl': '2.3.2'
+  'request-libcurl': '2.3.3'
 });
