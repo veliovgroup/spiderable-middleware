@@ -371,7 +371,7 @@ In this example we're using `render-bypass.ostr.io` endpoint to avoid any possib
 
 ```sh
 # cURL example:
-curl -v https://test:test@render-bypass.ostr.io/?url=http://example.com
+curl -v "https://test:test@render-bypass.ostr.io/?url=http://example.com"
 ```
 
 ```js
