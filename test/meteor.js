@@ -28,7 +28,7 @@ const re = {
 
 const testURLs = {
   valid: ['', '/', '/articles', '/articles/', '/article/1', '/article/11', '/article/111/', '/posts', '/posts/', '/post/HhstejsJKH123jJ6', '/post/HhstejsJKH123jJ6/'],
-  invalid: ['/asd', '/articles/rand234', '/posts/234/', '/article/100', '/article/100/', '/post/HhstejsJKH123jJi', '/post/HhstejsJKH123jJi/']
+  invalid: ['/user', '/billing', '/asd', '/articles/rand234', '/posts/234/', '/article/100', '/article/100/', '/post/HhstejsJKH123jJi', '/post/HhstejsJKH123jJi/']
 };
 
 WebApp.connectHandlers.use(prerendering);
@@ -66,7 +66,7 @@ Meteor.startup(function(){
     });
 
     Tinytest.addAsync('Prerendering & Middleware Setup - Static file', function (test, next) {
-      HTTP.call('GET', process.env.ROOT_URL + '/packages/bootstrap/img/glyphicons-halflings.png', {
+      HTTP.call('GET', process.env.ROOT_URL + '/packages/test-in-browser/driver.css', {
         headers: {
           'User-Agent': 'GoogleBot'
         }
@@ -75,7 +75,7 @@ Meteor.startup(function(){
         if (!error) {
           test.isTrue(resp.statusCode === 200, 'File received with correct statusCode');
           test.isFalse(resp.headers && !!resp.headers['x-prerender-id'], 'Has no "x-prerender-id" header');
-          test.isTrue(resp.headers['content-type'] === 'image/png', 'Content type is properly set');
+          test.isTrue(resp.headers['content-type'].includes('text/css'), 'Has correct content type header');
         }
         next();
       });
