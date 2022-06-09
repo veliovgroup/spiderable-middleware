@@ -1,6 +1,6 @@
 Package.describe({
   name: 'ostrio:spiderable-middleware',
-  version: '1.6.5',
+  version: '1.6.6',
   summary: 'Allow JavaScript websites to be perfectly crawled and indexed by search engines (SEO)',
   git: 'https://github.com/veliovgroup/spiderable-middleware',
   documentation: 'README.md'
