@@ -16,6 +16,23 @@ Google, Facebook, Twitter, Yahoo, and Bing and all other crawlers and search eng
 - 📱 Consistent link previews in messaging apps, like iMessage, Messages, Facebook, Slack, Telegram, WhatsApp, Viber, VK, Twitter, etc.;
 - 💻 Image, title, and description previews for posted links at social networks, like Facebook, Twitter, VK and others.
 
+## ToC
+
+- [Installation](https://github.com/veliovgroup/spiderable-middleware#installation)
+- [Basic usage](https://github.com/veliovgroup/spiderable-middleware#basic-usage)
+- [Meteor.js usage](https://github.com/veliovgroup/spiderable-middleware/blob/master/docs/meteor.md)
+- [Return genuine status code](https://github.com/veliovgroup/spiderable-middleware#return-genuine-status-code)
+- [Speed-up rendering](https://github.com/veliovgroup/spiderable-middleware#speed-up-rendering)
+- [Detect request from Prerendering engine during runtime](https://github.com/veliovgroup/spiderable-middleware#detect-request-from-pre-rendering-engine-during-runtime)
+- [JavaScript redirects](https://github.com/veliovgroup/spiderable-middleware#javascript-redirects)
+- [AMP Support](https://github.com/veliovgroup/spiderable-middleware#amp-support)
+- [Rendering Endpoints](https://github.com/veliovgroup/spiderable-middleware#rendering-endpoints)
+- [API](https://github.com/veliovgroup/spiderable-middleware#api)
+  - [Constructor](https://github.com/veliovgroup/spiderable-middleware#constructor-new-spiderableopts)
+  - [Middleware](https://github.com/veliovgroup/spiderable-middleware#spiderablehandlerreq-res-next)
+- [Debugging](https://github.com/veliovgroup/spiderable-middleware#debugging)
+- [Running Tests](https://github.com/veliovgroup/spiderable-middleware#running-tests)
+
 ## About Package
 
 This package acts as middleware and intercepts requests to your Node.js application from web crawlers. All requests proxy passed to the Prerendering Service, which returns static, rendered HTML.
@@ -29,7 +46,6 @@ We made this package with developers in mind. It's well written in a very simple
 
 This middleware was tested and works like a charm with:
 
-- [meteor](https://www.meteor.com/): [example](https://github.com/veliovgroup/spiderable-middleware/blob/master/examples/meteor.middleware.js)
 - [express](https://www.npmjs.com/package/express): [example](https://github.com/veliovgroup/spiderable-middleware/blob/master/examples/express.middleware.js)
 - [connect](https://www.npmjs.com/package/connect): [example](https://github.com/veliovgroup/spiderable-middleware/blob/master/examples/connect.middleware.js)
 - [vanilla http(s) server](https://nodejs.org/api/http.html): [example](https://github.com/veliovgroup/spiderable-middleware/blob/master/examples/http.middleware.js)
@@ -39,41 +55,12 @@ All other frameworks which follow Node's middleware convention - will work too.
 
 This package was originally developed for [ostr.io](https://ostr.io) service. But it's not limited to, and can proxy-pass requests to any other rendering-endpoint.
 
-## ToC
-
-- [Installation](https://github.com/veliovgroup/spiderable-middleware#installation)
-- [Basic usage](https://github.com/veliovgroup/spiderable-middleware#basic-usage)
-- [MeteorJS usage](https://github.com/veliovgroup/spiderable-middleware#meteor-specific-usage)
-- [Return genuine status code](https://github.com/veliovgroup/spiderable-middleware#return-genuine-status-code)
-- [Speed-up rendering](https://github.com/veliovgroup/spiderable-middleware#speed-up-rendering)
-- [Detect request from Prerendering engine during runtime](https://github.com/veliovgroup/spiderable-middleware#detect-request-from-pre-rendering-engine-during-runtime)
-- [Detect request from Prerendering engine during __Meteor/Blaze__ runtime](https://github.com/veliovgroup/spiderable-middleware#detect-request-from-pre-rendering-engine-in-meteorjs)
-- [JavaScript redirects](https://github.com/veliovgroup/spiderable-middleware#javascript-redirects)
-- [AMP Support](https://github.com/veliovgroup/spiderable-middleware#amp-support)
-- [Rendering Endpoints](https://github.com/veliovgroup/spiderable-middleware#rendering-endpoints)
-- [API](https://github.com/veliovgroup/spiderable-middleware#api)
-  - [Constructor](https://github.com/veliovgroup/spiderable-middleware#constructor-new-spiderableopts)
-  - [Middleware](https://github.com/veliovgroup/spiderable-middleware#spiderablehandlerreq-res-next)
-- [Debugging](https://github.com/veliovgroup/spiderable-middleware#debugging)
-- [Running Tests](https://github.com/veliovgroup/spiderable-middleware#running-tests)
-  - [Node.js/Mocha](https://github.com/veliovgroup/spiderable-middleware#nodejsmocha)
-  - [Meteor/Tinytest](https://github.com/veliovgroup/spiderable-middleware#meteortinytest)
-
 ## Installation
 
-This package is distributed via NPM for Node.js and Atmosphere for Meteor.js. Although it is safe to use NPM distributed version in Meteor backend.
-
-### NPM:
+Install [`spiderable-middleware` package from NPM](https://www.npmjs.com/package/spiderable-middleware) for Node.js usage, alternatively see [Meteor.js specific setup documentation](https://github.com/veliovgroup/spiderable-middleware/blob/master/docs/meteor.md)
 
 ```sh
 npm install spiderable-middleware --save
-```
-
-### Meteor:
-
-```sh
-meteor add webapp
-meteor add ostrio:spiderable-middleware
 ```
 
 ## Usage
@@ -101,15 +88,15 @@ First, add `fragment` meta-tag to your HTML template:
 ```js
 // Make sure this code isn't exported to the Browser bundle
 // and executed only on SERVER (Node.js)
-const express    = require('express');
-const app        = express();
+const express = require('express');
 const Spiderable = require('spiderable-middleware');
+
 const spiderable = new Spiderable({
   rootURL: 'http://example.com',
-  serviceURL: 'https://render.ostr.io',
   auth: 'APIUser:APIPass'
 });
 
+const app = express();
 app.use(spiderable.handler).get('/', (req, res) => {
   res.send('Hello World');
 });
@@ -118,26 +105,6 @@ app.listen(3000);
 ```
 
 We provide various options for `serviceURL` as "[Rendering Endpoints](https://github.com/veliovgroup/ostrio/blob/master/docs/prerendering/rendering-endpoints.md)", each endpoint has its own features to fit every project needs.
-
-### Meteor specific usage
-
-```js
-// Install necessary packages:
-// meteor add webapp
-// meteor add ostrio:spiderable-middleware
-
-// Make sure this code executed only on SERVER
-// Use `if (Meteor.isServer) {/*...*/}` blocks
-// or place this code under `/server/` directory
-import { WebApp } from 'meteor/webapp';
-import Spiderable from 'meteor/ostrio:spiderable-middleware';
-
-WebApp.connectHandlers.use(new Spiderable({
-  rootURL: 'http://example.com',
-  serviceURL: 'https://render.ostr.io',
-  auth: 'APIUser:APIPass'
-}));
-```
 
 ## Return genuine status code
 
@@ -164,8 +131,6 @@ This package support __any__ standard and custom status codes:
 - `403` - `<!-- response:status-code=403 -->`
 - `500` - `<!-- response:status-code=500 -->`
 - `514` - `<!-- response:status-code=514 -->` (*non-standard*)
-
-__Note__: *Reserved status codes for internal service communications:* `49[0-9]`.
 
 ## Speed-up rendering
 
@@ -216,32 +181,6 @@ Object.defineProperty(window, 'IS_PRERENDERING', {
 });
 ```
 
-## Detect request from Pre-rendering engine in Meteor.js
-
-Pre-rendering engine will set `window.IS_PRERENDERING` global variable to `true`. As in Meteor/Blaze everything should be reactive, let's bound it with `ReactiveVar`:
-
-```js
-import { Template }    from 'meteor/templating';
-import { ReactiveVar } from 'meteor/reactive-var';
-
-const isPrerendering = new ReactiveVar(window.IS_PRERENDERING || false);
-Object.defineProperty(window, 'IS_PRERENDERING', {
-  set(val) {
-    isPrerendering.set(val);
-  },
-  get() {
-    return isPrerendering.get();
-  }
-});
-
-// Make globally available Blaze helper,
-// Feel free to omit this line in case if you're not using Blaze
-// or going to handle logic in JavaScript part
-Template.registerHelper('IS_PRERENDERING', () => isPrerendering.get());
-```
-
-__Note__: `window.IS_PRERENDERING` can be `undefined` on initial page load, and may change during runtime.
-
 ## JavaScript redirects
 
 If you need to redirect browser/crawler inside your application, while a page is loading (*imitate navigation*), you're free to use any of classic JS-redirects as well as your framework's navigation, or `History.pushState()`
@@ -261,7 +200,7 @@ __Note__: *Only 4 redirects are allowed during one request after 4 redirects ses
 
 - `opts` {*Object*} - Configuration options
 - `opts.serviceURL` {*String*} - Valid URL to Spiderable endpoint (local or foreign). Default: `https://render.ostr.io`. Can be set via environment variables: `SPIDERABLE_SERVICE_URL` or `PRERENDER_SERVICE_URL`
-- `opts.rootURL` {*String*} - Valid root URL of your website. Can be set via an environment variable: `ROOT_URL` (*common for meteor*)
+- `opts.rootURL` {*String*} - Valid root URL of your website. Can be set via an environment variable: `ROOT_URL`
 - `opts.auth` {*String*} - [Optional] Auth string in next format: `user:pass`. Can be set via an environment variables: `SPIDERABLE_SERVICE_AUTH` or `PRERENDER_SERVICE_AUTH`. Default `null`
 - `opts.botsUA` {*[String]*} - [Optional] An array of strings (case insensitive) with additional User-Agent names of crawlers you would like to intercept. See default [bot's names](https://github.com/veliovgroup/spiderable-middleware/blob/master/lib/index.js#L119). Set to `['.*']` to match all browsers and robots, to serve static pages to all users/visitors
 - `opts.ignoredHeaders` {*[String]*} - [Optional] An array of strings (case insensitive) with HTTP header names to exclude from response. See default [list of ignored headers](https://github.com/veliovgroup/spiderable-middleware/blob/master/lib/index.js#L121). Set to `['.*']` to ignore all headers
@@ -281,12 +220,8 @@ __Note:__ *Setting* `.onlyRE` *and/or* `.only` *rules are highly recommended. Ot
 // ES6 import
 // import Spiderable from 'spiderable-middleware';
 
-// ES6 import (Meteor.js)
-// import Spiderable from 'meteor/ostrio:spiderable-middleware';
-
 const spiderable = new Spiderable({
   rootURL: 'http://example.com',
-  serviceURL: 'https://render.ostr.io',
   auth: 'APIUser:APIPass'
 });
 
@@ -308,9 +243,27 @@ const spiderable = new Spiderable({
 });
 ```
 
+### Configuration via env.vars
+
+Same configuration can get achieved via setting up environment variables:
+
+```sh
+ROOT_URL='http://example.com'
+SPIDERABLE_SERVICE_URL='https://render.ostr.io'
+SPIDERABLE_SERVICE_AUTH='APIUser:APIPass'
+```
+
+alternatively if you're migrating from other pre-rendering service you can keep using existing variables, we support it for compatibility
+
+```sh
+ROOT_URL='http://example.com'
+PRERENDER_SERVICE_URL='https://render.ostr.io'
+PRERENDER_SERVICE_AUTH='APIUser:APIPass'
+```
+
 ### `spiderable.handler(req, res, next)`
 
-*Middleware handler. Alias:* `spiderable.handle`.
+Middleware handler. Alias: `spiderable.handle`.
 
 ```js
 // Express, Connect:
@@ -413,17 +366,3 @@ ROOT_URL=http://127.0.0.1:3003 npm test
 DEBUG=true ROOT_URL=http://127.0.0.1:3003 npm test
 # http://127.0.0.1:3003 can be changed to any local address, PORT is required!
 ```
-
-### Meteor/Tinytest
-
-```sh
-meteor test-packages ./ --port 3003
-
-# Run same tests with extra-logging
-DEBUG=true meteor test-packages ./ --port 3003
-# PORT is required, and can be changed to any local open port
-```
-
-## Get $50 off pre-rendering service
-
-Get $50 off the second purchase, use [this link](https://ostr.io/signup/gCZWjiBScePWrnnDr) to sign up. *Valid only for new users.*
