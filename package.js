@@ -1,6 +1,6 @@
 Package.describe({
   name: 'ostrio:spiderable-middleware',
-  version: '1.6.6',
+  version: '2.0.0',
   summary: 'Allow JavaScript websites to be perfectly crawled and indexed by search engines (SEO)',
   git: 'https://github.com/veliovgroup/spiderable-middleware',
   documentation: 'README.md'
@@ -16,8 +16,4 @@ Package.onTest((api) => {
   api.use(['tinytest', 'ecmascript']);
   api.use(['underscore', 'http', 'webapp'], 'server');
   api.addFiles('test/meteor.js', 'server');
-});
-
-Npm.depends({
-  'request-libcurl': '2.3.4'
 });

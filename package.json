@@ -1,6 +1,6 @@
 {
   "name": "spiderable-middleware",
-  "version": "1.6.6",
+  "version": "2.0.0",
   "description": "Perfect SEO for JavaScript websites. Pre-rendering — it's just like SSR with simple integration and no coding",
   "main": "./lib/index.js",
   "scripts": {
@@ -38,14 +38,11 @@
   "bugs": {
     "url": "https://github.com/veliovgroup/spiderable-middleware/issues"
   },
-  "dependencies": {
-    "request-libcurl": "^2.3.4"
-  },
   "devDependencies": {
-    "chai": "^4.3.6",
+    "chai": "^4.4.1",
     "connect": "^3.7.0",
-    "express": "^4.18.1",
-    "mocha": "^10.0.0",
+    "express": "^4.18.2",
+    "mocha": "^10.3.0",
     "request": "^2.88.2",
     "underscore": "^1.13.4"
   }
