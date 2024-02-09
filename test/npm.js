@@ -248,9 +248,10 @@ describe('Check valid path rules', function () {
   _.each(testURLs.valid, (testUrl) => {
     const _testUrl = testUrl.replace(re.beginningSlash, '');
 
-    it('Vanilla node.js server - ' + urlUtil.format(url) + _testUrl, function (done) {
+    const vanillaUrl = urlUtil.format(url) + _testUrl;
+    it('Vanilla node.js server - ' + vanillaUrl, function (done) {
       request({
-        url: urlUtil.format(url) + _testUrl,
+        url: vanillaUrl,
         method: 'GET',
         headers: {
           'User-Agent': 'GoogleBot'
@@ -262,15 +263,16 @@ describe('Check valid path rules', function () {
           assert.isTrue(resp.headers && !!resp.headers['x-prerender-id'], 'has "x-prerender-id" header');
           assert.isTrue(resp.headers['x-prerender-id'] && resp.headers['x-prerender-id'].includes('TEST'), '"x-prerender-id" is TEST');
           assert.isTrue(body.includes('[PASSED]'), 'Test response has "[PASSED]" keyword');
-          assert.isTrue(body.includes(urlUtil.format(url) + _testUrl), 'Test response has valid source URL keyword');
+          assert.isTrue(body.includes(vanillaUrl), 'Test response has valid source URL keyword');
         }
         done();
       });
     });
 
-    it('Express server - ' + urlUtil.format(urlExpress) + _testUrl, function (done) {
+    const expressUrl = urlUtil.format(urlExpress) + _testUrl;
+    it('Express server - ' + expressUrl, function (done) {
       request({
-        url: urlUtil.format(urlExpress) + _testUrl,
+        url: expressUrl,
         method: 'GET',
         headers: {
           'User-Agent': 'GoogleBot'
@@ -282,15 +284,16 @@ describe('Check valid path rules', function () {
           assert.isTrue(resp.headers && !!resp.headers['x-prerender-id'], 'has "x-prerender-id" header');
           assert.isTrue(resp.headers['x-prerender-id'] && resp.headers['x-prerender-id'].includes('TEST'), '"x-prerender-id" is TEST');
           assert.isTrue(body.includes('[PASSED]'), 'Test response has "[PASSED]" keyword');
-          assert.isTrue(body.includes(urlUtil.format(urlExpress) + _testUrl), 'Test response has valid source URL keyword');
+          assert.isTrue(body.includes(expressUrl), 'Test response has valid source URL keyword');
         }
         done();
       });
     });
 
-    it('Connect server - ' + urlUtil.format(urlConnect) + _testUrl, function (done) {
+    const connectUrl = urlUtil.format(urlConnect) + _testUrl;
+    it('Connect server - ' + connectUrl, function (done) {
       request({
-        url: urlUtil.format(urlConnect) + _testUrl,
+        url: connectUrl,
         method: 'GET',
         headers: {
           'User-Agent': 'GoogleBot'
@@ -302,7 +305,7 @@ describe('Check valid path rules', function () {
           assert.isTrue(resp.headers && !!resp.headers['x-prerender-id'], 'has "x-prerender-id" header');
           assert.isTrue(resp.headers['x-prerender-id'] && resp.headers['x-prerender-id'].includes('TEST'), '"x-prerender-id" is TEST');
           assert.isTrue(body.includes('[PASSED]'), 'Test response has "[PASSED]" keyword');
-          assert.isTrue(body.includes(urlUtil.format(urlConnect) + _testUrl), 'Test response has valid source URL keyword');
+          assert.isTrue(body.includes(connectUrl), 'Test response has valid source URL keyword');
         }
         done();
       });
@@ -317,9 +320,10 @@ describe('Check ignored path rules', function () {
   _.each(testURLs.invalid, (testUrl) => {
     const _testUrl = testUrl.replace(re.beginningSlash, '');
 
-    it('Vanilla node.js server - ' + urlUtil.format(url) + _testUrl, function (done) {
+    const vanillaUrl = urlUtil.format(url) + _testUrl;
+    it('Vanilla node.js server - ' + vanillaUrl, function (done) {
       request({
-        url: urlUtil.format(url) + _testUrl,
+        url: vanillaUrl,
         method: 'GET',
         headers: {
           'User-Agent': 'GoogleBot'
@@ -335,9 +339,10 @@ describe('Check ignored path rules', function () {
       });
     });
 
-    it('Express server - ' + urlUtil.format(urlExpress) + _testUrl, function (done) {
+    const expressUrl = urlUtil.format(urlExpress) + _testUrl;
+    it('Express server - ' + expressUrl, function (done) {
       request({
-        url: urlUtil.format(urlExpress) + _testUrl,
+        url: expressUrl,
         method: 'GET',
         headers: {
           'User-Agent': 'GoogleBot'
@@ -353,9 +358,10 @@ describe('Check ignored path rules', function () {
       });
     });
 
-    it('Connect server - ' + urlUtil.format(urlConnect) + _testUrl, function (done) {
+    const connectUrl = urlUtil.format(urlConnect) + _testUrl;
+    it('Connect server - ' + connectUrl, function (done) {
       request({
-        url: urlUtil.format(urlConnect) + _testUrl,
+        url: connectUrl,
         method: 'GET',
         headers: {
           'User-Agent': 'GoogleBot'
