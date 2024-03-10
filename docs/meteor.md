@@ -39,9 +39,7 @@ import { WebApp } from 'meteor/webapp';
 import Spiderable from 'meteor/ostrio:spiderable-middleware';
 
 const spiderable = new Spiderable({
-	rootURL: 'https://myservice.com',
-	serviceURL: 'https://render.ostr.io',
-	auth: 'APIUser:APIPass'
+  auth: 'APIUser:APIPass'
 });
 
 WebApp.connectHandlers.use(spiderable.handler.bind(spiderable));
