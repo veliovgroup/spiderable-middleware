@@ -32,6 +32,19 @@ WebApp.connectHandlers.use(new Spiderable({
 }));
 ```
 
+In Meteor 3 use this code instead
+
+```js
+import { WebApp } from 'meteor/webapp';
+import Spiderable from 'meteor/ostrio:spiderable-middleware';
+
+const spiderable = new Spiderable({
+  auth: 'APIUser:APIPass'
+});
+
+WebApp.connectHandlers.use(spiderable.handler.bind(spiderable));
+```
+
 ## Detect request from Pre-rendering engine in Meteor.js
 
 Pre-rendering engine will set `window.IS_PRERENDERING` global variable to `true`. As in Meteor/Blaze everything should be reactive, let's bound it with `ReactiveVar`:
