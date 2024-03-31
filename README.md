@@ -18,20 +18,20 @@ Google, Facebook, Twitter, Yahoo, and Bing and all other crawlers and search eng
 
 ## ToC
 
-- [Installation](https://github.com/veliovgroup/spiderable-middleware#installation)
-- [Basic usage](https://github.com/veliovgroup/spiderable-middleware#basic-usage)
+- [Installation](https://github.com/veliovgroup/spiderable-middleware?tab=readme-ov-file#installation)
+- [Basic usage](https://github.com/veliovgroup/spiderable-middleware?tab=readme-ov-file#usage)
 - [Meteor.js usage](https://github.com/veliovgroup/spiderable-middleware/blob/master/docs/meteor.md)
-- [Return genuine status code](https://github.com/veliovgroup/spiderable-middleware#return-genuine-status-code)
-- [Speed-up rendering](https://github.com/veliovgroup/spiderable-middleware#speed-up-rendering)
-- [Detect request from Prerendering engine during runtime](https://github.com/veliovgroup/spiderable-middleware#user-content-detect-request-from-pre-rendering-engine-during-runtime)
-- [JavaScript redirects](https://github.com/veliovgroup/spiderable-middleware#javascript-redirects)
-- [AMP Support](https://github.com/veliovgroup/spiderable-middleware#amp-support)
-- [Rendering Endpoints](https://github.com/veliovgroup/spiderable-middleware#rendering-endpoints)
-- [API](https://github.com/veliovgroup/spiderable-middleware#api)
-  - [Constructor](https://github.com/veliovgroup/spiderable-middleware#constructor-new-spiderableopts)
-  - [Middleware](https://github.com/veliovgroup/spiderable-middleware#spiderablehandlerreq-res-next)
-- [Debugging](https://github.com/veliovgroup/spiderable-middleware#debugging)
-- [Running Tests](https://github.com/veliovgroup/spiderable-middleware#running-tests)
+- [Return genuine status code](https://github.com/veliovgroup/spiderable-middleware?tab=readme-ov-file#return-genuine-status-code)
+- [Speed-up rendering](https://github.com/veliovgroup/spiderable-middleware?tab=readme-ov-file#speed-up-rendering)
+- [Detect request from Prerendering engine during runtime](https://github.com/veliovgroup/spiderable-middleware?tab=readme-ov-file#detect-request-from-pre-rendering-engine-during-runtime)
+- [JavaScript redirects](https://github.com/veliovgroup/spiderable-middleware?tab=readme-ov-file#javascript-redirects)
+- [AMP Support](https://github.com/veliovgroup/spiderable-middleware?tab=readme-ov-file#amp-support)
+- [Rendering Endpoints](https://github.com/veliovgroup/spiderable-middleware?tab=readme-ov-file#rendering-endpoints)
+- [API](https://github.com/veliovgroup/spiderable-middleware?tab=readme-ov-file#api)
+  - [Constructor `new Spiderable()`](https://github.com/veliovgroup/spiderable-middleware?tab=readme-ov-file#constructor-new-spiderableopts)
+  - [Middleware](https://github.com/veliovgroup/spiderable-middleware?tab=readme-ov-file#spiderablehandlerreq-res-next)
+- [Debugging](https://github.com/veliovgroup/spiderable-middleware?tab=readme-ov-file#debugging)
+- [Running Tests](https://github.com/veliovgroup/spiderable-middleware?tab=readme-ov-file#running-tests)
 
 ## About Package
 
@@ -49,11 +49,14 @@ This middleware was tested and works like a charm with:
 - [express](https://www.npmjs.com/package/express): [example](https://github.com/veliovgroup/spiderable-middleware/blob/master/examples/express.middleware.js)
 - [connect](https://www.npmjs.com/package/connect): [example](https://github.com/veliovgroup/spiderable-middleware/blob/master/examples/connect.middleware.js)
 - [vanilla http(s) server](https://nodejs.org/api/http.html): [example](https://github.com/veliovgroup/spiderable-middleware/blob/master/examples/http.middleware.js)
+- [meteor.js](https://github.com/veliovgroup/spiderable-middleware/blob/master/docs/meteor.md): [example](https://github.com/veliovgroup/spiderable-middleware/blob/master/examples/meteor.middleware.js)
+- [Nginx](https://nginx.org/en/docs/): [example](https://github.com/veliovgroup/spiderable-middleware/blob/master/examples/nginx)
+- [Apache](https://httpd.apache.org/): [example](https://github.com/veliovgroup/spiderable-middleware/blob/master/examples/apache.htaccess)
 - See [all examples](https://github.com/veliovgroup/spiderable-middleware/tree/master/examples)
 
 All other frameworks which follow Node's middleware convention - will work too.
 
-This package was originally developed for [ostr.io](https://ostr.io) service. But it's not limited to, and can proxy-pass requests to any other rendering-endpoint.
+> This package was originally developed for [ostr.io](https://ostr.io) service. But it's not limited to, and can proxy-pass requests to any other rendering-endpoint.
 
 ## Installation
 
@@ -203,8 +206,8 @@ __Note__: *Only 4 redirects are allowed during one request after 4 redirects ses
 - `opts.rootURL` {*String*} - Valid root URL of your website. Can be set via an environment variable: `ROOT_URL`
 - `opts.auth` {*String*} - [Optional] Auth string in next format: `user:pass`. Can be set via an environment variables: `SPIDERABLE_SERVICE_AUTH` or `PRERENDER_SERVICE_AUTH`. Default `null`
 - `opts.sanitizeUrls` {*Boolean*} - [Optional] Sanitize URLs in order to "fix" badly composed URLs. Default `false`
-- `opts.botsUA` {*[String]*} - [Optional] An array of strings (case insensitive) with additional User-Agent names of crawlers you would like to intercept. See default [bot's names](https://github.com/veliovgroup/spiderable-middleware/blob/master/lib/index.js#L119). Set to `['.*']` to match all browsers and robots, to serve static pages to all users/visitors
-- `opts.ignoredHeaders` {*[String]*} - [Optional] An array of strings (case insensitive) with HTTP header names to exclude from response. See default [list of ignored headers](https://github.com/veliovgroup/spiderable-middleware/blob/master/lib/index.js#L121). Set to `['.*']` to ignore all headers
+- `opts.botsUA` {*[String]*} - [Optional] An array of strings (case insensitive) with additional User-Agent names of crawlers you would like to intercept. See default [bot's names](https://github.com/veliovgroup/spiderable-middleware/blob/master/lib/index.js#L128). Set to `['.*']` to match all browsers and robots, to serve static pages to all users/visitors
+- `opts.ignoredHeaders` {*[String]*} - [Optional] An array of strings (case insensitive) with HTTP header names to exclude from response. See default [list of ignored headers](https://github.com/veliovgroup/spiderable-middleware/blob/master/lib/index.js#L130). Set to `['.*']` to ignore all headers
 - `opts.ignore` {*[String]*} - [Optional] An array of strings (case __sensitive__) with ignored routes. Note: it's based on first match, so route `/users` will cause ignoring of `/part/users/part`, `/users/_id` and `/list/of/users`, but not `/user/_id` or `/list/of/blocked-users`. Default `null`
 - `opts.only` {*[String|RegExp]*} - [Optional] An array of strings (case __sensitive__) or regular expressions (*could be mixed*). Define __exclusive__ route rules for pre-rendering. Could be used with `opts.onlyRE` rules. __Note:__ To define "safe" rules as {*RegExp*} it should start with `^` and end with `$` symbols, examples: `[/^\/articles\/?$/, /^\/article\/[A-z0-9]{16}\/?$/]`
 - `opts.onlyRE` {*RegExp*} - [Optional] Regular Expression with __exclusive__ route rules for pre-rendering. Could be used with `opts.only` rules

@@ -1,6 +1,6 @@
 # Meteor.js usage
 
-Setup "spiderable" pre-rendering middleware for [Meteor.js](https://www.meteor.com/) based application
+Setup "spiderable" pre-rendering middleware for [Meteor.js](https://www.meteor.com/)-based application
 
 Examples:
 
@@ -27,22 +27,15 @@ Import necessary packages and initiate new `Spiderable` instance
 import { WebApp } from 'meteor/webapp';
 import Spiderable from 'meteor/ostrio:spiderable-middleware';
 
-WebApp.connectHandlers.use(new Spiderable({
-  auth: 'APIUser:APIPass'
-}));
-```
-
-In Meteor 3 use this code instead
-
-```js
-import { WebApp } from 'meteor/webapp';
-import Spiderable from 'meteor/ostrio:spiderable-middleware';
-
 const spiderable = new Spiderable({
   auth: 'APIUser:APIPass'
 });
 
+// meteor@>=3 use the next line for modern version for Meteor
 WebApp.connectHandlers.use(spiderable.handler.bind(spiderable));
+
+// meteor@<3 use the next line for meteor@2.x and meteor@1.x releases
+WebApp.connectHandlers.use(spiderable);
 ```
 
 ## Detect request from Pre-rendering engine in Meteor.js
