@@ -107,7 +107,7 @@ async function handleRequest(request, env) {
 
 
   // # Avoid dead loop and drop get query
-  const isOstr =   url.origin.includes('ostr.io')
+  const isOstr = url.origin.includes('ostr.io')
   
   if (
     isOstr ||
@@ -117,7 +117,7 @@ async function handleRequest(request, env) {
     return fetch(request);
   }
 
-  const newURL = `https://${env.OSTR_USER}:${env.OSTR_PASS}@render-bypass.ostr.io/?url=${request.url}&bot=${userAgent}`;
+  const newURL = `https://${env.OSTR_USER}:${env.OSTR_PASS}@render.ostr.io/?url=${request.url}&bot=${userAgent}`;
   const newHeaders = new Headers(request.headers);
 
   return fetch(
