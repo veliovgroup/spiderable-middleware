@@ -11,7 +11,7 @@ export default {
 
     if (!url.origin.includes('ostr.io') && BOT_AGENTS.includes(userAgent) && !(extension && IGNORE_EXTENSIONS.includes(extension))) {
       return fetch(new Request(`https://${env.OSTR_USER}:${env.OSTR_PASS}@render.ostr.io/?url=${request.url}&bot=${userAgent}`, {
-        headers: Headers(request.headers),
+        headers: new Headers(request.headers),
         redirect: 'manual',
       }));
     }
