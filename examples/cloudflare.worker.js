@@ -10,8 +10,11 @@ export default {
     const extension = pathName.substring(pathName.lastIndexOf('.') + 1 || pathName.length)?.toLowerCase?.() || '';
 
     if (!url.origin.includes('ostr.io') && BOT_AGENTS.includes(userAgent) && !(extension && IGNORE_EXTENSIONS.includes(extension))) {
-      return fetch(new Request(`https://${env.OSTR_USER}:${env.OSTR_PASS}@render.ostr.io/?url=${request.url}&bot=${userAgent}`, {
-        headers: new Headers(request.headers),
+      const headers = new Headers(request.headers);
+      headers.append('Authorization', env.OSTR_AUTH);
+
+      return fetch(new Request(`https://render.ostr.io/?url=${request.url}&bot=${userAgent}`, {
+        headers: headers,
         redirect: 'manual',
       }));
     }
