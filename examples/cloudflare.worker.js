@@ -11,7 +11,7 @@ export default {
 
     if (!url.origin.includes('ostr.io') && BOT_AGENTS.includes(userAgent) && !(extension && IGNORE_EXTENSIONS.includes(extension))) {
       const headers = new Headers(request.headers);
-      headers.append('Authorization', env.OSTR_AUTH);
+      headers.set('Authorization', env.OSTR_AUTH);
 
       return fetch(new Request(`https://render.ostr.io/?url=${request.url}&bot=${userAgent}`, {
         headers: headers,
