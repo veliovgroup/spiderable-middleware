@@ -17,10 +17,11 @@ Step-by-step integration instructions for ostr.io pre-rendering via CloudFlare W
   b. Route: `*.example.com/*`
   c. Worker: Select newly created worker
   d. Click on <kbd>save</kbd>
-9. __Check `X-Prerender-Id` header to confirm that pre-rendering works__
+9. __Purge cache:__ Websites > example.com > Caching > Configuration > <kbd>Purge Everything</kbd>
+10. __Check `X-Prerender-Id` header to confirm that pre-rendering works__
   a. Request using cURL: `curl -v -A GoogleBot https://example.com/`
   b. Ensure `X-Prerender-Id` header returned with response
   c. Check ostr.io: Rendering statistics will appear in real-time
-10. Further reading:
+11. Further reading:
   a. [Speed-up rendering](https://github.com/veliovgroup/spiderable-middleware?tab=readme-ov-file#speed-up-rendering)
   b. [Detect requests from pre-rendering](https://github.com/veliovgroup/spiderable-middleware?tab=readme-ov-file#detect-request-from-pre-rendering-engine-during-runtime)
