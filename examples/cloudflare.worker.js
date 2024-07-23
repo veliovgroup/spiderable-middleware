@@ -5,7 +5,7 @@ const IGNORE_EXTENSIONS = ['3ds', '3g2', '3gp', '3gpp', '7z', 'a', 'aac', 'aaf',
 export default {
   async fetch(request, env, ctx) {
     const url = new URL(request.url);
-    const userAgent = request.headers.get('User-Agent')?.toLowerCase() || '';
+    const userAgent = request.headers.get('User-Agent')?.toLowerCase?.() || '';
     const pathName = url.pathname.toLowerCase();
     const extension = pathName.substring(pathName.lastIndexOf('.') + 1 || pathName.length)?.toLowerCase?.() || '';
 
