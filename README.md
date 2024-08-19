@@ -274,9 +274,9 @@ Middleware handler. Alias: `spiderable.handle`.
 app.use(spiderable.handler);
 
 // Meteor:
-WebApp.connectHandlers.use(spiderable);
+WebApp.connectHandlers.use(spiderable.handler.bind(spiderable));
 
-//HTTP(s) Server
+// HTTP(s) Server
 http.createServer((req, res) => {
   spiderable.handler(req, res, () => {
     // Callback, triggered if this request
