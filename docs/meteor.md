@@ -31,7 +31,7 @@ const spiderable = new Spiderable({
   auth: 'APIUser:APIPass'
 });
 
-// meteor@>=3 use the next line for modern version for Meteor
+// meteor@>=3 use the next line for modern version of Meteor
 WebApp.connectHandlers.use(spiderable.handler.bind(spiderable));
 
 // meteor@<3 use the next line for meteor@2.x and meteor@1.x releases
@@ -73,10 +73,10 @@ __Note__: `window.IS_PRERENDERING` can be `undefined` on initial page load, and 
 ### Meteor/Tinytest
 
 ```sh
-meteor test-packages ./ --port 3003
+ROOT_URL=http://127.0.0.1:3003/ meteor test-packages ./ --port 3003
 
 # Run same tests with extra-logging
-DEBUG=true meteor test-packages ./ --port 3003
+DEBUG=true ROOT_URL=http://127.0.0.1:3003/ meteor test-packages ./ --port 3003
 # PORT is required, and can be changed to any local open port
 ```
 
