@@ -16,6 +16,8 @@ meteor add webapp
 meteor add ostrio:spiderable-middleware
 ```
 
+__This is SERVER only package. For Meteor.js please make sure library imported and executed only on SERVER.__
+
 ## Usage example
 
 Import necessary packages and initiate new `Spiderable` instance
@@ -57,7 +59,7 @@ Object.defineProperty(window, 'IS_PRERENDERING', {
 });
 
 // Make globally available Blaze helper,
-// Feel free to omit this line in case if you're not using Blaze
+// Feel free to omit this line in case when Blaze no used
 // or going to handle logic in JavaScript part
 Template.registerHelper('IS_PRERENDERING', () => isPrerendering.get());
 ```
@@ -82,4 +84,4 @@ DEBUG=true ROOT_URL=http://127.0.0.1:3003/ meteor test-packages ./ --port 3003
 
 ## Get $50 off pre-rendering service
 
-For Meteor-folks who read documentation to the very end — get $50 off your second purchase at __ostr.io__, use [this link](https://ostr.io/signup/gCZWjiBScePWrnnDr) to sign up. *Valid only for new users.*
+For Meteor-folks who read documentation to the very end — get $50 off the second purchase at __ostr.io__, use [this link](https://ostr.io/signup/gCZWjiBScePWrnnDr) to sign up. *Valid only for new users.*

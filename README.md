@@ -1,20 +1,20 @@
 # Spiderable middleware
 
-Google, Facebook, Twitter, Yahoo, and Bing and all other crawlers and search engines are constantly trying to view your website. If your website is built on top of the JavaScript framework like, but not limited to - Angular, Backbone, Ember, Meteor, React, MEAN most of the front-end solutions returns basic HTML-markup and script-tags to crawlers, but not content of your page. The mission of `spiderable-middleware` and [ostr.io](https://ostr.io) are to boost your SEO experience without a headache.
+Google, Facebook, Twitter, Yahoo, Bing, and all other crawlers, search engines, and social networks are constantly trying to view your website. If your website is built on top of the JavaScript framework like, but not limited to - React, Vue, Svelte, Angular, Backbone, Ember, Meteor these front-end JS-frameworks are returning basic HTML-markup with script-tags to crawlers, but not content of the requested page. The mission of `spiderable-middleware` and [ostr.io](https://ostr.io) are to boost SEO for modern JavaScript-websites.
 
 ## Why Pre-render?
 
-- 🕸 Execute JavaScript, as web-crawlers and search engines can't run JS code;
+- 🕸 Execute JavaScript, — get rendered HTML page;
 - 🏃‍♂️ Boost response rate and decrease response time with caching;
-- 🚀 Optimized HTML markup for best SEO score;
+- 🚀 Optimized HTML markup for the best SEO score;
 - 🖥 Support for PWAs and SPAs;
 - 📱 Support for mobile-like crawlers;
 - 💅 Support [`styled-components`](https://styled-components.com);
 - ⚡️ Support [AMP (Accelerated Mobile Pages)](https://www.ampproject.org);
-- 🤓 Works with `Content-Security-Policy` and other "complicated" front-end security;
+- 🤓 Works with `Content-Security-Policy` and other complex front-end security rules;
 - ❤️ Search engines and social network crawlers love straightforward and pre-rendered pages;
 - 📱 Consistent link previews in messaging apps, like iMessage, Messages, Facebook, Slack, Telegram, WhatsApp, Viber, VK, Twitter, etc.;
-- 💻 Image, title, and description previews for posted links at social networks, like Facebook, Twitter, VK and others.
+- 💻 Image, title, and description previews for posted links at social networks, like Facebook, Twitter, Instagram, and others.
 
 ## ToC
 
@@ -35,21 +35,20 @@ Google, Facebook, Twitter, Yahoo, and Bing and all other crawlers and search eng
 
 ## About Package
 
-This package acts as middleware and intercepts requests to your Node.js application from web crawlers. All requests proxy passed to the Prerendering Service, which returns static, rendered HTML.
+This package acts as middleware and intercepts requests to a Node.js application from web crawlers. All requests proxy passed to the Prerendering Service, which returns static, rendered HTML.
 
-__This is SERVER only package. For NPM make sure you're importing library only in Node.js. For Meteor.js please make sure library imported and executed only on SERVER.__
+__This is SERVER only package. For NPM make sure it's imported only in Node.js.__
 
-We made this package with developers in mind. It's well written in a very simple way, hackable, and easily tunable to meet your needs, can be used to turn dynamic pages into rendered, cached, and lightweight static pages, just set `botsUA` to `['.*']`. This is the best option to offload servers unless a website gets updated more than once in 4 hours.
+We made this package with developers in mind. It's well written in a very simple way, hackable, and easily tunable to meet all projects needs, it can be used to turn dynamic pages into rendered, cached, and lightweight static pages, just set `botsUA` to `['.*']`. This is the best option to offload servers unless a website gets updated more often than once in 4 hours.
 
-- __Note__: *This package proxies real HTTP headers and response code, to reduce overwhelming requests, try to avoid HTTP-redirect headers, like* `Location` *and others. Read how to [return genuine status code](https://github.com/veliovgroup/spiderable-middleware#return-genuine-status-code) and [handle JS-redirects](https://github.com/veliovgroup/spiderable-middleware#javascript-redirects).*
-- __Note__: This is __server only package__. For isomorphic environments, *like Meteor.js*, this package should be imported/initialized only at server code base.
+- __Note__: *This package proxies real HTTP headers and response code, to reduce overwhelming requests, try to avoid HTTP-redirect headers, like* `Location` *. Read how to [return genuine status code](https://github.com/veliovgroup/spiderable-middleware#return-genuine-status-code) and [handle JS-redirects](https://github.com/veliovgroup/spiderable-middleware#javascript-redirects)*
+- __Note__: This is __server only package__. This package should be imported/initialized only within server code base
 
 This middleware was tested and works like a charm with:
 
 - [express](https://www.npmjs.com/package/express): [example](https://github.com/veliovgroup/spiderable-middleware/blob/master/examples/express.middleware.js)
 - [connect](https://www.npmjs.com/package/connect): [example](https://github.com/veliovgroup/spiderable-middleware/blob/master/examples/connect.middleware.js)
 - [vanilla http(s) server](https://nodejs.org/api/http.html): [example](https://github.com/veliovgroup/spiderable-middleware/blob/master/examples/http.middleware.js)
-- [meteor.js](https://github.com/veliovgroup/spiderable-middleware/blob/master/docs/meteor.md): [example](https://github.com/veliovgroup/spiderable-middleware/blob/master/examples/meteor.middleware.js)
 - [Nginx](https://nginx.org/en/docs/): [example](https://github.com/veliovgroup/spiderable-middleware/blob/master/examples/nginx)
 - [Apache](https://httpd.apache.org/): [example](https://github.com/veliovgroup/spiderable-middleware/blob/master/examples/apache.htaccess)
 - See [all examples](https://github.com/veliovgroup/spiderable-middleware/tree/master/examples)
@@ -60,10 +59,14 @@ All other frameworks which follow Node's middleware convention - will work too.
 
 ## Installation
 
-Install [`spiderable-middleware` package from NPM](https://www.npmjs.com/package/spiderable-middleware) for Node.js usage, alternatively see [Meteor.js specific setup documentation](https://github.com/veliovgroup/spiderable-middleware/blob/master/docs/meteor.md)
+Install [`spiderable-middleware` package from NPM](https://www.npmjs.com/package/spiderable-middleware):
 
 ```sh
+# using npmjs
 npm install spiderable-middleware --save
+
+# using yarn
+yarn add spiderable-middleware
 ```
 
 ## Usage
@@ -74,7 +77,7 @@ Get ready in a few lines of code
 
 See [all examples](https://github.com/veliovgroup/spiderable-middleware/tree/master/examples).
 
-First, add `fragment` meta-tag to your HTML template:
+First, add `fragment` meta-tag to HTML template or page:
 
 ```html
 <html>
@@ -88,11 +91,21 @@ First, add `fragment` meta-tag to your HTML template:
 </html>
 ```
 
+Import or require `spiderable-middleware` package:
+
 ```js
-// Make sure this code isn't exported to the Browser bundle
-// and executed only on SERVER (Node.js)
-const express = require('express');
+// ES6 import
+import Spiderable from 'spiderable-middleware';
+
+// or CommonJS require
 const Spiderable = require('spiderable-middleware');
+```
+
+Register middleware handler:
+
+```js
+import express from 'express';
+import Spiderable from 'spiderable-middleware';
 
 const spiderable = new Spiderable({
   rootURL: 'http://example.com',
@@ -100,6 +113,8 @@ const spiderable = new Spiderable({
 });
 
 const app = express();
+// ensure this is the most top registered handler
+// to reduce response time and server load
 app.use(spiderable.handler).get('/', (req, res) => {
   res.send('Hello World');
 });
@@ -111,7 +126,7 @@ We provide various options for `serviceURL` as "[Rendering Endpoints](https://gi
 
 ## Return genuine status code
 
-To pass expected response code from front-end JavaScript framework to browser/crawlers, you need to create specially formatted HTML-comment. This comment __can be placed in any part of HTML-page__. `head` or `body` tag is the best place for it.
+To pass expected status code of a response from front-end JavaScript framework to browser/crawlers use specially formatted HTML-comment. This comment __can be placed in any part of HTML-page__. `head` or `body` tag is the best place for it.
 
 ### Format
 
@@ -137,7 +152,7 @@ This package support __any__ standard and custom status codes:
 
 ## Speed-up rendering
 
-To speed-up rendering, you __should__ tell to the Spiderable engine when your page is ready. Set `window.IS_RENDERED` to `false`, and once your page is ready set this variable to `true`. Example:
+To speed-up rendering, JS-runtime __should__ tell to the Spiderable engine when the page is ready. Set `window.IS_RENDERED` to `false`, and once the page is ready set this variable to `true`. Example:
 
 ```html
 <html>
@@ -150,7 +165,7 @@ To speed-up rendering, you __should__ tell to the Spiderable engine when your pa
   <body>
     <!-- ... -->
     <script type="text/javascript">
-      //Somewhere deep in your app-code:
+      //Somewhere deep in app-code:
       window.IS_RENDERED = true;
     </script>
   </body>
@@ -186,7 +201,7 @@ Object.defineProperty(window, 'IS_PRERENDERING', {
 
 ## JavaScript redirects
 
-If you need to redirect browser/crawler inside your application, while a page is loading (*imitate navigation*), you're free to use any of classic JS-redirects as well as your framework's navigation, or `History.pushState()`
+Redirect browser/crawler inside application when needed while a page is loading (*imitate navigation*), use any of classic JS-redirects can be used, including framework's navigation, or `History.pushState()`
 
 ```js
 window.location.href = 'http://example.com/another/page';
@@ -203,10 +218,10 @@ __Note__: *Only 4 redirects are allowed during one request after 4 redirects ses
 
 - `opts` {*Object*} - Configuration options
 - `opts.serviceURL` {*String*} - Valid URL to Spiderable endpoint (local or foreign). Default: `https://render.ostr.io`. Can be set via environment variables: `SPIDERABLE_SERVICE_URL` or `PRERENDER_SERVICE_URL`
-- `opts.rootURL` {*String*} - Valid root URL of your website. Can be set via an environment variable: `ROOT_URL`
+- `opts.rootURL` {*String*} - Valid root URL of a website. Can be set via an environment variable: `ROOT_URL`
 - `opts.auth` {*String*} - [Optional] Auth string in next format: `user:pass`. Can be set via an environment variables: `SPIDERABLE_SERVICE_AUTH` or `PRERENDER_SERVICE_AUTH`. Default `null`
 - `opts.sanitizeUrls` {*Boolean*} - [Optional] Sanitize URLs in order to "fix" badly composed URLs. Default `false`
-- `opts.botsUA` {*[String]*} - [Optional] An array of strings (case insensitive) with additional User-Agent names of crawlers you would like to intercept. See default [bot's names](https://github.com/veliovgroup/spiderable-middleware/blob/master/lib/index.js#L128). Set to `['.*']` to match all browsers and robots, to serve static pages to all users/visitors
+- `opts.botsUA` {*[String]*} - [Optional] An array of strings (case insensitive) with additional User-Agent names of crawlers that needs to get intercepted. See default [bot's names](https://github.com/veliovgroup/spiderable-middleware/blob/master/lib/index.js#L128). Set to `['.*']` to match all browsers and robots, to serve static pages to all users/visitors
 - `opts.ignoredHeaders` {*[String]*} - [Optional] An array of strings (case insensitive) with HTTP header names to exclude from response. See default [list of ignored headers](https://github.com/veliovgroup/spiderable-middleware/blob/master/lib/index.js#L130). Set to `['.*']` to ignore all headers
 - `opts.ignore` {*[String]*} - [Optional] An array of strings (case __sensitive__) with ignored routes. Note: it's based on first match, so route `/users` will cause ignoring of `/part/users/part`, `/users/_id` and `/list/of/users`, but not `/user/_id` or `/list/of/blocked-users`. Default `null`
 - `opts.only` {*[String|RegExp]*} - [Optional] An array of strings (case __sensitive__) or regular expressions (*could be mixed*). Define __exclusive__ route rules for pre-rendering. Could be used with `opts.onlyRE` rules. __Note:__ To define "safe" rules as {*RegExp*} it should start with `^` and end with `$` symbols, examples: `[/^\/articles\/?$/, /^\/article\/[A-z0-9]{16}\/?$/]`
@@ -257,7 +272,7 @@ SPIDERABLE_SERVICE_URL='https://render.ostr.io'
 SPIDERABLE_SERVICE_AUTH='APIUser:APIPass'
 ```
 
-alternatively if you're migrating from other pre-rendering service you can keep using existing variables, we support it for compatibility
+alternatively, when migrating from other pre-rendering service — keep using existing variables, we support the next ones for compatibility:
 
 ```sh
 ROOT_URL='http://example.com'
@@ -272,9 +287,6 @@ Middleware handler. Alias: `spiderable.handle`.
 ```js
 // Express, Connect:
 app.use(spiderable.handler);
-
-// Meteor:
-WebApp.connectHandlers.use(spiderable.handler.bind(spiderable));
 
 // HTTP(s) Server
 http.createServer((req, res) => {
@@ -312,19 +324,23 @@ All URLs with `.amp.` extension and `/amp/` prefix will be optimized for AMP.
 
 ## Rendering Endpoints
 
-- __render (*default*)__ - `https://render.ostr.io` - This endpoint has "optimal" settings, and should fit 98% cases. Respects cache headers of both Crawler and your server;
-- __render-bypass (*devel/debug*)__ - `https://render-bypass.ostr.io` - This endpoint has bypass caching mechanism (*almost no cache*). Use it if you're experiencing an issue, or during development, to make sure you're not running into the intermediate cache. You're safe to use this endpoint in production, but it may result in higher usage and response time.
-- __render-cache (*under attack*)__ - `https://render-cache.ostr.io` - This endpoint has the most aggressive caching mechanism. Use it if you're looking for the shortest response time, and don't really care about outdated pages in cache for 6-12 hours
+- __render (*default*)__ - `https://render.ostr.io` - This endpoint has "optimal" settings, and should fit 98% cases. This endpoint respects cache headers of Crawler and origin server
+- __render-bypass (*devel/debug*)__ - `https://render-bypass.ostr.io` - This endpoint will bypass caching mechanisms. Use it when experiencing an issue, or during development, to make sure responses are not cached. It's safe to use this endpoint in production, but it may result in higher usage and response time
+- __render-cache (*under attack*)__ - `https://render-cache.ostr.io` - This endpoint has the most aggressive caching mechanism. Use it to achieve the shortest response time, and when outdated pages (*for 6-12 hours*) are acceptable
 
-To change default endpoint, grab [integration examples code](https://github.com/veliovgroup/spiderable-middleware/tree/master/examples) and replace `render.ostr.io`, with endpoint of your choice. For NPM/Meteor integration change value of [`serviceURL`](https://github.com/veliovgroup/spiderable-middleware#basic-usage) option.
+To change default endpoint, grab [integration examples code](https://github.com/veliovgroup/spiderable-middleware/tree/master/examples) and replace `render.ostr.io`, with endpoint from the list above. For NPM integration change value of [`serviceURL`](https://github.com/veliovgroup/spiderable-middleware#basic-usage) option.
 
 __Note:__ Described differences in caching behavior related to intermediate proxy caching, `Cache-Control` header will be always set to the value defined in "Cache TTL". Cached results at the "Pre-rendering Engine" end can be [purged at any time](https://github.com/veliovgroup/ostrio/blob/master/docs/prerendering/cache-purge.md).
 
 ## Debugging
 
-To make sure a server can reach our rendering endpoint run cURL command or send request via Node.js to (*replace example.com with your domain name*) `https://test:test@render-bypass.ostr.io/?url=http://example.com`.
+To make sure a server can reach a rendering endpoint run `cURL` command or send request via Node.js to (*replace example.com with your domain name*):
 
-In this example we're using `render-bypass.ostr.io` endpoint to avoid any possible cached results, [read more about rendering endpoints](https://github.com/veliovgroup/spiderable-middleware#rendering-endpoints). As API credentials we're using `test:test`, this part of URL can be replaced with `auth` option from Node.js example. Your API credentials and instructions can be found at the very bottom of [Pre-rendering Panel](https://ostr.io/service/prerender) of a host, click on "Integration Guide".
+```shell
+curl -v "https://test:test@render-bypass.ostr.io/?url=http://example.com"
+```
+
+In this example we're using `render-bypass.ostr.io` endpoint to avoid any possible cached results, [read more about rendering endpoints](https://github.com/veliovgroup/spiderable-middleware#rendering-endpoints). As API credentials we're using `test:test`, this part of URL can be replaced with `auth` option from Node.js example. The API credentials and instructions can be found at the very bottom of [Pre-rendering Panel](https://ostr.io/service/prerender) of a particular host, — click on <kbd>Integration Guide</kbd>
 
 ```sh
 # cURL example:
