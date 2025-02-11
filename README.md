@@ -1,20 +1,20 @@
 # Spiderable middleware
 
-Google, Facebook, Twitter, Yahoo, Bing, and all other crawlers, search engines, and social networks are constantly trying to view your website. If your website is built on top of the JavaScript framework like, but not limited to - React, Vue, Svelte, Angular, Backbone, Ember, Meteor these front-end JS-frameworks are returning basic HTML-markup with script-tags to crawlers, but not content of the requested page. The mission of `spiderable-middleware` and [ostr.io](https://ostr.io) are to boost SEO for modern JavaScript-websites.
+Search engines and social networks — such as Google, Facebook, Twitter, Yahoo, Bing, and many others — are constantly crawling your website to index its content. However, if your site is built using a modern JavaScript framework (*for example, React, Preact, Vue, Svelte, Angular, Backbone, Ember, Meteor, Blaze*), it serve only a basic HTML skeleton with script tags instead of fully rendered page content. This limitation negatively impacts website's SEO score, performance, and user experience when links shared by users around the web. The mission of `spiderable-middleware` and [`ostr.io`](https://ostr.io) is to enhance SEO and performance for modern JavaScript websites.
 
 ## Why Pre-render?
 
-- 🕸 Execute JavaScript, — get rendered HTML page;
+- 🕸 Execute JavaScript, — get rendered HTML page and its content;
 - 🏃‍♂️ Boost response rate and decrease response time with caching;
 - 🚀 Optimized HTML markup for the best SEO score;
-- 🖥 Support for PWAs and SPAs;
-- 📱 Support for mobile-like crawlers;
+- 🖥 Support PWAs and SPAs;
+- 📱 Support mobile-like crawlers;
 - 💅 Support [`styled-components`](https://styled-components.com);
 - ⚡️ Support [AMP (Accelerated Mobile Pages)](https://www.ampproject.org);
 - 🤓 Works with `Content-Security-Policy` and other complex front-end security rules;
 - ❤️ Search engines and social network crawlers love straightforward and pre-rendered pages;
-- 📱 Consistent link previews in messaging apps, like iMessage, Messages, Facebook, Slack, Telegram, WhatsApp, Viber, VK, Twitter, etc.;
-- 💻 Image, title, and description previews for posted links at social networks, like Facebook, Twitter, Instagram, and others.
+- 📱 Consistent link previews in messaging apps, like iMessage, Messages, Facebook, Slack, Telegram, WhatsApp, Viber, VK, Twitter, and other apps;
+- 💻 Image, title, and description previews for posted links at social networks, like Facebook, Twitter, Instagram, and other social networks.
 
 ## ToC
 
