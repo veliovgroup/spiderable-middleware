@@ -4,6 +4,7 @@
 .eslintrc
 .github
 .meteor
+.meteorignore
 .npm
 .versions
 examples
