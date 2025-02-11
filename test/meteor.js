@@ -31,7 +31,11 @@ const testURLs = {
   invalid: ['/user', '/billing', '/asd', '/articles/rand234', '/posts/234/', '/article/100', '/article/100/', '/post/HhstejsJKH123jJi', '/post/HhstejsJKH123jJi/']
 };
 
-WebApp.connectHandlers.use(prerendering);
+if (Meteor.release.includes('@1') || Meteor.release.includes('@2')) {
+  WebApp.connectHandlers.use(prerendering);
+} else {
+  WebApp.connectHandlers.use(prerendering.handler.bind(prerendering));
+}
 
 Meteor.startup(function(){
   if (Meteor.isServer) {
@@ -40,7 +44,7 @@ Meteor.startup(function(){
     });
 
     Tinytest.add('Spiderable - Instance', function (test) {
-      test.isTrue(prerendering.rootURL === (process.env.ROOT_URL || '').replace(/\/$/, ''), 'Spiderable instance correctly initialized');
+      test.isTrue(prerendering.rootURL === (process.env.ROOT_URL || '').replace(re.trailingSlash, ''), 'Spiderable instance correctly initialized');
     });
 
     Tinytest.add('Spiderable - botsRE property', function (test) {
@@ -66,7 +70,7 @@ Meteor.startup(function(){
     });
 
     Tinytest.addAsync('Prerendering & Middleware Setup - Static file', function (test, next) {
-      HTTP.call('GET', process.env.ROOT_URL + '/packages/test-in-browser/driver.css', {
+      HTTP.call('GET', (process.env.ROOT_URL || '').replace(re.trailingSlash, '') + '/packages/test-in-browser/driver.css', {
         headers: {
           'User-Agent': 'GoogleBot'
         }
@@ -82,9 +86,9 @@ Meteor.startup(function(){
     });
 
     _.each(testURLs.valid, (testUrl, jj) => {
-      const _testUrl = testUrl.replace(re.beginningSlash, '');
-      Tinytest.addAsync('Test allowed (only) routes - ' + ' {' + jj + '} ' + _testUrl, function (test, next) {
-        HTTP.call('GET', process.env.ROOT_URL + _testUrl, {
+      const testRoot = (process.env.ROOT_URL || '').replace(re.trailingSlash, '');
+      Tinytest.addAsync(`Test allowed (only) routes - { ${jj} } ${testUrl}`, function (test, next) {
+        HTTP.call('GET', testRoot + testUrl, {
           headers: {
             'User-Agent': 'GoogleBot'
           }
@@ -95,7 +99,7 @@ Meteor.startup(function(){
             test.isTrue(resp.headers && !!resp.headers['x-prerender-id'], 'Response has "x-prerender-id" header');
             test.isTrue(resp.headers['x-prerender-id'] && resp.headers['x-prerender-id'].includes('TEST'), 'Value of "x-prerender-id" is correctly set');
             test.isTrue(resp.content.includes('[PASSED]'), 'Response has correct body content');
-            test.isTrue(resp.content.includes(process.env.ROOT_URL + _testUrl), 'Response has correct ping-back URL');
+            test.isTrue(resp.content.includes(testRoot + testUrl), 'Response has correct ping-back URL');
           }
           next();
         });
@@ -103,9 +107,9 @@ Meteor.startup(function(){
     });
 
     _.each(testURLs.invalid, (testUrl, jj) => {
-      const _testUrl = testUrl.replace(re.beginningSlash, '');
-      Tinytest.addAsync('Test ignored routes - ' + ' {' + jj + '} ' + _testUrl, function (test, next) {
-        HTTP.call('GET', process.env.ROOT_URL + _testUrl, {
+      const testRoot = (process.env.ROOT_URL || '').replace(re.trailingSlash, '');
+      Tinytest.addAsync(`Test ignored routes - { ${jj} } ${testUrl}`, function (test, next) {
+        HTTP.call('GET', testRoot + testUrl, {
           headers: {
             'User-Agent': 'GoogleBot'
           }
