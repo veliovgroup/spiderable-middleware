@@ -334,6 +334,8 @@ __Note:__ Described differences in caching behavior related to intermediate prox
 
 ## Debugging
 
+Pass `{ debug: true }` or set `DEBUG=true` environment variable to enable debugging mode.
+
 To make sure a server can reach a rendering endpoint run `cURL` command or send request via Node.js to (*replace example.com with your domain name*):
 
 ```shell
