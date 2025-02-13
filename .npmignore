@@ -3,10 +3,13 @@
 .eslintcache
 .eslintrc
 .github
+.gitignore
 .meteor
 .meteorignore
 .npm
 .versions
+docs
+docs/*
 examples
 examples/*
 lib/meteor.js
