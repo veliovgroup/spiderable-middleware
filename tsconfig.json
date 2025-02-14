@@ -1,0 +1,16 @@
+{
+  "compilerOptions": {
+    "preserveSymlinks": true,
+    "esModuleInterop": true,
+    "strict": true,
+    "outDir": "./dist",
+    "typeRoots": ["./node_modules/@types", "./types"],
+    "paths": {
+      "meteor/*": [
+        "node_modules/@types/meteor/*",
+        ".meteor/local/types/packages.d.ts"
+      ]
+    }
+  },
+  "include": ["test/*.ts", "types"]
+}
