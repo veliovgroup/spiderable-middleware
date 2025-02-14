@@ -2,7 +2,7 @@ import { _ }      from 'meteor/underscore';
 import { HTTP }   from 'meteor/http';
 import { Meteor } from 'meteor/meteor';
 import { WebApp } from 'meteor/webapp';
-import Spiderable from '../lib/index.js';
+import Spiderable from 'meteor/ostrio:spiderable-middleware';
 
 const prerendering = new Spiderable({
   rootURL: process.env.ROOT_URL,
@@ -34,7 +34,7 @@ const testURLs = {
 if (Meteor.release.includes('@1') || Meteor.release.includes('@2')) {
   WebApp.connectHandlers.use(prerendering);
 } else {
-  WebApp.connectHandlers.use(prerendering.handler.bind(prerendering));
+  WebApp.connectHandlers.use(prerendering.handler);
 }
 
 Meteor.startup(function(){
