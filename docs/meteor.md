@@ -30,11 +30,11 @@ import { WebApp } from 'meteor/webapp';
 import Spiderable from 'meteor/ostrio:spiderable-middleware';
 
 const spiderable = new Spiderable({
-  auth: 'APIUser:APIPass'
+  auth: 'test:test'
 });
 
 // meteor@>=3 use the next line for modern version of Meteor
-WebApp.connectHandlers.use(spiderable.handler.bind(spiderable));
+WebApp.connectHandlers.use(spiderable.handler);
 
 // meteor@<3 use the next line for meteor@2.x and meteor@1.x releases
 WebApp.connectHandlers.use(spiderable);
@@ -65,6 +65,29 @@ Template.registerHelper('IS_PRERENDERING', () => isPrerendering.get());
 ```
 
 __Note__: `window.IS_PRERENDERING` can be `undefined` on initial page load, and may change during runtime.
+
+## Types
+
+Import types right from Atmosphere package
+
+```ts
+import Spiderable from 'meteor/ostrio:spiderable-middleware';
+import type { SpiderableOptions, NextFunction } from 'meteor/ostrio:spiderable-middleware';
+
+const options: SpiderableOptions = {
+  rootURL: 'http://example.com',
+  auth: 'test:test',
+  debug: false,
+  /* ..and other options.. */
+};
+expectType<SpiderableOptions>(options);
+
+const spiderable = new Spiderable(options);
+expectType<Spiderable>(spiderable);
+
+const next: NextFunction = (_err?: unknown): void => {};
+expectType<void>(spiderable.handle(req, res, next));
+```
 
 ## Running Tests
 

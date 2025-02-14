@@ -12,6 +12,7 @@ Search engines and social networks — such as Google, Facebook, Twitter, Yahoo,
 - 💅 Support [`styled-components`](https://styled-components.com);
 - ⚡️ Support [AMP (Accelerated Mobile Pages)](https://www.ampproject.org);
 - 🤓 Works with `Content-Security-Policy` and other complex front-end security rules;
+- 📦 This package shipped with [types](https://github.com/veliovgroup/spiderable-middleware/blob/master/types/index.d.ts) and [TS examples](https://github.com/veliovgroup/spiderable-middleware/blob/master/examples/);
 - ❤️ Search engines and social network crawlers love straightforward and pre-rendered pages;
 - 📱 Consistent link previews in messaging apps, like iMessage, Messages, Facebook, Slack, Telegram, WhatsApp, Viber, VK, Twitter, and other apps;
 - 💻 Image, title, and description previews for posted links at social networks, like Facebook, Twitter, Instagram, and other social networks.
@@ -28,8 +29,9 @@ Search engines and social networks — such as Google, Facebook, Twitter, Yahoo,
 - [AMP Support](https://github.com/veliovgroup/spiderable-middleware?tab=readme-ov-file#amp-support)
 - [Rendering Endpoints](https://github.com/veliovgroup/spiderable-middleware?tab=readme-ov-file#rendering-endpoints)
 - [API](https://github.com/veliovgroup/spiderable-middleware?tab=readme-ov-file#api)
-  - [Constructor `new Spiderable()`](https://github.com/veliovgroup/spiderable-middleware?tab=readme-ov-file#constructor-new-spiderableopts)
-  - [Middleware](https://github.com/veliovgroup/spiderable-middleware?tab=readme-ov-file#spiderablehandlerreq-res-next)
+  - [Constructor `new Spiderable()`](https://github.com/veliovgroup/spiderable-middleware?tab=readme-ov-file#constructor)
+  - [Middleware](https://github.com/veliovgroup/spiderable-middleware?tab=readme-ov-file#handle)
+  - [TS Types](https://github.com/veliovgroup/spiderable-middleware?tab=readme-ov-file#types)
 - [Debugging](https://github.com/veliovgroup/spiderable-middleware?tab=readme-ov-file#debugging)
 - [Running Tests](https://github.com/veliovgroup/spiderable-middleware?tab=readme-ov-file#running-tests)
 
@@ -46,9 +48,9 @@ We made this package with developers in mind. It's well written in a very simple
 
 This middleware was tested and works like a charm with:
 
-- [express](https://www.npmjs.com/package/express): [example](https://github.com/veliovgroup/spiderable-middleware/blob/master/examples/express.middleware.js)
-- [connect](https://www.npmjs.com/package/connect): [example](https://github.com/veliovgroup/spiderable-middleware/blob/master/examples/connect.middleware.js)
-- [vanilla http(s) server](https://nodejs.org/api/http.html): [example](https://github.com/veliovgroup/spiderable-middleware/blob/master/examples/http.middleware.js)
+- [express](https://www.npmjs.com/package/express): [`example.js`](https://github.com/veliovgroup/spiderable-middleware/blob/master/examples/express.middleware.js), [`example.ts`](https://github.com/veliovgroup/spiderable-middleware/blob/master/examples/express.middleware.ts)
+- [connect](https://www.npmjs.com/package/connect): [`example.js`](https://github.com/veliovgroup/spiderable-middleware/blob/master/examples/connect.middleware.js), [`example.ts`](https://github.com/veliovgroup/spiderable-middleware/blob/master/examples/connect.middleware.ts)
+- [vanilla http(s) server](https://nodejs.org/api/http.html): [`example.js`](https://github.com/veliovgroup/spiderable-middleware/blob/master/examples/http.middleware.js), [`example.ts`](https://github.com/veliovgroup/spiderable-middleware/blob/master/examples/http.middleware.ts)
 - [Nginx](https://nginx.org/en/docs/): [example](https://github.com/veliovgroup/spiderable-middleware/blob/master/examples/nginx)
 - [Apache](https://httpd.apache.org/): [example](https://github.com/veliovgroup/spiderable-middleware/blob/master/examples/apache.htaccess)
 - See [all examples](https://github.com/veliovgroup/spiderable-middleware/tree/master/examples)
@@ -75,9 +77,9 @@ Get ready in a few lines of code
 
 ### Basic usage
 
-See [all examples](https://github.com/veliovgroup/spiderable-middleware/tree/master/examples).
+See [usage examples in `.js` and `.ts`](https://github.com/veliovgroup/spiderable-middleware/tree/master/examples) for quick copy-paste experience.
 
-First, add `fragment` meta-tag to HTML template or page:
+Start with adding `fragment` meta-tag to HTML template, head, or page:
 
 ```html
 <html>
@@ -101,7 +103,7 @@ import Spiderable from 'spiderable-middleware';
 const Spiderable = require('spiderable-middleware');
 ```
 
-Register middleware handler:
+Register middleware handle:
 
 ```js
 import express from 'express';
@@ -109,13 +111,13 @@ import Spiderable from 'spiderable-middleware';
 
 const spiderable = new Spiderable({
   rootURL: 'http://example.com',
-  auth: 'APIUser:APIPass'
+  auth: 'test:test',
 });
 
 const app = express();
-// ensure this is the most top registered handler
+// ensure this is the most top registered handle
 // to reduce response time and server load
-app.use(spiderable.handler).get('/', (req, res) => {
+app.use(spiderable.handle).get('/', (req, res) => {
   res.send('Hello World');
 });
 
@@ -214,7 +216,13 @@ __Note__: *Only 4 redirects are allowed during one request after 4 redirects ses
 
 ## API
 
-### *Constructor* `new Spiderable([opts])`
+Create new instance and pass middleware to server's routes chain;
+
+### *Constructor*
+
+```ts
+new Spiderable(opts?: SpiderableOptions);
+```
 
 - `opts` {*Object*} - Configuration options
 - `opts.serviceURL` {*String*} - Valid URL to Spiderable endpoint (local or foreign). Default: `https://render.ostr.io`. Can be set via environment variables: `SPIDERABLE_SERVICE_URL` or `PRERENDER_SERVICE_URL`
@@ -241,14 +249,14 @@ __Note:__ *Setting* `.onlyRE` *and/or* `.only` *rules are highly recommended. Ot
 
 const spiderable = new Spiderable({
   rootURL: 'http://example.com',
-  auth: 'APIUser:APIPass'
+  auth: 'test:test'
 });
 
 // More complex setup (recommended):
 const spiderable = new Spiderable({
   rootURL: 'http://example.com',
   serviceURL: 'https://render.ostr.io',
-  auth: 'APIUser:APIPass',
+  auth: 'test:test',
   only: [
     /\/?/, // Root of the website
     /^\/posts\/?$/, // "/posts" path with(out) trailing slash
@@ -262,7 +270,7 @@ const spiderable = new Spiderable({
 });
 ```
 
-### Configuration via env.vars
+#### Configuration via env.vars
 
 Same configuration can get achieved via setting up environment variables:
 
@@ -280,17 +288,45 @@ PRERENDER_SERVICE_URL='https://render.ostr.io'
 PRERENDER_SERVICE_AUTH='APIUser:APIPass'
 ```
 
-### `spiderable.handler(req, res, next)`
+### handle
 
-Middleware handler. Alias: `spiderable.handle`.
+Middleware handle
+
+```ts
+const spiderable = new Spiderable();
+spiderable.handle(req: IncomingMessage, res: ServerResponse, next: NextFunction): void;
+
+// Alias that returns {boolean} 
+// true — if prerendering takes over the request
+spiderable.handler(req: IncomingMessage, res: ServerResponse, next: NextFunction): boolean;
+```
+
+Example using `connect` and `express` package:
 
 ```js
-// Express, Connect:
-app.use(spiderable.handler);
+import { createServer } from 'node:http';
+import Spiderable from 'spiderable-middleware';
+
+const app = express();
+// const app = connect();
+const spiderable = new Spiderable();
+
+app.use(spiderable.handle).use((_req, res) => {
+  res.end('Hello from Connect!\n');
+});
+
+createServer(app).listen(3000;
+```
+
+Example using node.js `http` server:
+
+```js
+import { createServer } from 'node:http';
+import Spiderable from 'spiderable-middleware';
 
 // HTTP(s) Server
 http.createServer((req, res) => {
-  spiderable.handler(req, res, () => {
+  spiderable.handle(req, res, () => {
     // Callback, triggered if this request
     // is not a subject of spiderable pre-rendering
     res.writeHead(200, {'Content-Type': 'text/plain; charset=UTF-8'});
@@ -298,6 +334,29 @@ http.createServer((req, res) => {
     // Or do something else ...
   });
 }).listen(3000);
+```
+
+### Types
+
+Import types right from NPM package
+
+```ts
+import Spiderable from 'spiderable-middleware';
+import type { SpiderableOptions, NextFunction } from 'spiderable-middleware';
+
+const options: SpiderableOptions = {
+  rootURL: 'http://example.com',
+  auth: 'test:test',
+  debug: false,
+  /* ..and other options.. */
+};
+expectType<SpiderableOptions>(options);
+
+const spiderable = new Spiderable(options);
+expectType<Spiderable>(spiderable);
+
+const next: NextFunction = (_err?: unknown): void => {};
+expectType<void>(spiderable.handle(req, res, next));
 ```
 
 ## AMP Support
@@ -381,6 +440,11 @@ https.get('https://test:test@render-bypass.ostr.io/?url=http://example.com', (re
 npm install --save-dev
 # Install NPM dependencies:
 npm install --save
+
+# Link package to itself
+npm link
+npm link spiderable-middleware
+
 # Run tests:
 ROOT_URL=http://127.0.0.1:3003 npm test
 
