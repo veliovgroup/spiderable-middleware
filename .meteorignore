@@ -4,11 +4,14 @@
 .eslintrc
 .github
 .gitignore
+.mocharc.json
 .npm
 .npmignore
 CHANGELOG.md
 CODE_OF_CONDUCT.md
 CONTRIBUTING.md
+dist
+dist/*
 docs
 docs/*
 examples

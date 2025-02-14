@@ -1,5 +1,7 @@
 .npm
 .DS_Store
 .eslintcache
+dist
+dist/*
 node_modules
 npm-debug.log*

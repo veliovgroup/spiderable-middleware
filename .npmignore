@@ -6,8 +6,11 @@
 .gitignore
 .meteor
 .meteorignore
+.mocharc.json
 .npm
 .versions
+dist
+dist/*
 docs
 docs/*
 examples
@@ -16,5 +19,6 @@ lib/meteor.js
 node_modules
 npm-debug.log*
 package.js
+package-types.json
 test/
 test/*
