@@ -22,3 +22,4 @@ package.js
 package-types.json
 test/
 test/*
+tsconfig.json

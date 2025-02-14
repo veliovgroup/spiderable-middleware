@@ -25,3 +25,4 @@ package.json
 README.md
 test/
 test/*
+tsconfig.json

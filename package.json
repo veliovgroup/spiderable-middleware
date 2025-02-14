@@ -1,10 +1,15 @@
 {
   "name": "spiderable-middleware",
-  "version": "2.1.0",
+  "version": "2.2.0",
   "description": "Optimize SEO for JavaScript websites with pre-rendering that delivers SSR-like performance through effortless integration and zero coding",
-  "main": "./lib/index.js",
+  "main": "lib/index.js",
+  "types": "types/index.d.ts",
+  "files": [
+    "lib/index.js",
+    "types/index.d.ts"
+  ],
   "scripts": {
-    "test": "mocha ./test/npm.js"
+    "test": "mocha"
   },
   "repository": {
     "type": "git",
@@ -70,11 +75,18 @@
     "node": ">=7.1.0"
   },
   "devDependencies": {
+    "@types/chai": "^5.0.1",
+    "@types/express": "^5.0.0",
+    "@types/meteor": "^2.9.8",
+    "@types/mocha": "^10.0.10",
+    "@types/node": "^22.13.4",
     "chai": "^4.5.0",
     "connect": "^3.7.0",
     "express": "^4.21.2",
     "mocha": "^10.8.2",
-    "request": "^2.88.2",
+    "ts-node": "^10.9.2",
+    "tsd": "^0.31.2",
+    "typescript": "^5.7.3",
     "underscore": "^1.13.7"
   }
 }
