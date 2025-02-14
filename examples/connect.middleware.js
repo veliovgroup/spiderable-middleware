@@ -1,16 +1,22 @@
-'use strict';
-var connect    = require('connect');
-var http       = require('http');
-var app        = connect();
-var Spiderable = require('spiderable-middleware');
-var spiderable = new Spiderable({
+import connect from 'connect';
+import { createServer } from 'node:http';
+import Spiderable from 'spiderable-middleware';
+
+const app = connect();
+
+const spiderable = new Spiderable({
   rootURL: 'http://example.com',
-  serviceURL: 'https://render.ostr.io',
-  auth: 'APIUser:APIPass'
+  auth: 'test:test',
 });
 
-app.use(spiderable.handler.bind(spiderable)).use(function (req, res) {
+app.use(spiderable.handle);
+
+app.use((_req, res) => {
   res.end('Hello from Connect!\n');
 });
 
-http.createServer(app).listen(3000);
+const server = createServer(app);
+
+server.listen(3000, () => {
+  console.log('Server running on port 3000');
+});

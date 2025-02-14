@@ -5,9 +5,9 @@ Spiderable = require 'spiderable-middleware'
 spiderable = new Spiderable
   rootURL: 'http://example.com'
   serviceURL: 'https://render.ostr.io'
-  auth: 'APIUser:APIPass'
+  auth: 'test:test'
 
-app.use(spiderable.handler).use (req, res) ->
+app.use(spiderable.handle).use (req, res) ->
   res.end 'Hello from Connect!\n'
 
 http.createServer(app).listen 3000

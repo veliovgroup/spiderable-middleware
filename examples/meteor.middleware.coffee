@@ -6,10 +6,10 @@
 spiderable = new Spiderable
   rootURL: 'http://example.com'
   serviceURL: 'https://render.ostr.io'
-  auth: 'APIUser:APIPass'
+  auth: 'test:test'
 
 # meteor@>=3
-WebApp.connectHandlers.use spiderable.handler.bind spiderable
+WebApp.connectHandlers.use spiderable.handle
 
 # meteor@<3
 # WebApp.connectHandlers.use spiderable

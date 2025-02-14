@@ -1,17 +1,17 @@
-'use strict';
-var http       = require('http');
-var Spiderable = require('spiderable-middleware');
-var spiderable = new Spiderable({
+import { createServer } from 'http';
+import Spiderable from 'spiderable-middleware';
+
+const spiderable = new Spiderable({
   rootURL: 'http://example.com',
-  serviceURL: 'https://render.ostr.io',
-  auth: 'APIUser:APIPass'
+  auth: 'test:test',
 });
 
-var requestListener = function(req, res) {
-  spiderable.handler(req, res, function(){
+const requestListener = (req, res) => {
+  spiderable.handler(req, res, () => {
+    // Function called when request coming from users, not bots
     res.writeHead(200, {'Content-Type': 'text/plain; charset=UTF-8'});
     res.end('Hello vanilla NodeJS!');
   });
 };
 
-http.createServer(requestListener).listen(3000);
+createServer(requestListener).listen(3000);
