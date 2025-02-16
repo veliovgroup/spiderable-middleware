@@ -224,19 +224,19 @@ Create new instance and pass middleware to server's routes chain;
 new Spiderable(opts?: SpiderableOptions);
 ```
 
-- `opts` {*Object*} - Configuration options
-- `opts.serviceURL` {*String*} - Valid URL to Spiderable endpoint (local or foreign). Default: `https://render.ostr.io`. Can be set via environment variables: `SPIDERABLE_SERVICE_URL` or `PRERENDER_SERVICE_URL`
-- `opts.rootURL` {*String*} - Valid root URL of a website. Can be set via an environment variable: `ROOT_URL`
-- `opts.auth` {*String*} - [Optional] Auth string in next format: `user:pass`. Can be set via an environment variables: `SPIDERABLE_SERVICE_AUTH` or `PRERENDER_SERVICE_AUTH`. Default `null`
-- `opts.sanitizeUrls` {*Boolean*} - [Optional] Sanitize URLs in order to "fix" badly composed URLs. Default `false`
-- `opts.botsUA` {*[String]*} - [Optional] An array of strings (case insensitive) with additional User-Agent names of crawlers that needs to get intercepted. See default [bot's names](https://github.com/veliovgroup/spiderable-middleware/blob/master/lib/index.js#L128). Set to `['.*']` to match all browsers and robots, to serve static pages to all users/visitors
-- `opts.ignoredHeaders` {*[String]*} - [Optional] An array of strings (case insensitive) with HTTP header names to exclude from response. See default [list of ignored headers](https://github.com/veliovgroup/spiderable-middleware/blob/master/lib/index.js#L130). Set to `['.*']` to ignore all headers
-- `opts.ignore` {*[String]*} - [Optional] An array of strings (case __sensitive__) with ignored routes. Note: it's based on first match, so route `/users` will cause ignoring of `/part/users/part`, `/users/_id` and `/list/of/users`, but not `/user/_id` or `/list/of/blocked-users`. Default `null`
-- `opts.only` {*[String|RegExp]*} - [Optional] An array of strings (case __sensitive__) or regular expressions (*could be mixed*). Define __exclusive__ route rules for pre-rendering. Could be used with `opts.onlyRE` rules. __Note:__ To define "safe" rules as {*RegExp*} it should start with `^` and end with `$` symbols, examples: `[/^\/articles\/?$/, /^\/article\/[A-z0-9]{16}\/?$/]`
-- `opts.onlyRE` {*RegExp*} - [Optional] Regular Expression with __exclusive__ route rules for pre-rendering. Could be used with `opts.only` rules
-- `opts.timeout` {*Number*} - [Optional] Number, proxy-request timeout to rendering endpoint in milliseconds. Default: `180000`
-- `opts.requestOptions` {*Object*} - [Optional] Options for request module (like: `timeout`, `lookup`, `insecureHTTPParser`), for all available options see [`http` API docs](https://nodejs.org/docs/latest-v14.x/api/http.html#http_http_request_url_options_callback)
-- `opts.debug` {*Boolean*} - [Optional] Enable debug and extra logging, default: `false`
+- `opts` {*SpiderableOptions?*} - [Optional] Configuration options
+- `opts.serviceURL` {*string*} - Valid URL to Spiderable endpoint (local or foreign). Default: `https://render.ostr.io`. Can be set via environment variables: `SPIDERABLE_SERVICE_URL` or `PRERENDER_SERVICE_URL`
+- `opts.rootURL` {*string*} - Valid root URL of a website. Can be set via an environment variable: `ROOT_URL`
+- `opts.auth` {*string*} - Auth string in next format: `user:pass`. Can be set via an environment variables: `SPIDERABLE_SERVICE_AUTH` or `PRERENDER_SERVICE_AUTH`. Default `null`
+- `opts.sanitizeUrls` {*boolean*} - Sanitize URLs in order to "fix" badly composed URLs. Default `false`
+- `opts.botsUA` {*string[]*} - An array of strings (case insensitive) with additional User-Agent names of crawlers that needs to get intercepted. See default [bot's names](https://github.com/veliovgroup/spiderable-middleware/blob/master/lib/index.js#L198). Set to `['.*']` to match all browsers and robots, to serve static pages to all users/visitors
+- `opts.ignoredHeaders` {*string[]*} - An array of strings (case insensitive) with HTTP header names to exclude from response. See default [list of ignored headers](https://github.com/veliovgroup/spiderable-middleware/blob/master/lib/index.js#L206). Set to `['.*']` to ignore all headers
+- `opts.ignore` {*string[]*} - An array of strings (case __sensitive__) with ignored routes. Note: it's based on first match, so route `/users` will cause ignoring of `/part/users/part`, `/users/_id` and `/list/of/users`, but not `/user/_id` or `/list/of/blocked-users`. Default `null`
+- `opts.only` {*(String|RegExp)[]*} - An array of strings (case __sensitive__) or regular expressions (*could be mixed*). Define __exclusive__ route rules for pre-rendering. Could be used with `opts.onlyRE` rules. __Note:__ To define "safe" rules as {*RegExp*} it should start with `^` and end with `$` symbols, examples: `[/^\/articles\/?$/, /^\/article\/[A-z0-9]{16}\/?$/]`
+- `opts.onlyRE` {*RegExp*} - Regular Expression with __exclusive__ route rules for pre-rendering. Could be used with `opts.only` rules
+- `opts.timeout` {*number*} - Number, proxy-request timeout to rendering endpoint in milliseconds. Default: `180000`
+- `opts.requestOptions` {*RequestOptions*} - Options for request module (like: `timeout`, `lookup`, `insecureHTTPParser`), for all available options see [`http` API docs](https://nodejs.org/docs/latest-v14.x/api/http.html#http_http_request_url_options_callback)
+- `opts.debug` {*boolean*} - [Optional] Enable debug and extra logging, default: `false`
 
 __Note:__ *Setting* `.onlyRE` *and/or* `.only` *rules are highly recommended. Otherwise, all routes, including randomly generated by bots will be subject of Pre-rendering and may cause unexpectedly higher usage.*
 
@@ -387,7 +387,7 @@ All URLs with `.amp.` extension and `/amp/` prefix will be optimized for AMP.
 - __render-bypass (*devel/debug*)__ - `https://render-bypass.ostr.io` - This endpoint will bypass caching mechanisms. Use it when experiencing an issue, or during development, to make sure responses are not cached. It's safe to use this endpoint in production, but it may result in higher usage and response time
 - __render-cache (*under attack*)__ - `https://render-cache.ostr.io` - This endpoint has the most aggressive caching mechanism. Use it to achieve the shortest response time, and when outdated pages (*for 6-12 hours*) are acceptable
 
-To change default endpoint, grab [integration examples code](https://github.com/veliovgroup/spiderable-middleware/tree/master/examples) and replace `render.ostr.io`, with endpoint from the list above. For NPM integration change value of [`serviceURL`](https://github.com/veliovgroup/spiderable-middleware#basic-usage) option.
+To change default endpoint, grab [integration examples code](https://github.com/veliovgroup/spiderable-middleware/tree/master/examples) and replace `render.ostr.io`, with endpoint from the list above. For NPM integration change value of [`serviceURL`](https://github.com/veliovgroup/spiderable-middleware?tab=readme-ov-file#constructor) option.
 
 __Note:__ Described differences in caching behavior related to intermediate proxy caching, `Cache-Control` header will be always set to the value defined in "Cache TTL". Cached results at the "Pre-rendering Engine" end can be [purged at any time](https://github.com/veliovgroup/ostrio/blob/master/docs/prerendering/cache-purge.md).
 

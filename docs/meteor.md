@@ -34,7 +34,7 @@ const spiderable = new Spiderable({
 });
 
 // meteor@>=3 use the next line for modern version of Meteor
-WebApp.connectHandlers.use(spiderable.handler);
+WebApp.connectHandlers.use(spiderable.handle);
 
 // meteor@<3 use the next line for meteor@2.x and meteor@1.x releases
 WebApp.connectHandlers.use(spiderable);
