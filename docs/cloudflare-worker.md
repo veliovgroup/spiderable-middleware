@@ -29,3 +29,9 @@ Step-by-step integration instructions for ostr.io pre-rendering via CloudFlare W
 12. Further reading:
     - [Speed-up rendering](https://github.com/veliovgroup/spiderable-middleware?tab=readme-ov-file#speed-up-rendering)
     - [Detect requests from pre-rendering](https://github.com/veliovgroup/spiderable-middleware?tab=readme-ov-file#detect-request-from-pre-rendering-engine-during-runtime)
+
+## Example
+
+Example of CloudFlare Worker setting for pre-rendering
+
+![pre-rendrering-cloudflare-worker-example](https://github.com/user-attachments/assets/b082fe5c-199f-4565-8789-2e09c700a563)
