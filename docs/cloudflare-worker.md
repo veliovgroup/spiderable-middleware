@@ -14,12 +14,16 @@ Step-by-step integration instructions for ostr.io pre-rendering via CloudFlare W
     - Workers > Settings > <kbd>Edit Code</kbd>: [Paste CF Worker Code](https://github.com/veliovgroup/spiderable-middleware/blob/master/examples/cloudflare.worker.js)
 9. __Connect Worker to a website__
     - Websites > example.com > Workers Routes > [Add Route]
-    - Route: `*.example.com/*`
+    - Route (one of below):
+        - Standard (*recommended*): `https://example.com/*`
+        - `http:` and `https:` protocols : `*example.com/*`
+        - All for subdomains __only__ (*PRO and BUSINESS plans only*) `*.example.com/*`
+        - Main domain and all subdomains (*PRO and BUSINESS plans only*) `*example.com/*`
     - Worker: Select newly created worker
     - Click on <kbd>save</kbd>
 10. __Purge cache:__ Websites > example.com > Caching > Configuration > <kbd>Purge Everything</kbd>
 11. __Check `X-Prerender-Id` header to confirm that pre-rendering works__
-    - Request using cURL: `curl -v -A GoogleBot https://example.com/`
+    - Request using cURL: `curl -v -A GoogleBot "https://example.com/"`
     - Ensure `X-Prerender-Id` header returned with response
     - Check ostr.io: Rendering statistics will appear in real-time
 12. Further reading:
