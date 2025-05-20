@@ -7,10 +7,10 @@ Step-by-step integration instructions for ostr.io pre-rendering via CloudFlare W
 3. Verify domain ownership using `DNS TXT` record adding via CloudFlare interface
 4. Inside server's panel click on <kbd>add</kbd> next to "Pre-rendering & SSR for SEO"
 5. Inside server's pre-rendering panel scroll down to <kbd>integration guide</kbd>
-6. In the first <kbd>CURL</kbd> tab grab "Authorization Header" starting from `Basic...` and ending with closing double-quotes
+6. In the <kbd>CLOUDFLARE</kbd> tab — grab `env.OSTR_AUTH` value for CloudFlare's WebWorker environment variable
 7. __Create CF Worker:__
     - Workers > Create: Create Worker via CloudFlare Dashboard
-    - Workers > Settings > Variables: Place copied header as `OSTR_AUTH` to WebWorker's environment variables OR replace `env.OSTR_AUTH` with Authentication Header value from step 6
+    - Workers > Settings > Variables: Place value (*from step no.6*) as `OSTR_AUTH` to WebWorker's environment variables
     - Workers > Settings > <kbd>Edit Code</kbd>: [Paste CF Worker Code](https://github.com/veliovgroup/spiderable-middleware/blob/master/examples/cloudflare.worker.js)
 9. __Connect Worker to a website__
     - Websites > example.com > Workers Routes > [Add Route]
