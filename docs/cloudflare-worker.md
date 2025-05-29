@@ -9,9 +9,13 @@ Step-by-step integration instructions for ostr.io pre-rendering via CloudFlare W
 5. Inside server's pre-rendering panel scroll down to <kbd>integration guide</kbd>
 6. In the <kbd>CLOUDFLARE</kbd> tab — grab `env.OSTR_AUTH` value for CloudFlare's WebWorker environment variable
 7. __Create CF Worker:__
-    - Workers > Create: Create Worker via CloudFlare Dashboard
-    - Workers > Settings > Variables: Place value (*from step no.6*) as `OSTR_AUTH` to WebWorker's environment variables
-    - Workers > Settings > <kbd>Edit Code</kbd>: [Paste CF Worker Code](https://github.com/veliovgroup/spiderable-middleware/blob/master/examples/cloudflare.worker.js)
+    - Workers & Pages > <kbd>Create</kbd> > Select "Start with Hello World!" or "Create Worker via CloudFlare Dashboard"
+    - Hello World Worker > Enter memorable name > click on <kbd>deploy</kbd>
+    - Hello World Worker > click on <kbd>Edit Code</kbd>
+    - Hello World Worker Editor > Remove default code and replce with [CF Worker Code](https://github.com/veliovgroup/spiderable-middleware/blob/master/examples/cloudflare.worker.js)
+    - Worker Editor > click on <kbd>Deploy</kbd>
+    - Workers & Pages > Open Newly Created Worker > Settings > Variables and Secrets: Place value (*from step no.6*) as `OSTR_AUTH` to WebWorker's environment variables
+    - Click on <kbd>Deploy</kbd> after adding `OSTR_AUTH` variable
 9. __Connect Worker to a website__
     - Websites > example.com > Workers Routes > [Add Route]
     - Route (one of below):
