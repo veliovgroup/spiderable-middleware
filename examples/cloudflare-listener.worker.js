@@ -10,7 +10,7 @@ addEventListener('fetch', (e) => {
   const pathName = url.pathname.toLowerCase();
   const extension = pathName.substring(pathName.lastIndexOf('.') + 1 || pathName.length)?.toLowerCase?.() || '';
 
-  if (!url.origin.includes('ostr.io') && !url.pathname.includes('/.well-known/')  && (userAgent && BOT_AGENTS_RE.test(userAgent)) && !(extension && IGNORE_EXTENSIONS.includes(extension))) {
+  if (!url.origin.includes('ostr.io') && !url.pathname.includes('/.well-known/') && (userAgent && BOT_AGENTS_RE.test(userAgent)) && !(extension && IGNORE_EXTENSIONS.includes(extension))) {
     const headers = new Headers(request.headers);
     headers.set('Authorization', OSTR_AUTH);
 
