@@ -1,98 +1,184 @@
+# Using MAP module here as more efficient alternative to `if` blocks
+# Feel free to edit bots User Agent regular expression
+# to meet your needs we have included most of the crawlers and AI Bots
+# which have been active around the Internet for at least last 5 years
+map $http_user_agent $is_webbot {
+  default 0;
+  "~*(?:\.net crawler|360spider|50\.nu|8bo crawler bot|aboundex|accoona|adldxbot|ahrefsbot|altavista|appengine-google|applebot|archiver|arielisbot|ask jeeves|auskunftbot|baidumobaider|baiduspider|becomebot|bingbot|bingpreview|bitbot|bitlybot|blitzbot|blogbridge|boardreader|botseer|catchbot|catchpoint bot|charlotte|checklinks|cliqzbot|clumboot|coccocbot|converacrawler|crawl-e|crawlconvera|dataparksearch|daum|deusu|discordbot|dotbot|duckduckbot|elefent|embedly|evernote|exabot|facebookbot|facebookexternalhit|meta-external|fatbot|fdse robot|feed seeker bot|feedfetcher|femtosearchbot|findlinks|flamingo_searchengine|flipboard|followsite bot|furlbot|fyberspider|gaisbot|galaxybot|geniebot|genieo|gigablast|gigabot|girafabot|gomezagent|gonzo1|googlebot|google sketchup|adsbot-google|google-structured-data-testing-tool|google-extended|developers\.google\.com/+/web/snippet|haosouspider|heritrix|holmes|hoowwwer|htdig|ia_archiver|idbot|infuzapp|innovazion crawler|instagram|internetarchive|iqdb|iskanie|istellabot|izsearch\.com|kaloogabot|kaz\.kz_bot|kd bot|konqueror|kraken|kurzor|larbin|leia|lesnikbot|linguee bot|linkaider|linkapediabot|linkedinbot|lite bot|llaut|lookseek|lycos|mail\.ru_bot|masidani_bot|masscan|mediapartners-google|metajobbot|mj12bot|mnogosearch|mogimogi|mojeekbot|motominerbot|mozdex|msiecrawler|msnbot|msrbot|netpursual|netresearch|netvibes|newsgator|ng-search|nicebot|nutchcvs|nuzzel|nymesis|objectssearch|odklbot|omgili|oovoo|oozbot|openfosbot|orangebot|orbiter|org_bot|outbrain|pagepeeker|pagesinventory|parsijoobot|paxleframework|peeplo screenshot bot|pinterest|plantynet_webrobot|plukkie|pompos|psbot|quora link preview|qwantify|read%20later|reaper|redcarpet|redditbot|retreiver|riddler|rival iq|rogerbot|saucenao|scooter|scrapy|scrubby|searchie|searchsight|seekbot|semanticdiscovery|seznambot|showyoubot|simplepie|simpy|sitelockspider|skypeuripreview|slackbot|slack-imgproxy|slurp|snappy|sogou|solofield|speedyspider|speedy spider|sputnikbot|stackrambler|teeraidbot|teoma|theusefulbot|thumbshots\.ru|thumbshotsbot|tineye|toweya\.com|toweyabot|tumblr|tweetedtimes|tweetmemebot|twitterbot|url2png|vagabondo|vebidoobot|viber|visionutils|vkshare|voilabot|vortex|votay bot|voyager|w3c_validator|wasalive\.bot|web-sniffer|websquash\.com|webthumb|whatsapp|whatweb|wire|wotbox|yacybot|yahoo|yandex|yeti|yisouspider|yodaobot|yooglifetchagent|yoozbot|yottaamonitor|yowedo|zao-crawler|zebot_www\.ze\.bz|zooshot|zyborgi|ai2bot|amazonbot|anthropic\.com|bard|bytespider|ccbot|chatgpt-user|claude-web|claudebot|cohere-ai|deepseek|diffbot|duckassistbot|gemini|gptbot|grok|mistralai|oai-searchbot|omgili|openai\.com|perplexity\.ai|perplexitybot|xai|youbot)" 1;
+}
+
+# CHECK AND SET ESCAPED FRAGMENT
+# For more info read: https://developers.google.com/webmasters/ajax-crawling/docs/specification
+map $arg__escaped_fragment_ $fragment {
+  ""   "";
+  default "$arg__escaped_fragment_";
+}
+
 server {
   ###################
   # Common server configuration
-  # As well as Phusion Passenger or MeteorUp configs
   ###################
   listen 80;
   listen [::]:80;
-  server_name example.com ddp.example.com;
+  server_name example.com;
   root /path/to/public;
 
-  ###################
-  # Below is Crawlable (Pre-rendering) related configuration
-  ###################
-  location / {
-    # Try static files, if request is not for
-    # the static file - proxy pass to Pre-rendering
-    try_files $uri @crawlable;
+  # Serve static files directly using Nginx
+  location ~* \.(?:3ds|3g2|3gp|3gpp|7z|a|aac|aaf|adp|ai|aif|aiff|alz|ape|apk|appcache|ar|arj|asf|asx|atom|au|avchd|avi|bak|bbaw|bh|bin|bk|bmp|btif|bz2|bzip2|cab|caf|cco|cgm|class|cmx|cpio|cr2|crt|crx|css|csv|cur|dat|deb|der|dex|djvu|dll|dmg|dng|doc|docm|docx|dot|dotm|dra|drc|DS_Store|dsk|dts|dtshd|dvb|dwg|dxf|ear|ecelp4800|ecelp7470|ecelp9600|egg|eol|eot|eps|epub|exe|f4a|f4b|f4p|f4v|fbs|fh|fla|flac|fli|flv|fpx|fst|fvt|g3|geojson|gif|graffle|gz|gzip|h261|h263|h264|hqx|htc|ico|ief|img|ipa|iso|jad|jar|jardiff|jng|jnlp|jpeg|jpg|jpgv|jpm|js|jxr|key|kml|kmz|ktx|less|lha|lvp|lz|lzh|lzma|lzo|m2v|m3u|m4a|m4p|m4v|map|manifest|mar|markdown|md|mdi|mdown|mdwn|mht|mid|midi|mj2|mka|mkd|mkdn|mkdown|mkv|mml|mmr|mng|mobi|mov|movie|mp2|mp3|mp4|mp4a|mpe|mpeg|mpg|mpga|mpv|msi|msm|msp|mxf|mxu|nef|npx|nsv|numbers|o|oex|oga|ogg|ogv|opus|otf|pages|pbm|pcx|pdb|pdf|pea|pem|pgm|pic|pl|pm|png|pnm|pot|potm|potx|ppa|ppam|ppm|pps|ppsm|ppsx|ppt|pptm|pptx|prc|ps|psd|pya|pyc|pyo|pyv|qt|ra|rar|ras|raw|rdf|rgb|rip|rlc|rm|rmf|rmvb|ron|roq|rpm|rss|rtf|run|rz|s3m|s7z|safariextz|scpt|sea|sgi|shar|sil|sit|slk|smv|so|sub|svg|svgz|svi|swf|tar|tbz|tbz2|tcl|tga|tgz|thmx|tif|tiff|tk|tlz|topojson|torrent|ttc|ttf|txt|txz|udf|uvh|uvi|uvm|uvp|uvs|uvu|vcard|vcf|viv|vob|vtt|war|wav|wax|wbmp|wdp|weba|webapp|webm|webmanifest|webp|whl|wim|wm|wma|wml|wmlc|wmv|wmx|woff|woff2|wvx|xbm|xif|xla|xlam|xloc|xls|xlsb|xlsm|xlsx|xlt|xltm|xltx|xm|xmind|xml|xpi|xpm|xsl|xwd|xz|yuv|z|zip|zipx)$ {
+    # UNCOMMENT THE NEXT 2 LINES TO ENABLE CACHING FOR STATIC FILES
+    # expires 30d;
+    # add_header Cache-Control "public";
+
+    # UNCOMMENT TO REDUCE LOAD BY DISABLING LOGGING FOR STATIC FILES
+    # access_log off;
+    # log_not_found off;
+    try_files $uri =404;
   }
 
-  location @crawlable {
-    set $crawlable 0;
-    set $fragment  '';
-    set $orig_uri  $request_uri;
+  recursive_error_pages on;
+  # (uncomment when used) CUSTOM 350 CODE FOR INTERNAL REDIRECT TO @application_*
+  # error_page 350 = @application_*;
+  # (uncomment when used) HANDLE 404 ERORR WITH APPLICATION'S @application_* — SHOULD BE USED WITH PHP/WordPress/Laravel/Django/Go/etc
+  # error_page 404 = @application_*;
 
-    # Avoid dead loop and drop get query
-    if ($orig_uri ~ "^(.*)\?(.*)$") {
-      set $orig_uri $1;
+  # CUSTOM 354 CODE FOR INTERNAL REDIRECT TO @prerendering
+  error_page 354 = @prerendering;
+
+
+  location / {
+    # IF REQUEST RECEIVED FROM BOT OR
+    # WITH "FRAGMENT" REDIRECT TO @prerendering
+    if ($is_webbot = 1) {
+      return 354;
     }
-
-    # Feel free to edit bots User Agent regular expression
-    # to meet your needs we have included most of the bots
-    # which have been active around Internet for at least last 5 years
-    if ($http_user_agent ~* "\.net crawler|360spider|50\.nu|8bo crawler bot|aboundex|accoona|adldxbot|adsbot-google|ahrefsbot|altavista|appengine-google|applebot|archiver|arielisbot|ask jeeves|auskunftbot|baidumobaider|baiduspider|becomebot|bingbot|bingpreview|bitbot|bitlybot|blitzbot|blogbridge|boardreader|botseer|catchbot|catchpoint bot|charlotte|checklinks|cliqzbot|clumboot|coccocbot|converacrawler|crawl-e|crawlconvera|dataparksearch|daum|deusu|developers\.google\.com/+/web/snippet|discordbot|dotbot|duckduckbot|elefent|embedly|evernote|exabot|facebookbot|facebookexternalhit|fatbot|fdse robot|feed seeker bot|feedfetcher|femtosearchbot|findlinks|flamingo_searchengine|flipboard|followsite bot|furlbot|fyberspider|gaisbot|galaxybot|geniebot|genieo|gigablast|gigabot|girafabot|gomezagent|gonzo1|google sketchup|google-structured-data-testing-tool|googlebot|haosouspider|heritrix|holmes|hoowwwer|htdig|ia_archiver|idbot|infuzapp|innovazion crawler|instagram|internetarchive|iqdb|iskanie|istellabot|izsearch\.com|kaloogabot|kaz\.kz_bot|kd bot|konqueror|kraken|kurzor|larbin|leia|lesnikbot|linguee bot|linkaider|linkapediabot|linkedinbot|lite bot|llaut|lookseek|lycos|mail\.ru_bot|masidani_bot|masscan|mediapartners-google|metajobbot|mj12bot|mnogosearch|mogimogi|mojeekbot|motominerbot|mozdex|msiecrawler|msnbot|msrbot|netpursual|netresearch|netvibes|newsgator|ng-search|nicebot|nutchcvs|nuzzel|nymesis|objectssearch|odklbot|omgili|oovoo|oozbot|openfosbot|orangebot|orbiter|org_bot|outbrain|pagepeeker|pagesinventory|parsijoobot|paxleframework|peeplo screenshot bot|pinterest|plantynet_webrobot|plukkie|pompos|psbot|quora link preview|qwantify|read%20later|reaper|redcarpet|redditbot|retreiver|riddler|rival iq|rogerbot|saucenao|scooter|scrapy|scrubby|searchie|searchsight|seekbot|semanticdiscovery|seznambot|showyoubot|simplepie|simpy|sitelockspider|skypeuripreview|slack-imgproxy|slackbot|slurp|snappy|sogou|solofield|speedy spider|speedyspider|sputnikbot|stackrambler|teeraidbot|teoma|theusefulbot|thumbshots\.ru|thumbshotsbot|tineye|toweya\.com|toweyabot|tumblr|tweetedtimes|tweetmemebot|twitterbot|url2png|vagabondo|vebidoobot|viber|visionutils|vkshare|voilabot|vortex|votay bot|voyager|w3c_validator|wasalive\.bot|web-sniffer|websquash\.com|webthumb|whatsapp|whatweb|wire|wotbox|yacybot|yahoo|yandex|yeti|yisouspider|yodaobot|yooglifetchagent|yoozbot|yottaamonitor|yowedo|zao-crawler|zebot_www\.ze\.bz|zooshot|zyborg") {
-      set $crawlable 1;
-    }
-
-    # For more info read: https://developers.google.com/webmasters/ajax-crawling/docs/specification
     if ($args ~ _escaped_fragment_) {
-      set $crawlable 1;
+      return 354;
     }
 
-    # Catch "hashbang" ("Shebang") URI
-    if ($args ~ "_escaped_fragment_=(.+)") {
-      set $fragment /$1;
-    }
+    # Try static files, then load default index file
+    # NOTE: REPLACE `index.html` WITH DEFAULT "ROOT" FILE OF YOUR APP,
+    #       LIKE index.php FOR PHP FILES AND SIMILAR FOR OTHER STACKS
+    try_files $uri $uri/ /index.html;
 
-    # Do not proxy requests to static files!
-    if ($uri ~* "\.(?:3ds|3g2|3gp|3gpp|7z|a|aac|aaf|adp|ai|aif|aiff|alz|ape|apk|appcache|ar|arj|asf|asx|atom|au|avchd|avi|bak|bbaw|bh|bin|bk|bmp|btif|bz2|bzip2|cab|caf|cco|cgm|class|cmx|cpio|cr2|crt|crx|css|csv|cur|dat|deb|der|dex|djvu|dll|dmg|dng|doc|docm|docx|dot|dotm|dra|drc|DS_Store|dsk|dts|dtshd|dvb|dwg|dxf|ear|ecelp4800|ecelp7470|ecelp9600|egg|eol|eot|eps|epub|exe|f4a|f4b|f4p|f4v|fbs|fh|fla|flac|fli|flv|fpx|fst|fvt|g3|geojson|gif|graffle|gz|gzip|h261|h263|h264|hqx|htc|ico|ief|img|ipa|iso|jad|jar|jardiff|jng|jnlp|jpeg|jpg|jpgv|jpm|js|jxr|key|kml|kmz|ktx|less|lha|lvp|lz|lzh|lzma|lzo|m2v|m3u|m4a|m4p|m4v|map|manifest|mar|markdown|md|mdi|mdown|mdwn|mht|mid|midi|mj2|mka|mkd|mkdn|mkdown|mkv|mml|mmr|mng|mobi|mov|movie|mp2|mp3|mp4|mp4a|mpe|mpeg|mpg|mpga|mpv|msi|msm|msp|mxf|mxu|nef|npx|nsv|numbers|o|oex|oga|ogg|ogv|opus|otf|pages|pbm|pcx|pdb|pdf|pea|pem|pgm|pic|pl|pm|png|pnm|pot|potm|potx|ppa|ppam|ppm|pps|ppsm|ppsx|ppt|pptm|pptx|prc|ps|psd|pya|pyc|pyo|pyv|qt|ra|rar|ras|raw|rdf|rgb|rip|rlc|rm|rmf|rmvb|ron|roq|rpm|rss|rtf|run|rz|s3m|s7z|safariextz|scpt|sea|sgi|shar|sil|sit|slk|smv|so|sub|svg|svgz|svi|swf|tar|tbz|tbz2|tcl|tga|tgz|thmx|tif|tiff|tk|tlz|topojson|torrent|ttc|ttf|txt|txz|udf|uvh|uvi|uvm|uvp|uvs|uvu|vcard|vcf|viv|vob|vtt|war|wav|wax|wbmp|wdp|weba|webapp|webm|webmanifest|webp|whl|wim|wm|wma|wml|wmlc|wmv|wmx|woff|woff2|wvx|xbm|xif|xla|xlam|xloc|xls|xlsb|xlsm|xlsx|xlt|xltm|xltx|xm|xmind|xml|xpi|xpm|xsl|xwd|xz|yuv|z|zip|zipx)(?:\?[a-zA-Z0-9\-\.\_\~\:\/\#\[\]\@\!\$\&\'\(\)\*\+\,\;\=]*)?$") {
-      set $crawlable 0;
-    }
+    # OR USE ONE OF PREDEFINED @application_* definitions (see below)
+    # FOR FastCGI:
+    # try_files $uri $uri/ @application_fastcgi;
 
-    # Do not proxy requests to static files!
-    if ($fragment ~* "\.(?:3ds|3g2|3gp|3gpp|7z|a|aac|aaf|adp|ai|aif|aiff|alz|ape|apk|appcache|ar|arj|asf|asx|atom|au|avchd|avi|bak|bbaw|bh|bin|bk|bmp|btif|bz2|bzip2|cab|caf|cco|cgm|class|cmx|cpio|cr2|crt|crx|css|csv|cur|dat|deb|der|dex|djvu|dll|dmg|dng|doc|docm|docx|dot|dotm|dra|drc|DS_Store|dsk|dts|dtshd|dvb|dwg|dxf|ear|ecelp4800|ecelp7470|ecelp9600|egg|eol|eot|eps|epub|exe|f4a|f4b|f4p|f4v|fbs|fh|fla|flac|fli|flv|fpx|fst|fvt|g3|geojson|gif|graffle|gz|gzip|h261|h263|h264|hqx|htc|ico|ief|img|ipa|iso|jad|jar|jardiff|jng|jnlp|jpeg|jpg|jpgv|jpm|js|jxr|key|kml|kmz|ktx|less|lha|lvp|lz|lzh|lzma|lzo|m2v|m3u|m4a|m4p|m4v|map|manifest|mar|markdown|md|mdi|mdown|mdwn|mht|mid|midi|mj2|mka|mkd|mkdn|mkdown|mkv|mml|mmr|mng|mobi|mov|movie|mp2|mp3|mp4|mp4a|mpe|mpeg|mpg|mpga|mpv|msi|msm|msp|mxf|mxu|nef|npx|nsv|numbers|o|oex|oga|ogg|ogv|opus|otf|pages|pbm|pcx|pdb|pdf|pea|pem|pgm|pic|pl|pm|png|pnm|pot|potm|potx|ppa|ppam|ppm|pps|ppsm|ppsx|ppt|pptm|pptx|prc|ps|psd|pya|pyc|pyo|pyv|qt|ra|rar|ras|raw|rdf|rgb|rip|rlc|rm|rmf|rmvb|ron|roq|rpm|rss|rtf|run|rz|s3m|s7z|safariextz|scpt|sea|sgi|shar|sil|sit|slk|smv|so|sub|svg|svgz|svi|swf|tar|tbz|tbz2|tcl|tga|tgz|thmx|tif|tiff|tk|tlz|topojson|torrent|ttc|ttf|txt|txz|udf|uvh|uvi|uvm|uvp|uvs|uvu|vcard|vcf|viv|vob|vtt|war|wav|wax|wbmp|wdp|weba|webapp|webm|webmanifest|webp|whl|wim|wm|wma|wml|wmlc|wmv|wmx|woff|woff2|wvx|xbm|xif|xla|xlam|xloc|xls|xlsb|xlsm|xlsx|xlt|xltm|xltx|xm|xmind|xml|xpi|xpm|xsl|xwd|xz|yuv|z|zip|zipx)(?:\?[a-zA-Z0-9\-\.\_\~\:\/\#\[\]\@\!\$\&\'\(\)\*\+\,\;\=]*)?$") {
-      set $crawlable 0;
-    }
+    # FOR PHP:
+    # try_files $uri $uri/ @application_php;
 
-    # Disable Pre-rendering for WebSockets
-    # More info: http://nginx.org/en/docs/http/websocket.html
-    if ($http_upgrade) {
-      set $crawlable 0;
-    }
+    # FOR NODE.JS:
+    # try_files $uri @application_nodejs;
+
+    # FOR Django:
+    # try_files $uri @application_django;
+
+    # FOR Go:
+    # try_files $uri @application_go;
+  }
+
+  # EXAMPLE FOR FAST-CGI APPS
+  # location @application_fastcgi {
+  #   internal;
+  #   include fastcgi_params;
+  #   fastcgi_param SCRIPT_FILENAME $realpath_root$fastcgi_script_name;
+  #   fastcgi_param DOCUMENT_ROOT $realpath_root;
+  #   fastcgi_pass unix:/var/run/example.com.sock;
+  # }
+
+  # EXAMPLE FOR Laravel/WordPress/PHP APPS
+  # location @application_php {
+  #   internal;
+  #   proxy_set_header   Host               $host;
+  #   proxy_set_header   X-Real-IP          $remote_addr;
+  #   proxy_set_header   X-Forwarded-For    $proxy_add_x_forwarded_for;
+  #   proxy_set_header   X-Forwarded-Proto  $scheme;
+  #   proxy_connect_timeout 30s;
+  #   proxy_send_timeout    60s;
+  #   proxy_read_timeout    60s;
+  #   proxy_pass http://127.0.0.1:8000;
+  # }
+
+  # EXAMPLE FOR NODE.JS APPS
+  # location @application_nodejs {
+  #   internal;
+  #   proxy_set_header Host              $host;
+  #   proxy_set_header X-Real-IP         $remote_addr;
+  #   proxy_set_header X-Forwarded-For   $proxy_add_x_forwarded_for;
+  #   proxy_set_header X-Forwarded-Proto $scheme;
+  #   proxy_pass http://127.0.0.1:3000;
+  # }
+
+  # EXAMPLE FOR DJANGO APPS
+  # location @application_django {
+  #   internal;
+  #   proxy_redirect off;
+  #   proxy_set_header Host              $host;
+  #   proxy_set_header X-Real-IP         $remote_addr;
+  #   proxy_set_header X-Forwarded-For   $proxy_add_x_forwarded_for;
+  #   proxy_set_header X-Forwarded-Proto $scheme;
+  #   proxy_pass http://127.0.0.1:8000;
+  # }
+
+  # EXAMPLE FOR Go APPS
+  # location @application_go {
+  #   internal;
+  #   proxy_redirect off;
+  #   proxy_set_header   Host               $host;
+  #   proxy_set_header   X-Real-IP          $remote_addr;
+  #   proxy_set_header   X-Forwarded-For    $proxy_add_x_forwarded_for;
+  #   proxy_set_header   X-Forwarded-Proto  $scheme;
+  #   proxy_connect_timeout 5s;
+  #   proxy_send_timeout    30s;
+  #   proxy_read_timeout    30s;
+  #   proxy_pass http://127.0.0.1:8080;
+  # }
+
+  location @prerendering {
+    internal;
+    set $renderer_domain "render.ostr.io";
+    set $orig_uri $request_uri;
 
     # UNCOMMENT IF NEEDED
-    # For Meteor, if DDP runs on different domain / subdomain
-    # And configured in same {server} block
-    # if ($server_name = ddp.example.com) {
-    #   set $crawlable 0;
+    # For apps using WebSockets or any other solution based on top of sockjs / socket.js / socket.io on separate domain / subdomain
+    # And configured in the same {server} block
+    # if ($server_name = wss.example.com) {
+    #   return 350;
     # }
 
     # UNCOMMENT IF NEEDED
-    # Required for Meteor, or any other solution based on top of sockjs / socket.js / socket.io
+    # For apps using WebSockets or any other solution based on top of sockjs / socket.js / socket.io on the same domain
     # Change "/sockjs/" path if needed
     # Without this rule requests won't be rendered
     # if ($request_uri ~* /sockjs/) {
-    #   set $crawlable 0;
+    #   return 350;
+    # }
+
+    # UNCOMMENT IF NEEDED
+    # Disable Pre-rendering for WebSockets
+    # More info: http://nginx.org/en/docs/http/websocket.html
+    # if ($http_upgrade) {
+    #   return 350;
     # }
   
     # Minimize amount of forwarded headers
     proxy_pass_request_headers off;
+    proxy_ssl_server_name on;
     proxy_hide_header WWW-Authenticate;
     proxy_hide_header Set-Cookie;
 
     # !!Very important and required:
-    proxy_set_header Host $proxy_host;
-    proxy_ssl_server_name on;
-
-    ########
-    # Do not forget to change _YOUR_AUTH_TOKEN_ to token you get from ostr.io
-    ########
-    proxy_set_header Authorization "Basic _YOUR_AUTH_TOKEN_";
-
-    # Recommended to pass User-Agent
-    # for better bots/pre-rendering analytics
+    proxy_set_header Host $renderer_domain;
     proxy_set_header User-Agent $http_user_agent;
     proxy_set_header Connection "close";
+
+    ########
+    # Do not forget to change _YOUR_AUTH_TOKEN_ to token issued at ostr.io
+    ########
+    proxy_set_header Authorization "Basic _YOUR_AUTH_TOKEN_";
+    # UNCOMMENT IF NEEDED
+    # Use for testing or to avoid duplicated headers defined in other rules
+    # add_header X-Prerender-Status HIT;
 
     # Optional headers, pass if necessary for backend:
     # proxy_set_header Pragma $http_pragma;
@@ -111,16 +197,9 @@ server {
     resolver 8.8.4.4 8.8.8.8 valid=300s;
     resolver_timeout 15s;
 
-    if ($crawlable = 1) {
-      # Sendfile is useless for proxied requests, disable it
-      # For more info read: http://nginx.org/en/docs/http/ngx_http_core_module.html#sendfile
-      sendfile off;
-      # UNCOMMENT IF NEEDED
-      # Use to avoid duplicated headers defined in other rules
-      # add_header X-Prerender-Status HIT;
-      set $crawlable "render.ostr.io";
-      # Change $scheme to 'https', for http -> https proxy
-      proxy_pass https://$crawlable/?url=$scheme://$host$orig_uri$fragment;
-    }
+    # Sendfile is useless for proxied requests, disable it
+    # For more info read: http://nginx.org/en/docs/http/ngx_http_core_module.html#sendfile
+    sendfile off;
+    proxy_pass https://$renderer_domain/render/https://$host$request_uri$fragment;
   }
 }
