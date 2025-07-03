@@ -1,3 +1,8 @@
+# For more examples
+# Detailed tutorials
+# And other docs related to pre-rendering integration within Nginx
+# see: https://github.com/veliovgroup/ostrio/blob/master/docs/prerendering/nginx.md
+
 # Using MAP module here as more efficient alternative to `if` blocks
 # Feel free to edit bots User Agent regular expression
 # to meet your needs we have included most of the crawlers and AI Bots
