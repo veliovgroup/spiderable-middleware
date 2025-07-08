@@ -1,7 +1,7 @@
 Package.describe({
   name: 'ostrio:spiderable-middleware',
-  version: '2.2.0',
-  summary: 'Ensure Meteor.js apps are flawlessly crawled and indexed by search engines for optimal SEO',
+  version: '2.3.0',
+  summary: 'Boost organic traffic and enable SEO for Meteor.js application',
   git: 'https://github.com/veliovgroup/spiderable-middleware',
   documentation: 'README.md'
 });

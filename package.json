@@ -1,7 +1,7 @@
 {
   "name": "spiderable-middleware",
-  "version": "2.2.0",
-  "description": "Optimize SEO for JavaScript websites with pre-rendering that delivers SSR-like performance through effortless integration and zero coding",
+  "version": "2.3.0",
+  "description": "Boost organic traffic from SERPs, AI Chat Bots, and GPT",
   "main": "lib/index.js",
   "types": "types/index.d.ts",
   "files": [

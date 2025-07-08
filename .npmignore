@@ -9,6 +9,7 @@
 .mocharc.json
 .npm
 .versions
+ascii
 dist
 dist/*
 docs
