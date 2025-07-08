@@ -76,6 +76,7 @@ if (Meteor.release.includes('@1') || Meteor.release.includes('@2')) {
 }
 
 const callOpts: HTTP.HTTPRequest = {
+  followRedirects: false,
   headers: {
     'User-Agent': 'GoogleBot'
   }

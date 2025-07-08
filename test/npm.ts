@@ -121,6 +121,7 @@ const prerenders = {
 
 const fetchOptions: RequestInit = {
   method: 'GET',
+  redirect: 'manual',
   headers: { 'User-Agent': 'GoogleBot' },
 };
 

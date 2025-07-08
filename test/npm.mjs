@@ -50,7 +50,7 @@ const testURLs = {
     '/posts/?listing=true&page=2&categories=auto:color:size-M',
     '/post/HhstejsJKH123jJ6',
     '/post/HhstejsJKH123jJ6/',
-    '/post/HhstejsJKH123jJ6/?page=1234&category=test-category',
+    '/post/HhstejsJKH123jJ6/?page=1234&category=test-category.css',
   ],
   invalid: [
     '/asd',
@@ -98,6 +98,7 @@ const prerenders = {
 
 const fetchOptions = {
   method: 'GET',
+  redirect: 'manual',
   headers: { 'User-Agent': 'GoogleBot' },
 };
 
@@ -209,10 +210,7 @@ describe('Check Prerendering & Middleware Setup', function () {
     assert.strictEqual(response.status, 200, 'status code is 200');
 
     const xPrerender = response.headers.get('x-prerender-id');
-    assert.isTrue(
-      xPrerender && xPrerender.includes('TEST'),
-      '"x-prerender-id" is TEST'
-    );
+    assert.isTrue(xPrerender && xPrerender.includes('TEST'), '"x-prerender-id" is TEST');
 
     const body = await response.text();
     assert.isTrue(body.includes('[PASSED]'), 'Test response has "[PASSED]" keyword');
@@ -240,10 +238,7 @@ describe('Check valid path rules', function () {
     // Use the URL constructor to properly resolve the path.
     const vanillaTestUrl = new URL(testPath, vanillaURL).toString();
     it(`Vanilla node.js server - ${vanillaTestUrl}`, async function () {
-      const response = await fetch(vanillaTestUrl, {
-        method: 'GET',
-        headers: { 'User-Agent': 'GoogleBot' },
-      });
+      const response = await fetch(vanillaTestUrl, fetchOptions);
       assert.strictEqual(response.status, 200, 'status code is 200');
 
       const xPrerender = response.headers.get('x-prerender-id');
@@ -259,10 +254,7 @@ describe('Check valid path rules', function () {
 
     const expressTestUrl = new URL(testPath, expressURL).toString();
     it(`Express server - ${expressTestUrl}`, async function () {
-      const response = await fetch(expressTestUrl, {
-        method: 'GET',
-        headers: { 'User-Agent': 'GoogleBot' },
-      });
+      const response = await fetch(expressTestUrl, fetchOptions);
       assert.strictEqual(response.status, 200, 'status code is 200');
 
       const xPrerender = response.headers.get('x-prerender-id');
@@ -278,10 +270,7 @@ describe('Check valid path rules', function () {
 
     const connectTestUrl = new URL(testPath, connectURL).toString();
     it(`Connect server - ${connectTestUrl}`, async function () {
-      const response = await fetch(connectTestUrl, {
-        method: 'GET',
-        headers: { 'User-Agent': 'GoogleBot' },
-      });
+      const response = await fetch(connectTestUrl, fetchOptions);
       assert.strictEqual(response.status, 200, 'status code is 200');
 
       const xPrerender = response.headers.get('x-prerender-id');
@@ -304,10 +293,7 @@ describe('Check ignored path rules', function () {
   testURLs.invalid.forEach((testPath) => {
     const vanillaTestUrl = `${vanillaURL.toString().replace(re.trailingSlash, '')}${testPath}`;
     it(`Vanilla node.js server - ${vanillaTestUrl}`, async function () {
-      const response = await fetch(vanillaTestUrl, {
-        method: 'GET',
-        headers: { 'User-Agent': 'GoogleBot' },
-      });
+      const response = await fetch(vanillaTestUrl, fetchOptions);
       assert.strictEqual(response.status, 200, 'status code is 200');
 
       const xPrerender = response.headers.get('x-prerender-id');
@@ -319,10 +305,7 @@ describe('Check ignored path rules', function () {
 
     const expressTestUrl = `${expressURL.toString().replace(re.trailingSlash, '')}${testPath}`;
     it(`Express server - ${expressTestUrl}`, async function () {
-      const response = await fetch(expressTestUrl, {
-        method: 'GET',
-        headers: { 'User-Agent': 'GoogleBot' },
-      });
+      const response = await fetch(expressTestUrl, fetchOptions);
       assert.strictEqual(response.status, 200, 'status code is 200');
 
       const xPrerender = response.headers.get('x-prerender-id');
@@ -334,10 +317,7 @@ describe('Check ignored path rules', function () {
 
     const connectTestUrl = `${connectURL.toString().replace(re.trailingSlash, '')}${testPath}`;
     it(`Connect server - ${connectTestUrl}`, async function () {
-      const response = await fetch(connectTestUrl, {
-        method: 'GET',
-        headers: { 'User-Agent': 'GoogleBot' },
-      });
+      const response = await fetch(connectTestUrl, fetchOptions);
       assert.strictEqual(response.status, 200, 'status code is 200');
 
       const xPrerender = response.headers.get('x-prerender-id');

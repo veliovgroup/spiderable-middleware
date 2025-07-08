@@ -58,6 +58,13 @@ const testURLs = {
   ]
 };
 
+const callOpts = {
+  followRedirects: false,
+  headers: {
+    'User-Agent': 'GoogleBot'
+  },
+};
+
 if (Meteor.release.includes('@1') || Meteor.release.includes('@2')) {
   WebApp.connectHandlers.use(prerendering);
 } else {
@@ -79,11 +86,7 @@ Meteor.startup(function(){
     });
 
     Tinytest.addAsync('Prerendering & Middleware Setup - App', function (test, next) {
-      HTTP.call('GET', process.env.ROOT_URL, {
-        headers: {
-          'User-Agent': 'GoogleBot'
-        }
-      }, (error, resp) => {
+      HTTP.call('GET', process.env.ROOT_URL, callOpts, (error, resp) => {
         test.isTrue(!error);
         if (!error) {
           test.isTrue(resp.statusCode === 200, 'Page received with correct statusCode');
@@ -97,11 +100,7 @@ Meteor.startup(function(){
     });
 
     Tinytest.addAsync('Prerendering & Middleware Setup - Static file', function (test, next) {
-      HTTP.call('GET', (process.env.ROOT_URL || '').replace(re.trailingSlash, '') + '/packages/test-in-browser/driver.css', {
-        headers: {
-          'User-Agent': 'GoogleBot'
-        }
-      }, (error, resp) => {
+      HTTP.call('GET', (process.env.ROOT_URL || '').replace(re.trailingSlash, '') + '/packages/test-in-browser/driver.css', callOpts, (error, resp) => {
         test.isTrue(!error);
         if (!error) {
           test.isTrue(resp.statusCode === 200, 'File received with correct statusCode');
@@ -115,11 +114,7 @@ Meteor.startup(function(){
     _.each(testURLs.valid, (testUrl, jj) => {
       const testRoot = (process.env.ROOT_URL || '').replace(re.trailingSlash, '');
       Tinytest.addAsync(`Test allowed (only) routes - { ${jj} } ${testUrl}`, function (test, next) {
-        HTTP.call('GET', testRoot + testUrl, {
-          headers: {
-            'User-Agent': 'GoogleBot'
-          }
-        }, (error, resp) => {
+        HTTP.call('GET', testRoot + testUrl, callOpts, (error, resp) => {
           test.isTrue(!error);
           if (!error) {
             test.isTrue(resp.statusCode === 200, 'Page received with correct statusCode');
@@ -136,11 +131,7 @@ Meteor.startup(function(){
     _.each(testURLs.invalid, (testUrl, jj) => {
       const testRoot = (process.env.ROOT_URL || '').replace(re.trailingSlash, '');
       Tinytest.addAsync(`Test ignored routes - { ${jj} } ${testUrl}`, function (test, next) {
-        HTTP.call('GET', testRoot + testUrl, {
-          headers: {
-            'User-Agent': 'GoogleBot'
-          }
-        }, (error, resp) => {
+        HTTP.call('GET', testRoot + testUrl, callOpts, (error, resp) => {
           test.isTrue(!error);
           if (!error) {
             test.isTrue(resp.statusCode === 200, 'File received with correct statusCode');
