@@ -1,6 +1,8 @@
 # Spiderable middleware
 
-Search engines and social networks — such as Google, Facebook, Twitter, Yahoo, Bing, and many others — are constantly crawling your website to index its content. However, if your site is built using a modern JavaScript framework (*for example, React, Preact, Vue, Svelte, Angular, Backbone, Ember, Meteor, Blaze*), it serve only a basic HTML skeleton with script tags instead of fully rendered page content. This limitation negatively impacts website's SEO score, performance, and user experience when links shared by users around the web. The mission of `spiderable-middleware` and [`ostr.io`](https://ostr.io) is to enhance SEO and performance for modern JavaScript websites.
+__Spiderable Middleware__ is a lightweight Node.js package designed for modern JavaScript web apps — including those built with React, Preact, Vue, Svelte, Angular, Ember, Backbone, Meteor, and others. It ensures that search engine crawlers and social media bots receive fully-rendered HTML, not just an empty skeleton. This bridges the gap between client-rendered apps and the indexing and preview requirements of platforms like Google, Facebook, and Twitter.
+
+When paired with the global CDN and smart caching layer from [`ostr.io`](https://ostr.io), `spiderable-middleware` significantly improves SEO scores, link previews, and performance metrics like TTFB and Lighthouse scores — all without requiring changes to existing codebase. It intelligently reroutes bot traffic to `ostr.io` rendering endpoints, minimizing server load, reducing database queries, and lowering infrastructure costs.
 
 ## Why Pre-render?
 
@@ -40,14 +42,16 @@ Search engines and social networks — such as Google, Facebook, Twitter, Yahoo,
 
 ## About Package
 
-This package acts as middleware and intercepts requests to a Node.js application from web crawlers. All requests proxy passed to the Prerendering Service, which returns static, rendered HTML.
+This package works as Express-style middleware, intercepting requests from crawlers and social media bots to your Node.js application. It seamlessly proxies those requests to a pre-rendering service, which returns fully-rendered static HTML — optimized for indexing and rich previews.
 
-__This is SERVER only package. For NPM make sure it's imported only in Node.js.__
+Built with developers in mind, `spiderable-middleware` is lightweight, well-structured, and easy to customize. Whether you're scaling a production app or prototyping, it's designed to be hackable and flexible enough to fit any project. By offloading bot traffic to the pre-rendering engine, it helps reduce backend load and improve server performance effortlessly.
 
-We made this package with developers in mind. It's well written in a very simple way, hackable, and easily tunable to meet all projects needs. This is the best option to offload bot's traffic from your servers to pre-rendering engine.
+> [!NOTE]
+> *This package proxies real HTTP headers and response code, to reduce overwhelming requests, try to avoid HTTP-redirect headers, like* `Location` *. Read how to [return genuine status code](https://github.com/veliovgroup/spiderable-middleware#return-genuine-status-code) and [handle JS-redirects](https://github.com/veliovgroup/spiderable-middleware#javascript-redirects)*
 
-- __Note__: *This package proxies real HTTP headers and response code, to reduce overwhelming requests, try to avoid HTTP-redirect headers, like* `Location` *. Read how to [return genuine status code](https://github.com/veliovgroup/spiderable-middleware#return-genuine-status-code) and [handle JS-redirects](https://github.com/veliovgroup/spiderable-middleware#javascript-redirects)*
-- __Note__: This is __server only package__. This package should be imported/initialized only within server code base
+
+> [!IMPORTANT]
+> This is __server only package__. This package should be imported/initialized only within server codebase
 
 This middleware was tested and works like a charm with:
 
@@ -58,8 +62,9 @@ This middleware was tested and works like a charm with:
 - [Apache](https://httpd.apache.org/): [example](https://github.com/veliovgroup/spiderable-middleware/blob/master/examples/apache.htaccess)
 - See [all examples](https://github.com/veliovgroup/spiderable-middleware/tree/master/examples)
 
-All other frameworks which follow Node's middleware convention - will work too.
+*All other frameworks that follows Node/Express middleware convention - will work too.*
 
+> [!TIP]
 > This package was originally developed for [ostr.io](https://ostr.io) service. But it's not limited to, and can proxy-pass requests to any other rendering-endpoint.
 
 ## Installation
@@ -76,13 +81,14 @@ yarn add spiderable-middleware
 
 ## Usage
 
-Get ready in a few lines of code
+Setup pre-rendering middleware in few lines of code
 
 ### Basic usage
 
-See [usage examples in `.js` and `.ts`](https://github.com/veliovgroup/spiderable-middleware/tree/master/examples) for quick copy-paste experience.
-
 Start with adding `fragment` meta-tag to HTML template, head, or page:
+
+> [!TIP]
+> See [usage examples in `.js` and `.ts`](https://github.com/veliovgroup/spiderable-middleware/tree/master/examples) for quick copy-paste experience
 
 ```html
 <html>
@@ -127,7 +133,8 @@ app.use(spiderable.handle).get('/', (req, res) => {
 app.listen(3000);
 ```
 
-We provide various options for `serviceURL` as "[Rendering Endpoints](https://github.com/veliovgroup/ostrio/blob/master/docs/prerendering/rendering-endpoints.md)", each endpoint has its own features to fit every project needs.
+> [!TIP]
+> We provide various options for `serviceURL` as "[Rendering Endpoints](https://github.com/veliovgroup/ostrio/blob/master/docs/prerendering/rendering-endpoints.md)", each endpoint has its own features to fit different project needs
 
 ## Return genuine status code
 
@@ -187,7 +194,8 @@ if (window.IS_PRERENDERING) {
 }
 ```
 
-__Note__: `window.IS_PRERENDERING` can be `undefined` on initial page load, and may change during runtime. That's why we recommend to pre-define a setter for `IS_PRERENDERING`:
+> [!NOTE]
+> `window.IS_PRERENDERING` can be `undefined` on initial page load, and may change during runtime. That's why we recommend to pre-define a setter for `IS_PRERENDERING`:
 
 ```js
 let isPrerendering = false;
@@ -229,7 +237,8 @@ window.location.replace('http://example.com/another/page');
 Router.go('/another/page'); // framework's navigation !pseudo code
 ```
 
-__Note__: *Only 4 redirects are allowed during one request after 4 redirects session will be terminated.*
+> [!IMPORTANT]
+> *Only 4 redirects are allowed during one request after 4 redirects session will be terminated.*
 
 ## API
 
@@ -255,7 +264,8 @@ new Spiderable(opts?: SpiderableOptions);
 - `opts.requestOptions` {*RequestOptions*} - Options for request module (like: `timeout`, `lookup`, `insecureHTTPParser`), for all available options see [`http` API docs](https://nodejs.org/docs/latest-v14.x/api/http.html#http_http_request_url_options_callback)
 - `opts.debug` {*boolean*} - [Optional] Enable debug and extra logging, default: `false`
 
-__Note:__ *Setting* `.onlyRE` *and/or* `.only` *rules are highly recommended. Otherwise, all routes, including randomly generated by bots will be subject of Pre-rendering and may cause unexpectedly higher usage.*
+> [!IMPORTANT]
+> *Setting* `.onlyRE` *and/or* `.only` *rules are highly recommended. Otherwise, all routes, including randomly generated by bots will be subject of Pre-rendering and may cause unexpectedly higher usage.*
 
 ```js
 // CommonJS
@@ -396,7 +406,8 @@ https://example.com/amp/index.amp.html
 https://example.com/amp/articles/article-title.amp.html
 ```
 
-All URLs with `.amp.` extension and `/amp/` prefix will be optimized for AMP.
+> [!IMPORTANT]
+> All URLs with `.amp.` extension and `/amp/` prefix will be optimized for AMP.
 
 ## Rendering Endpoints
 
@@ -425,7 +436,8 @@ const spiderable = new Spiderable({
 
 Pass `{ debug: true }` or set `DEBUG=true` environment variable to enable debugging mode.
 
-To make sure a server can reach a rendering endpoint run `cURL` command or send request via Node.js to (*replace example.com with your domain name*):
+> [!TIP]
+> To make sure a server can reach a rendering endpoint run `cURL` command or send request via Node.js to (*replace example.com with your domain name*):
 
 ```shell
 curl -v "https://test:test@render-bypass.ostr.io/?url=http://example.com"
