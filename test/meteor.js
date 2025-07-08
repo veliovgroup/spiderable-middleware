@@ -27,8 +27,35 @@ const re = {
 };
 
 const testURLs = {
-  valid: ['', '/', '/articles', '/articles/', '/article/1', '/article/11', '/article/111/', '/posts', '/posts/', '/post/HhstejsJKH123jJ6', '/post/HhstejsJKH123jJ6/'],
-  invalid: ['/user', '/billing', '/asd', '/articles/rand234', '/posts/234/', '/article/100', '/article/100/', '/post/HhstejsJKH123jJi', '/post/HhstejsJKH123jJi/']
+  valid: [
+    '',
+    '/',
+    '/articles',
+    '/articles/',
+    '/article/1',
+    '/article/11',
+    '/article/111/',
+    '/article/111/?show=sidebar&type=meteor.js',
+    '/posts',
+    '/posts/',
+    '/posts/?listing=true&page=2&categories=auto:color:size-M&type=meteor.js',
+    '/post/HhstejsJKH123jJ6',
+    '/post/HhstejsJKH123jJ6/',
+    '/post/HhstejsJKH123jJ6/?page=1234&category=test-category&type=meteor.js',
+  ],
+  invalid: [
+    '/user',
+    '/billing',
+    '/asd',
+    '/articles/rand234',
+    '/posts/234/',
+    '/article/100',
+    '/article/100/',
+    '/article/100/?tab=first&type=meteor.js',
+    '/post/HhstejsJKH123jJi',
+    '/post/HhstejsJKH123jJi?color=red&type=meteor.js',
+    '/post/HhstejsJKH123jJi/',
+  ]
 };
 
 if (Meteor.release.includes('@1') || Meteor.release.includes('@2')) {

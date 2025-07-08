@@ -46,10 +46,13 @@ const testURLs: { valid: string[]; invalid: string[] } = {
     '/article/1',
     '/article/11',
     '/article/111/',
+    '/article/111/?show=sidebar&type=meteor.ts',
     '/posts',
     '/posts/',
+    '/posts/?listing=true&page=2&categories=auto:color:size-M&type=meteor.ts',
     '/post/HhstejsJKH123jJ6',
-    '/post/HhstejsJKH123jJ6/'
+    '/post/HhstejsJKH123jJ6/',
+    '/post/HhstejsJKH123jJ6/?page=1234&category=test-category&type=meteor.ts',
   ],
   invalid: [
     '/user',
@@ -59,8 +62,10 @@ const testURLs: { valid: string[]; invalid: string[] } = {
     '/posts/234/',
     '/article/100',
     '/article/100/',
+    '/article/100/?tab=first&type=meteor.ts',
     '/post/HhstejsJKH123jJi',
-    '/post/HhstejsJKH123jJi/'
+    '/post/HhstejsJKH123jJi?color=red&type=meteor.ts',
+    '/post/HhstejsJKH123jJi/',
   ]
 };
 

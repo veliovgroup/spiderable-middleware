@@ -56,10 +56,13 @@ const testURLs: TestURLs = {
     '/article/1',
     '/article/11',
     '/article/111/',
+    '/article/111/?show=sidebar&type=node.ts',
     '/posts',
     '/posts/',
+    '/posts/?listing=true&page=2&categories=auto:color:size-M&type=node.ts',
     '/post/HhstejsJKH123jJ6',
     '/post/HhstejsJKH123jJ6/',
+    '/post/HhstejsJKH123jJ6/?page=1234&category=test-category&type=node.ts',
   ],
   invalid: [
     '/asd',
@@ -68,7 +71,9 @@ const testURLs: TestURLs = {
     '/posts/234/',
     '/article/100',
     '/article/100/',
+    '/article/100/?tab=first&type=node.ts',
     '/post/HhstejsJKH123jJi',
+    '/post/HhstejsJKH123jJi?color=red&type=node.ts',
     '/post/HhstejsJKH123jJi/',
   ],
 };

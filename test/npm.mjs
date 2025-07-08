@@ -44,10 +44,13 @@ const testURLs = {
     '/article/1',
     '/article/11',
     '/article/111/',
+    '/article/111/?show=sidebar',
     '/posts',
     '/posts/',
+    '/posts/?listing=true&page=2&categories=auto:color:size-M',
     '/post/HhstejsJKH123jJ6',
     '/post/HhstejsJKH123jJ6/',
+    '/post/HhstejsJKH123jJ6/?page=1234&category=test-category',
   ],
   invalid: [
     '/asd',
@@ -56,7 +59,9 @@ const testURLs = {
     '/posts/234/',
     '/article/100',
     '/article/100/',
+    '/article/100/?tab=first',
     '/post/HhstejsJKH123jJi',
+    '/post/HhstejsJKH123jJi?color=red',
     '/post/HhstejsJKH123jJi/',
   ],
 };
@@ -180,17 +185,11 @@ describe('Check Prerendering & Middleware Setup', function () {
     assert.strictEqual(response.status, 200, 'status code is 200');
 
     const xPrerender = response.headers.get('x-prerender-id');
-    assert.isTrue(
-      xPrerender && xPrerender.includes('TEST'),
-      '"x-prerender-id" is TEST'
-    );
+    assert.isTrue(xPrerender && xPrerender.includes('TEST'), '"x-prerender-id" is TEST');
 
     const body = await response.text();
     assert.isTrue(body.includes('[PASSED]'), 'Test response has "[PASSED]" keyword');
-    assert.isTrue(
-      body.includes(expressURL.toString()),
-      'Test response has valid source URL keyword'
-    );
+    assert.isTrue(body.includes(expressURL.toString()), 'Test response has valid source URL keyword');
   });
 
   it('Express HTTP server [static file]', async function () {
@@ -217,10 +216,7 @@ describe('Check Prerendering & Middleware Setup', function () {
 
     const body = await response.text();
     assert.isTrue(body.includes('[PASSED]'), 'Test response has "[PASSED]" keyword');
-    assert.isTrue(
-      body.includes(connectURL.toString()),
-      'Test response has valid source URL keyword'
-    );
+    assert.isTrue(body.includes(connectURL.toString()), 'Test response has valid source URL keyword');
   });
 
   it('Connect server [static file]', async function () {
@@ -251,10 +247,7 @@ describe('Check valid path rules', function () {
       assert.strictEqual(response.status, 200, 'status code is 200');
 
       const xPrerender = response.headers.get('x-prerender-id');
-      assert.isTrue(
-        xPrerender && xPrerender.includes('TEST'),
-        '"x-prerender-id" is TEST'
-      );
+      assert.isTrue(xPrerender && xPrerender.includes('TEST'), '"x-prerender-id" is TEST');
 
       const body = await response.text();
       assert.isTrue(body.includes('[PASSED]'), 'Test response has "[PASSED]" keyword');
@@ -273,10 +266,7 @@ describe('Check valid path rules', function () {
       assert.strictEqual(response.status, 200, 'status code is 200');
 
       const xPrerender = response.headers.get('x-prerender-id');
-      assert.isTrue(
-        xPrerender && xPrerender.includes('TEST'),
-        '"x-prerender-id" is TEST'
-      );
+      assert.isTrue(xPrerender && xPrerender.includes('TEST'), '"x-prerender-id" is TEST');
 
       const body = await response.text();
       assert.isTrue(body.includes('[PASSED]'), 'Test response has "[PASSED]" keyword');
@@ -295,10 +285,7 @@ describe('Check valid path rules', function () {
       assert.strictEqual(response.status, 200, 'status code is 200');
 
       const xPrerender = response.headers.get('x-prerender-id');
-      assert.isTrue(
-        xPrerender && xPrerender.includes('TEST'),
-        '"x-prerender-id" is TEST'
-      );
+      assert.isTrue(xPrerender && xPrerender.includes('TEST'), '"x-prerender-id" is TEST');
 
       const body = await response.text();
       assert.isTrue(body.includes('[PASSED]'), 'Test response has "[PASSED]" keyword');
