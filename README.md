@@ -440,15 +440,14 @@ Pass `{ debug: true }` or set `DEBUG=true` environment variable to enable debugg
 > To make sure a server can reach a rendering endpoint run `cURL` command or send request via Node.js to (*replace example.com with your domain name*):
 
 ```shell
-curl -v "https://test:test@render-bypass.ostr.io/?url=http://example.com"
-```
-
-In this example we're using `render-bypass.ostr.io` endpoint to avoid any possible cached results, [read more about rendering endpoints](https://github.com/veliovgroup/spiderable-middleware#rendering-endpoints). As API credentials we're using `test:test`, this part of URL can be replaced with `auth` option from Node.js example. The API credentials and instructions can be found at the very bottom of [Pre-rendering Panel](https://ostr.io/service/prerender) of a particular host, — click on <kbd>Integration Guide</kbd>
-
-```sh
 # cURL example:
 curl -v "https://test:test@render-bypass.ostr.io/?url=http://example.com"
 ```
+
+In this example we're using `render-bypass.ostr.io` endpoint to avoid any possible cached results, [read more about rendering endpoints](https://github.com/veliovgroup/spiderable-middleware#rendering-endpoints). As API credentials we're using `test:test`, this part of URL can be replaced with `auth` option from Node.js example.
+
+> [!TIP]
+> The API credentials and instructions can be found at the very bottom of [Pre-rendering Panel](https://ostr.io/service/prerender), — click on the name of your website, then on <kbd>Integration Guide</kbd> at the bottom of the page
 
 ```js
 // Node.js example:
