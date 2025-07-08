@@ -5,17 +5,19 @@ Search engines and social networks — such as Google, Facebook, Twitter, Yahoo,
 ## Why Pre-render?
 
 - 🕸 Execute JavaScript, — get rendered HTML page and its content;
+- 🏎️ Improve delivery for dynamic and static pages via our advanced CDN and caching;
 - 🏃‍♂️ Boost response rate and decrease response time with caching;
 - 🚀 Optimized HTML markup for the best SEO score;
-- 🖥 Support PWAs and SPAs;
-- 📱 Support mobile-like crawlers;
-- 💅 Support [`styled-components`](https://styled-components.com);
-- ⚡️ Support [AMP (Accelerated Mobile Pages)](https://www.ampproject.org);
+- 🎛️ Improve TTFB, LCP, INP, CLS, and other LightHouse metrics positively enhancing overall SEO score;
+- 🖥 Supports PWAs and SPAs;
+- 📱 Supports mobile-like crawlers;
+- 💅 Supports [`styled-components`](https://styled-components.com);
+- ⚡️ Supports [AMP (Accelerated Mobile Pages)](https://www.ampproject.org);
 - 🤓 Works with `Content-Security-Policy` and other complex front-end security rules;
 - 📦 This package shipped with [types](https://github.com/veliovgroup/spiderable-middleware/blob/master/types/index.d.ts) and [TS examples](https://github.com/veliovgroup/spiderable-middleware/blob/master/examples/);
 - ❤️ Search engines and social network crawlers love straightforward and pre-rendered pages;
 - 📱 Consistent link previews in messaging apps, like iMessage, Messages, Facebook, Slack, Telegram, WhatsApp, Viber, VK, Twitter, and other apps;
-- 💻 Image, title, and description previews for posted links at social networks, like Facebook, Twitter, Instagram, and other social networks.
+- 💻 Image, title, and description previews for links posted at social networks, like Facebook, X/Twitter, Instagram, and other social networks.
 
 ## ToC
 
@@ -25,6 +27,7 @@ Search engines and social networks — such as Google, Facebook, Twitter, Yahoo,
 - [Return genuine status code](https://github.com/veliovgroup/spiderable-middleware?tab=readme-ov-file#return-genuine-status-code)
 - [Speed-up rendering](https://github.com/veliovgroup/spiderable-middleware?tab=readme-ov-file#speed-up-rendering)
 - [Detect request from Prerendering engine during runtime](https://github.com/veliovgroup/spiderable-middleware?tab=readme-ov-file#detect-request-from-pre-rendering-engine-during-runtime)
+- [Detect type of Prerendering engine](https://github.com/veliovgroup/spiderable-middleware?tab=readme-ov-file#detect-type-of-the-pre-rendering-engine)
 - [JavaScript redirects](https://github.com/veliovgroup/spiderable-middleware?tab=readme-ov-file#javascript-redirects)
 - [AMP Support](https://github.com/veliovgroup/spiderable-middleware?tab=readme-ov-file#amp-support)
 - [Rendering Endpoints](https://github.com/veliovgroup/spiderable-middleware?tab=readme-ov-file#rendering-endpoints)
@@ -41,7 +44,7 @@ This package acts as middleware and intercepts requests to a Node.js application
 
 __This is SERVER only package. For NPM make sure it's imported only in Node.js.__
 
-We made this package with developers in mind. It's well written in a very simple way, hackable, and easily tunable to meet all projects needs, it can be used to turn dynamic pages into rendered, cached, and lightweight static pages, just set `botsUA` to `['.*']`. This is the best option to offload servers unless a website gets updated more often than once in 4 hours.
+We made this package with developers in mind. It's well written in a very simple way, hackable, and easily tunable to meet all projects needs. This is the best option to offload bot's traffic from your servers to pre-rendering engine.
 
 - __Note__: *This package proxies real HTTP headers and response code, to reduce overwhelming requests, try to avoid HTTP-redirect headers, like* `Location` *. Read how to [return genuine status code](https://github.com/veliovgroup/spiderable-middleware#return-genuine-status-code) and [handle JS-redirects](https://github.com/veliovgroup/spiderable-middleware#javascript-redirects)*
 - __Note__: This is __server only package__. This package should be imported/initialized only within server code base
@@ -199,6 +202,20 @@ Object.defineProperty(window, 'IS_PRERENDERING', {
     return isPrerendering;
   }
 });
+```
+
+## Detect type of the Pre-rendering engine
+
+Like browsers, — crawlers and bots may request page as "mobile" (small screen touch-devices) or as "desktop" (large screens without touch-events) the pre-rendering engine supports these two types. For cases when content needs to get optimized for different screens pre-rendering engine will set `window.IS_PRERENDERING_TYPE` global variable to `desktop` or `mobile`
+
+```js
+if (window.IS_PRERENDERING_TYPE === 'mobile') {
+  // This request is coming from "mobile" web crawler and "mobile" pre-rendering engine
+} else if (window.IS_PRERENDERING_TYPE === 'desktop') {
+  // This request is coming from "desktop" web crawler and "desktop" pre-rendering engine
+} else {
+  // This request is coming from user
+}
 ```
 
 ## JavaScript redirects
@@ -390,6 +407,19 @@ All URLs with `.amp.` extension and `/amp/` prefix will be optimized for AMP.
 To change default endpoint, grab [integration examples code](https://github.com/veliovgroup/spiderable-middleware/tree/master/examples) and replace `render.ostr.io`, with endpoint from the list above. For NPM integration change value of [`serviceURL`](https://github.com/veliovgroup/spiderable-middleware?tab=readme-ov-file#constructor) option.
 
 __Note:__ Described differences in caching behavior related to intermediate proxy caching, `Cache-Control` header will be always set to the value defined in "Cache TTL". Cached results at the "Pre-rendering Engine" end can be [purged at any time](https://github.com/veliovgroup/ostrio/blob/master/docs/prerendering/cache-purge.md).
+
+## Convert dynamic website to static
+
+`spiderable-middleware` package can get used to convert dynamic websites to rendered, cached, and lightweight static pages. Simply set `botsUA` to `['.*']` to achieve this behavior
+
+```js
+import Spiderable from 'spiderable-middleware';
+
+const spiderable = new Spiderable({
+  botsUA: ['.*']
+  /* ... other options ...*/
+});
+```
 
 ## Debugging
 
