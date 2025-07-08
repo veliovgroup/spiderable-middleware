@@ -89,6 +89,11 @@ const next: NextFunction = (_err?: unknown): void => {};
 expectType<void>(spiderable.handle(req, res, next));
 ```
 
+## Further reading
+
+- [Detect crawler's type via `window.IS_PRERENDERING_TYPE`](https://github.com/veliovgroup/ostrio/blob/master/docs/prerendering/detect-prerendering-meteor.md)
+- [Pre-rendering optimizations](https://github.com/veliovgroup/ostrio/blob/master/docs/prerendering/optimization.md)
+
 ## Running Tests
 
 1. Clone this package
