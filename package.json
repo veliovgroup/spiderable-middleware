@@ -1,6 +1,6 @@
 {
   "name": "spiderable-middleware",
-  "version": "2.3.0",
+  "version": "2.3.1",
   "description": "Boost organic traffic from SERPs, AI Chat Bots, and GPT",
   "main": "lib/index.js",
   "types": "types/index.d.ts",

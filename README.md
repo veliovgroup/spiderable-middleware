@@ -10,7 +10,7 @@ When paired with the global CDN and smart caching layer from [`ostr.io`](https:/
 - 🏎️ Improve delivery for dynamic and static pages via our advanced CDN and caching;
 - 🏃‍♂️ Boost response rate and decrease response time with caching;
 - 🚀 Optimized HTML markup for the best SEO score;
-- 🎛️ Improve TTFB, LCP, INP, CLS, and other LightHouse metrics positively enhancing overall SEO score;
+- 🎛️ Improve TTFB, LCP, INP, CLS, and other Web Vitals and LightHouse metrics positively enhancing overall SEO score;
 - 🖥 Supports PWAs and SPAs;
 - 📱 Supports mobile-like crawlers;
 - 💅 Supports [`styled-components`](https://styled-components.com);
@@ -21,22 +21,34 @@ When paired with the global CDN and smart caching layer from [`ostr.io`](https:/
 - 📱 Consistent link previews in messaging apps, like iMessage, Messages, Facebook, Slack, Telegram, WhatsApp, Viber, VK, Twitter, and other apps;
 - 💻 Image, title, and description previews for links posted at social networks, like Facebook, X/Twitter, Instagram, and other social networks.
 
+## Related packages and docs
+
+- __Related Packages__
+  - [Next.js Integration](https://github.com/veliovgroup/ostrio/blob/master/docs/prerendering/nextjs-prerendering.md)
+  - [Meteor.js Integration via Atmosphere Package](https://github.com/veliovgroup/ostrio/blob/master/docs/prerendering/meteor-atmosphere.md)
+- __Cloud Integrations__
+  - [CloudFlare Worker Integration](https://github.com/veliovgroup/ostrio/blob/master/docs/prerendering/cloudflare-worker.md)
+  - [Netlify Integration](https://github.com/veliovgroup/ostrio/blob/master/docs/prerendering/netlify-prerendering.md)
+- __Web Server Integrations__
+  - [Nginx Integration](https://github.com/veliovgroup/ostrio/blob/master/docs/prerendering/nginx.md)
+  - [Apache Integration](https://github.com/veliovgroup/ostrio/blob/master/docs/prerendering/apache.md)
+
 ## ToC
 
 - [Installation](https://github.com/veliovgroup/spiderable-middleware?tab=readme-ov-file#installation)
 - [Basic usage](https://github.com/veliovgroup/spiderable-middleware?tab=readme-ov-file#usage)
 - [Meteor.js usage](https://github.com/veliovgroup/spiderable-middleware/blob/master/docs/meteor.md)
+- [__API__](https://github.com/veliovgroup/spiderable-middleware?tab=readme-ov-file#api)
+  - [Constructor `new Spiderable()`](https://github.com/veliovgroup/spiderable-middleware?tab=readme-ov-file#constructor)
+  - [Middleware](https://github.com/veliovgroup/spiderable-middleware?tab=readme-ov-file#handle)
+  - [TS Types](https://github.com/veliovgroup/spiderable-middleware?tab=readme-ov-file#types)
 - [Return genuine status code](https://github.com/veliovgroup/spiderable-middleware?tab=readme-ov-file#return-genuine-status-code)
-- [Speed-up rendering](https://github.com/veliovgroup/spiderable-middleware?tab=readme-ov-file#speed-up-rendering)
+- [Speed-up rendering](https://github.com/veliovgroup/ostrio/blob/master/docs/prerendering/optimization.md)
 - [Detect request from Prerendering engine during runtime](https://github.com/veliovgroup/spiderable-middleware?tab=readme-ov-file#detect-request-from-pre-rendering-engine-during-runtime)
 - [Detect type of Prerendering engine](https://github.com/veliovgroup/spiderable-middleware?tab=readme-ov-file#detect-type-of-the-pre-rendering-engine)
 - [JavaScript redirects](https://github.com/veliovgroup/spiderable-middleware?tab=readme-ov-file#javascript-redirects)
 - [AMP Support](https://github.com/veliovgroup/spiderable-middleware?tab=readme-ov-file#amp-support)
 - [Rendering Endpoints](https://github.com/veliovgroup/spiderable-middleware?tab=readme-ov-file#rendering-endpoints)
-- [API](https://github.com/veliovgroup/spiderable-middleware?tab=readme-ov-file#api)
-  - [Constructor `new Spiderable()`](https://github.com/veliovgroup/spiderable-middleware?tab=readme-ov-file#constructor)
-  - [Middleware](https://github.com/veliovgroup/spiderable-middleware?tab=readme-ov-file#handle)
-  - [TS Types](https://github.com/veliovgroup/spiderable-middleware?tab=readme-ov-file#types)
 - [Debugging](https://github.com/veliovgroup/spiderable-middleware?tab=readme-ov-file#debugging)
 - [Running Tests](https://github.com/veliovgroup/spiderable-middleware?tab=readme-ov-file#running-tests)
 
