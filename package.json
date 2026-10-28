@@ -19,7 +19,9 @@
   ],
   "scripts": {
     "build": "tsc --noEmit",
-    "test": "mocha",
+    "test": "mocha test/unit.mjs",
+    "test:coverage": "c8 mocha test/unit.mjs",
+    "test:integration": "mocha --require ts-node/register test/npm.mjs test/npm.ts",
     "test:types": "tsd"
   },
   "repository": {
@@ -91,10 +93,11 @@
     "@types/meteor": "^2.9.8",
     "@types/mocha": "^10.0.10",
     "@types/node": "^22.13.4",
+    "c8": "^10.1.3",
     "chai": "^4.5.0",
     "connect": "^3.7.0",
     "express": "^4.21.2",
-    "mocha": "^10.8.2",
+    "mocha": "^11.8.0",
     "ts-node": "^10.9.2",
     "tsd": "^0.31.2",
     "typescript": "^5.7.3",

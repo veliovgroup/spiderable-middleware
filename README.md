@@ -492,23 +492,28 @@ https.get('https://test:test@render-bypass.ostr.io/?url=http://example.com', (re
 
 ### Node.js/Mocha
 
-Test suite requires Node.js@>=18 (global `fetch`), the package itself supports older releases.
+Unit tests run offline against a local stub of the rendering service. Integration tests call the public ostr.io test endpoint and need network access. Both need Node.js@>=18, the package itself runs on older releases.
 
 ```sh
-# Install development NPM dependencies:
-npm install --save-dev
-# Install NPM dependencies:
-npm install --save
+# Install development dependencies
+npm ci
 
-# Link package to itself
-npm link
-npm link spiderable-middleware
+# Unit tests
+npm test
 
-# Run tests:
+# Unit tests with coverage report, fails below 95%
+npm run test:coverage
+
+# Integration tests
 # ROOT_URL port and ports +1, +5, 3010, 3011, 3015 must be free
-ROOT_URL=http://127.0.0.1:3003 npm test
+ROOT_URL=http://127.0.0.1:3003 npm run test:integration
 
-# Run same tests with extra-logging
-DEBUG=true ROOT_URL=http://127.0.0.1:3003 npm test
-# http://127.0.0.1:3003 can be changed to any local address, PORT is required!
+# Same tests with extra logging
+DEBUG=true ROOT_URL=http://127.0.0.1:3003 npm run test:integration
+
+# TypeScript declarations
+npm run build
+npm run test:types
 ```
+
+GitHub Actions runs all of the above on every push, plus unit tests on Node.js 12, 14, and 16.

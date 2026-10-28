@@ -23,4 +23,6 @@ package.js
 package-types.json
 test/
 test/*
-tsconfig.json
+tsconfig.jsoncoverage
+.c8rc.json
+ROADMAP.md

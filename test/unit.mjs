@@ -1,0 +1,544 @@
+// Offline unit tests: a local HTTPS stub plays the rendering service,
+// so the suite needs no network access and no ostr.io credentials
+import { createServer as createHttpServer, request as httpRequest } from 'http';
+import { createServer as createHttpsServer } from 'https';
+import { readFileSync } from 'fs';
+import { createRequire } from 'module';
+import { fileURLToPath } from 'url';
+import { dirname, join } from 'path';
+import { assert } from 'chai';
+import { after, afterEach, before, beforeEach, describe, it } from 'mocha';
+import Spiderable from 'spiderable-middleware';
+
+const fixtures = join(dirname(fileURLToPath(import.meta.url)), 'fixtures');
+const BOT_UA = 'Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)';
+const HUMAN_UA = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 14_0) AppleWebKit/605.1.15 Safari/605.1.15';
+const APP_BODY = 'APP';
+
+const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
+// Capture console output of the package, keep test output clean
+const logs = { warn: [], info: [] };
+const original = { warn: console.warn, info: console.info };
+const hasLog = (type, text) => logs[type].some((args) => args.map(String).join(' ').includes(text));
+
+beforeEach(() => {
+  logs.warn = [];
+  logs.info = [];
+  console.warn = (...args) => logs.warn.push(args);
+  console.info = (...args) => logs.info.push(args);
+});
+
+afterEach(() => {
+  console.warn = original.warn;
+  console.info = original.info;
+});
+
+// Rendering service stub, each test sets `stub.handle`
+const stub = {
+  handle: null,
+  requests: [],
+  server: null,
+  url: '',
+};
+
+// Apps under test, closed after the run
+const apps = [];
+
+const listen = (server) => new Promise((resolve) => {
+  server.listen(0, '127.0.0.1', () => resolve(server.address().port));
+});
+
+before(async () => {
+  stub.server = createHttpsServer({
+    key: readFileSync(join(fixtures, 'stub-key.pem')),
+    cert: readFileSync(join(fixtures, 'stub-cert.pem')),
+  }, (req, res) => {
+    const url = new URL(req.url, 'https://localhost');
+    stub.requests.push({ method: req.method, headers: req.headers, url: url.searchParams.get('url'), bot: url.searchParams.get('___bot') });
+    stub.handle(req, res, url);
+  });
+  stub.url = `https://127.0.0.1:${await listen(stub.server)}`;
+});
+
+after(() => {
+  for (const server of apps) {
+    server.close();
+  }
+  stub.server.close();
+});
+
+beforeEach(() => {
+  stub.requests = [];
+  stub.handle = (_req, res) => {
+    res.writeHead(200, { 'content-type': 'text/html', 'x-prerender-id': 'STUB', 'set-cookie': 'a=b' });
+    res.end('<html>RENDERED</html>');
+  };
+});
+
+const ENV_KEYS = ['ROOT_URL', 'SPIDERABLE_SERVICE_URL', 'PRERENDER_SERVICE_URL', 'SPIDERABLE_SERVICE_AUTH', 'PRERENDER_SERVICE_AUTH', 'DEBUG'];
+const withEnv = (env, fn) => {
+  const saved = {};
+  for (const key of ENV_KEYS) {
+    saved[key] = process.env[key];
+    delete process.env[key];
+  }
+  Object.assign(process.env, env);
+  try {
+    return fn();
+  } finally {
+    for (const key of ENV_KEYS) {
+      if (saved[key] === undefined) {
+        delete process.env[key];
+      } else {
+        process.env[key] = saved[key];
+      }
+    }
+  }
+};
+
+const create = (opts = {}) => withEnv({}, () => new Spiderable({
+  rootURL: 'http://example.com',
+  serviceURL: stub.url,
+  timeout: 1000,
+  requestOptions: { rejectUnauthorized: false },
+  ...opts,
+}));
+
+// Starts an app with `spiderable` registered, `onRequest` runs after the middleware
+const startApp = async (spiderable, onRequest) => {
+  const state = { nextCalls: 0, returned: [] };
+  const server = createHttpServer((req, res) => {
+    state.returned.push(spiderable(req, res, () => {
+      state.nextCalls++;
+      if (!res.headersSent) {
+        res.writeHead(200, { 'content-type': 'text/plain' });
+      }
+      res.end(APP_BODY);
+    }));
+    if (onRequest) {
+      onRequest(req, res);
+    }
+  });
+  apps.push(server);
+  state.port = await listen(server);
+  return state;
+};
+
+// Plain `http.request`, works on every Node.js release, unlike `fetch`
+const get = (port, path, { method = 'GET', ua = BOT_UA, abortAfter } = {}) => new Promise((resolve) => {
+  const req = httpRequest({ host: '127.0.0.1', port, path, method, headers: { 'user-agent': ua } }, (res) => {
+    let body = '';
+    res.setEncoding('utf8');
+    res.on('data', (chunk) => {
+      body += chunk;
+    });
+    res.on('end', () => resolve({ status: res.statusCode, headers: res.headers, body }));
+    res.on('error', (error) => resolve({ error: error.code || error.message }));
+    res.on('aborted', () => resolve({ error: 'aborted' }));
+  });
+  req.on('error', (error) => resolve({ error: error.code || error.message }));
+  if (abortAfter) {
+    setTimeout(() => {
+      req.destroy();
+      resolve({ error: 'client-aborted' });
+    }, abortAfter);
+  }
+  req.end();
+});
+
+describe('Constructor', () => {
+  it('returns a callable instance of Spiderable', () => {
+    const spiderable = create();
+    assert.isFunction(spiderable);
+    assert.instanceOf(spiderable, Spiderable);
+    assert.instanceOf(spiderable, Function);
+    assert.strictEqual(spiderable.length, 3);
+    assert.isFunction(spiderable.call);
+    assert.isFunction(spiderable.handle);
+    assert.isFunction(spiderable.handler);
+    assert.strictEqual(spiderable.NAME, 'SPIDERABLE_MIDDLEWARE');
+    assert.match(spiderable.userAgent, /^spiderable-middleware\/\d+\.\d+\.\d+$/);
+  });
+
+  it('refuses to load in a browser environment', () => {
+    const require = createRequire(import.meta.url);
+    const libPath = require.resolve('../lib/index.js');
+    const cached = require.cache[libPath];
+    delete require.cache[libPath];
+    globalThis.window = {};
+    try {
+      assert.throws(() => require(libPath), /Browser environment isn't allowed/);
+    } finally {
+      delete globalThis.window;
+      require.cache[libPath] = cached;
+    }
+  });
+
+  it('works without `new`', () => {
+    const spiderable = withEnv({}, () => Spiderable({ rootURL: 'http://example.com' }));
+    assert.instanceOf(spiderable, Spiderable);
+  });
+
+  it('applies defaults', () => {
+    const spiderable = withEnv({}, () => new Spiderable({ rootURL: 'http://example.com/' }));
+    assert.strictEqual(spiderable.rootURL, 'http://example.com');
+    assert.strictEqual(spiderable.serviceURL, 'https://render.ostr.io');
+    assert.strictEqual(spiderable.auth, '');
+    assert.strictEqual(spiderable.timeout, 180000);
+    assert.isFalse(spiderable.debug);
+    assert.isFalse(spiderable.only);
+    assert.isFalse(spiderable.onlyRE);
+    assert.isFalse(spiderable.ignoreRE);
+    assert.isFalse(spiderable.sanitizeUrls);
+    assert.deepEqual(spiderable.requestOptions, {});
+    assert.strictEqual(spiderable.botsUA, Spiderable.prototype.botsUA);
+    assert.strictEqual(spiderable.ignoredHeaders, Spiderable.prototype.ignoredHeaders);
+    assert.instanceOf(spiderable.botsRE, RegExp);
+    assert.instanceOf(spiderable.headersRE, RegExp);
+  });
+
+  it('reads ROOT_URL, SPIDERABLE_SERVICE_URL, SPIDERABLE_SERVICE_AUTH and DEBUG env variables', () => {
+    const spiderable = withEnv({
+      ROOT_URL: 'http://env.example.com/',
+      SPIDERABLE_SERVICE_URL: 'https://env.render.example.com/',
+      SPIDERABLE_SERVICE_AUTH: 'env:auth',
+      DEBUG: 'true',
+    }, () => new Spiderable());
+    assert.strictEqual(spiderable.rootURL, 'http://env.example.com');
+    assert.strictEqual(spiderable.serviceURL, 'https://env.render.example.com');
+    assert.strictEqual(spiderable.auth, 'env:auth');
+    assert.isTrue(spiderable.debug);
+  });
+
+  it('reads PRERENDER_SERVICE_URL and PRERENDER_SERVICE_AUTH env variables', () => {
+    const spiderable = withEnv({
+      ROOT_URL: 'http://env.example.com',
+      PRERENDER_SERVICE_URL: 'https://prerender.example.com',
+      PRERENDER_SERVICE_AUTH: 'pre:auth',
+    }, () => new Spiderable('not an object'));
+    assert.strictEqual(spiderable.serviceURL, 'https://prerender.example.com');
+    assert.strictEqual(spiderable.auth, 'pre:auth');
+  });
+
+  it('throws without rootURL', () => {
+    assert.throws(() => withEnv({}, () => new Spiderable()), /rootURL/);
+  });
+
+  it('throws on malformed rootURL', () => {
+    assert.throws(() => create({ rootURL: 'example.com' }), /\{rootURL\} is malformed/);
+  });
+
+  it('throws on malformed serviceURL', () => {
+    assert.throws(() => create({ serviceURL: 'render.ostr.io' }), /\{serviceURL\} is malformed/);
+  });
+
+  it('falls back to defaults and warns on invalid options', () => {
+    const spiderable = create({
+      staticExt: 'css',
+      onlyRE: '/only',
+      botsUA: 'googlebot',
+      ignoredHeaders: 'age',
+      only: '/only',
+      ignore: '/ignore',
+    });
+    assert.strictEqual(spiderable.staticExt.source, create().staticExt.source);
+    assert.isFalse(spiderable.onlyRE);
+    assert.strictEqual(spiderable.botsUA, Spiderable.prototype.botsUA);
+    assert.strictEqual(spiderable.ignoredHeaders, Spiderable.prototype.ignoredHeaders);
+    assert.isFalse(spiderable.only);
+    assert.isFalse(spiderable.ignoreRE);
+    for (const option of ['staticExt', 'onlyRE', 'botsUA', 'ignoredHeaders', 'only', 'ignore']) {
+      assert.isTrue(hasLog('warn', `opts.${option}`), `warns about opts.${option}`);
+    }
+  });
+
+  it('logs debug messages only when `debug` is enabled', () => {
+    create({ debug: true });
+    assert.isTrue(hasLog('info', 'Spiderable class initiated'));
+    logs.info = [];
+    create();
+    assert.lengthOf(logs.info, 0);
+  });
+});
+
+describe('getServiceURL()', () => {
+  it('builds rendering URL with and without bot User-Agent', () => {
+    const spiderable = create({ serviceURL: 'https://render.example.com' });
+    const urlObj = new URL('http://example.com/path?q=1');
+    urlObj.pathname = 'path';
+    assert.strictEqual(spiderable.getServiceURL(urlObj), 'https://render.example.com/?url=' + encodeURIComponent('http://example.com/path?q=1'));
+    assert.strictEqual(spiderable.getServiceURL(urlObj, 'Googlebot'), 'https://render.example.com/?url=' + encodeURIComponent('http://example.com/path?q=1') + '&___bot=Googlebot');
+  });
+});
+
+describe('getRequestURL()', () => {
+  const spiderable = create();
+
+  it('returns false for regular visitors', () => {
+    assert.isFalse(spiderable.getRequestURL({ url: '/page', headers: { 'user-agent': HUMAN_UA } }));
+    assert.isFalse(spiderable.getRequestURL({ url: '/page', headers: {} }));
+  });
+
+  it('returns URL for crawlers', () => {
+    const urlObj = spiderable.getRequestURL({ url: '/page?q=1', headers: { 'user-agent': BOT_UA } });
+    assert.strictEqual(urlObj.pathname, '/page');
+    assert.strictEqual(urlObj.search, '?q=1');
+  });
+
+  it('returns false for unparsable URLs', () => {
+    assert.isFalse(spiderable.getRequestURL({ url: 'http://[bad', headers: { 'user-agent': BOT_UA } }));
+  });
+
+  it('folds `_escaped_fragment_` into the path for any User-Agent', () => {
+    const urlObj = spiderable.getRequestURL({ url: '/page?_escaped_fragment_=/section&q=1', headers: { 'user-agent': HUMAN_UA } });
+    assert.strictEqual(urlObj.pathname, '/page/section');
+    assert.strictEqual(urlObj.search, '?q=1');
+  });
+
+  it('treats empty `_escaped_fragment_` as a render request', () => {
+    const urlObj = spiderable.getRequestURL({ url: '/page?_escaped_fragment_=', headers: { 'user-agent': HUMAN_UA } });
+    assert.strictEqual(urlObj.pathname, '/page');
+  });
+
+  it('collapses repeated slashes with `sanitizeUrls`', () => {
+    const sanitizing = create({ sanitizeUrls: true });
+    const urlObj = sanitizing.getRequestURL({ url: '/a//b///c', headers: { 'user-agent': BOT_UA } });
+    assert.strictEqual(urlObj.pathname, '/a/b/c');
+  });
+});
+
+describe('middleware() rules', () => {
+  const run = (spiderable, path, { method = 'GET', ua = BOT_UA } = {}) => {
+    let nextCalls = 0;
+    const result = spiderable.handler({ method, url: path, headers: { 'user-agent': ua } }, {}, () => {
+      nextCalls++;
+    });
+    return { result, nextCalls };
+  };
+
+  it('warns and stops when called without its context', () => {
+    let nextCalls = 0;
+    assert.isFalse(Spiderable.prototype.middleware.call({}, {}, {}, () => {
+      nextCalls++;
+    }));
+    assert.strictEqual(nextCalls, 0);
+    assert.isTrue(hasLog('warn', 'lost its context'));
+  });
+
+  it('skips methods other than GET and HEAD', () => {
+    assert.deepEqual(run(create(), '/', { method: 'POST' }), { result: false, nextCalls: 1 });
+  });
+
+  it('skips regular visitors', () => {
+    assert.deepEqual(run(create(), '/', { ua: HUMAN_UA }), { result: false, nextCalls: 1 });
+  });
+
+  it('skips static files', () => {
+    assert.deepEqual(run(create(), '/logo.png'), { result: false, nextCalls: 1 });
+    assert.deepEqual(run(create({ staticExt: /\.html$/ }), '/page.html'), { result: false, nextCalls: 1 });
+  });
+
+  it('applies `onlyRE`', () => {
+    const spiderable = create({ onlyRE: /^\/blog/ });
+    assert.deepEqual(run(spiderable, '/about'), { result: false, nextCalls: 1 });
+  });
+
+  it('applies `only` string and RegExp rules, warns about other types', () => {
+    const spiderable = create({ only: [42, '/exact', /^\/re\//] });
+    assert.deepEqual(run(spiderable, '/other'), { result: false, nextCalls: 1 });
+    assert.isTrue(hasLog('warn', 'rule isn\'t instance of {String} nor {RegExp}'));
+  });
+
+  it('applies `ignore`', () => {
+    const spiderable = create({ ignore: ['/admin'] });
+    assert.deepEqual(run(spiderable, '/admin/users'), { result: false, nextCalls: 1 });
+  });
+
+  it('applies `ignore` over a matching `only` rule', () => {
+    const spiderable = create({ only: ['/admin'], ignore: ['/admin'] });
+    assert.deepEqual(run(spiderable, '/admin'), { result: false, nextCalls: 1 });
+  });
+});
+
+describe('Rendering', () => {
+  it('proxies rendered page with status and filtered headers', async () => {
+    stub.handle = (_req, res) => {
+      res.writeHead(201, { 'content-type': 'text/html', 'x-prerender-id': 'STUB', 'set-cookie': 'a=b', 'x-empty': '' });
+      res.end('<html>RENDERED</html>');
+    };
+    const app = await startApp(create());
+    const resp = await get(app.port, '/page?q=1');
+    assert.strictEqual(resp.status, 201);
+    assert.strictEqual(resp.body, '<html>RENDERED</html>');
+    assert.strictEqual(resp.headers['x-prerender-id'], 'STUB');
+    assert.isUndefined(resp.headers['set-cookie']);
+    assert.isUndefined(resp.headers['x-empty']);
+    assert.strictEqual(app.nextCalls, 0);
+    assert.deepEqual(app.returned, [true]);
+    assert.strictEqual(stub.requests[0].url, 'http://example.com/page?q=1');
+    assert.strictEqual(stub.requests[0].bot, BOT_UA);
+    assert.match(stub.requests[0].headers['user-agent'], /^spiderable-middleware\//);
+  });
+
+  it('renders pages matching `only` and `onlyRE` rules', async () => {
+    const app = await startApp(create({ onlyRE: /^\/blog/, only: ['/exact', /^\/re\//] }));
+    for (const path of ['/blog/post', '/exact', '/re/1']) {
+      const resp = await get(app.port, path);
+      assert.strictEqual(resp.body, '<html>RENDERED</html>', path);
+    }
+    assert.strictEqual(app.nextCalls, 0);
+  });
+
+  it('sends Basic auth and merges `requestOptions`', async () => {
+    const app = await startApp(create({
+      auth: 'user:pass',
+      requestOptions: { rejectUnauthorized: false, headers: { 'x-custom': 'value' } },
+    }));
+    await get(app.port, '/');
+    const { headers } = stub.requests[0];
+    assert.strictEqual(headers.authorization, 'Basic ' + Buffer.from('user:pass').toString('base64'));
+    assert.strictEqual(headers['x-custom'], 'value');
+    assert.strictEqual(headers.accept, '*/*');
+  });
+
+  it('warns on 401 and 403 from the rendering service', async () => {
+    stub.handle = (_req, res) => {
+      res.writeHead(401);
+      res.end('Unauthorized');
+    };
+    const app = await startApp(create());
+    const resp = await get(app.port, '/');
+    assert.strictEqual(resp.status, 401);
+    assert.isTrue(hasLog('warn', 'Can\'t authenticate'));
+  });
+
+  it('answers HEAD requests without a body', async () => {
+    const app = await startApp(create());
+    const resp = await get(app.port, '/', { method: 'HEAD' });
+    assert.strictEqual(resp.status, 200);
+    assert.strictEqual(resp.body, '');
+    assert.strictEqual(stub.requests[0].method, 'HEAD');
+  });
+
+  it('streams large pages', async () => {
+    const page = 'x'.repeat(5 * 1024 * 1024);
+    stub.handle = (_req, res) => {
+      res.writeHead(200, { 'content-type': 'text/html' });
+      res.end(page);
+    };
+    const app = await startApp(create());
+    const resp = await get(app.port, '/');
+    assert.strictEqual(resp.body.length, page.length);
+  });
+
+  it('works through `.handle()` and `.handler()` aliases', async () => {
+    const spiderable = create();
+    for (const method of ['handle', 'handler']) {
+      const app = await startApp(spiderable[method]);
+      const resp = await get(app.port, '/');
+      assert.strictEqual(resp.body, '<html>RENDERED</html>', method);
+    }
+  });
+
+  it('passes regular visitors to the app', async () => {
+    const app = await startApp(create());
+    const resp = await get(app.port, '/', { ua: HUMAN_UA });
+    assert.strictEqual(resp.body, APP_BODY);
+    assert.lengthOf(stub.requests, 0);
+  });
+});
+
+describe('Failures', () => {
+  it('passes request to the app when the rendering service times out', async () => {
+    stub.handle = () => {};
+    const app = await startApp(create({ timeout: 200 }));
+    const resp = await get(app.port, '/');
+    assert.strictEqual(resp.body, APP_BODY);
+    assert.strictEqual(app.nextCalls, 1);
+    assert.isTrue(hasLog('warn', 'didn\'t respond within 200ms'));
+  });
+
+  it('ends the response when the rendering service stalls after headers', async () => {
+    stub.handle = (_req, res) => {
+      res.writeHead(200, { 'content-type': 'text/html' });
+      res.write('<html>partial');
+    };
+    const app = await startApp(create({ timeout: 300 }));
+    const resp = await get(app.port, '/');
+    assert.strictEqual(resp.body, '<html>partial');
+    assert.strictEqual(app.nextCalls, 0, 'no second response');
+  });
+
+  it('passes request to the app when the rendering service is unreachable', async () => {
+    const closed = createHttpServer();
+    const port = await listen(closed);
+    await new Promise((resolve) => closed.close(resolve));
+    const app = await startApp(create({ serviceURL: `https://127.0.0.1:${port}` }));
+    const resp = await get(app.port, '/');
+    assert.strictEqual(resp.body, APP_BODY);
+    assert.isTrue(hasLog('warn', 'Error while connecting to external service'));
+  });
+
+  it('passes request to the app when the request can not be created', async () => {
+    const app = await startApp(create({ requestOptions: { agent: 'not an agent' } }));
+    const resp = await get(app.port, '/');
+    assert.strictEqual(resp.body, APP_BODY);
+    assert.deepEqual(app.returned, [false]);
+    assert.isTrue(hasLog('warn', 'Exception while connecting to external service'));
+  });
+
+  it('destroys the response when the rendering service drops mid-body', async () => {
+    stub.handle = (_req, res) => {
+      res.writeHead(200, { 'content-type': 'text/html' });
+      res.write('<html>partial');
+      setTimeout(() => res.socket.destroy(), 50);
+    };
+    const app = await startApp(create());
+    const resp = await get(app.port, '/');
+    assert.isDefined(resp.error, 'crawler sees a failed response, not a complete page');
+    assert.isTrue(hasLog('warn', 'closed connection before response was complete'));
+  });
+
+  it('stops rendering when the visitor disconnects', async () => {
+    let rendererClosed = false;
+    stub.handle = (req) => {
+      req.on('close', () => {
+        rendererClosed = true;
+      });
+    };
+    const app = await startApp(create({ timeout: 2000 }));
+    const resp = await get(app.port, '/', { abortAfter: 100 });
+    assert.strictEqual(resp.error, 'client-aborted');
+    await wait(200);
+    assert.isTrue(rendererClosed, 'request to the rendering service is destroyed');
+    assert.strictEqual(app.nextCalls, 0);
+    assert.lengthOf(logs.warn, 0, 'client disconnects are not logged as errors');
+  });
+
+  it('logs unexpected request errors and stops rendering', async () => {
+    stub.handle = () => {};
+    const app = await startApp(create({ timeout: 2000 }), (req, res) => {
+      setTimeout(() => {
+        req.emit('error', new Error('unexpected request error'));
+        res.end();
+      }, 50);
+    });
+    await get(app.port, '/');
+    assert.isTrue(hasLog('warn', 'unexpected request error'));
+    assert.strictEqual(app.nextCalls, 0);
+  });
+
+  it('logs unexpected response errors and stops rendering', async () => {
+    stub.handle = () => {};
+    const app = await startApp(create({ timeout: 2000 }), (_req, res) => {
+      setTimeout(() => {
+        res.emit('error', new Error('unexpected response error'));
+        res.end();
+      }, 50);
+    });
+    await get(app.port, '/');
+    assert.isTrue(hasLog('warn', 'unexpected response error'));
+    assert.strictEqual(app.nextCalls, 0);
+  });
+});
