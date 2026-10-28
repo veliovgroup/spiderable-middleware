@@ -2,6 +2,7 @@ import { expectType, expectError } from 'tsd';
 import Spiderable from '..';
 import type {
   IncomingMessageLike,
+  Logger,
   NextFunction,
   RequestOptions,
   ServerResponseLike,
@@ -27,6 +28,7 @@ const options: SpiderableOptions = {
     }
   },
   debug: false,
+  logger: console,
   staticExt: /\.(css|js)$/,
 };
 
@@ -55,6 +57,7 @@ expectType<string>(spiderable.serviceURL);
 expectType<boolean>(spiderable.sanitizeUrls);
 expectType<string[]>(spiderable.ignoredHeaders);
 expectType<RequestOptions>(spiderable.requestOptions);
+expectType<Logger>(spiderable.logger);
 expectType<RegExp>(spiderable.headersRE);
 expectType<RegExp>(spiderable.botsRE);
 expectType<RegExp | false>(spiderable.ignoreRE);

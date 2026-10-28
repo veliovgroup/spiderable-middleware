@@ -253,6 +253,34 @@ describe('Constructor', () => {
     }
   });
 
+  it('sends warnings and debug messages to a custom `logger`', async () => {
+    const custom = { warn: [], info: [] };
+    const logger = {
+      warn(...args) {
+        custom.warn.push(args.join(' '));
+      },
+      info(...args) {
+        custom.info.push(args.join(' '));
+      },
+    };
+    const spiderable = create({ logger, debug: true, only: [42] });
+    spiderable.handler({ method: 'GET', url: '/', headers: { 'user-agent': BOT_UA } }, {}, () => {});
+    assert.isTrue(custom.warn.some((line) => line.startsWith('[WARN] [Spiderable-Middleware]') && line.includes('rule isn\'t instance')));
+    assert.isTrue(custom.info.some((line) => line.startsWith('[INFO] [Spiderable-Middleware] [DEBUG]')));
+    assert.lengthOf(logs.warn, 0, 'console is not used');
+    assert.lengthOf(logs.info, 0, 'console is not used');
+    assert.strictEqual(spiderable.logger, logger);
+  });
+
+  it('falls back to `console` when `logger` lacks `info` or `warn`', () => {
+    for (const logger of ['console', { warn() {} }, { info() {} }]) {
+      logs.warn = [];
+      const spiderable = create({ logger });
+      assert.strictEqual(spiderable.logger, console);
+      assert.isTrue(hasLog('warn', 'opts.logger'));
+    }
+  });
+
   it('logs debug messages only when `debug` is enabled', () => {
     create({ debug: true });
     assert.isTrue(hasLog('info', 'Spiderable class initiated'));

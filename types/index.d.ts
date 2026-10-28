@@ -72,6 +72,10 @@ declare class Spiderable extends Function {
    */
   requestOptions: Spiderable.RequestOptions;
   /**
+   * Logger receiving warnings and debug messages.
+   */
+  logger: Spiderable.Logger;
+  /**
    * RegExp built from `ignoredHeaders`.
    */
   headersRE: RegExp;
@@ -143,6 +147,11 @@ declare namespace Spiderable {
     setTimeout(msecs: number, callback?: () => void): unknown;
   }
 
+  export interface Logger {
+    info(...args: unknown[]): unknown;
+    warn(...args: unknown[]): unknown;
+  }
+
   export interface RequestOptions {
     headers?: Record<string, number | string | readonly string[] | undefined>;
     [key: string]: unknown;
@@ -202,6 +211,11 @@ declare namespace Spiderable {
      * When true, debug logging is enabled.
      */
     debug?: boolean;
+    /**
+     * Object with `info` and `warn` methods receiving log messages.
+     * Defaults to `console`.
+     */
+    logger?: Logger;
     /**
      * A regular expression to match static file extensions.
      */
