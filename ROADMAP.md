@@ -13,7 +13,6 @@ Ideas from the sibling [`seo-middleware-nextjs`](https://github.com/veliovgroup/
    - An empty `?_escaped_fragment_=` triggers a render, but the parameter is never removed from the URL sent to the renderer.
    - User `only` and `onlyRE` regexes with the `g` or `y` flag keep `lastIndex` between requests, so `.test()` alternates `true` and `false`. Reset `lastIndex` before each test.
 3. Skip `/.well-known/` paths, so ACME and other verification files are never pre-rendered. Skip requests whose host is `ostr.io` or a subdomain of it, to prevent render loops.
-4. Add hop-by-hop headers to `ignoredHeaders`: `te`, `trailer`, `upgrade`, `proxy-authenticate`, `proxy-authorization`, `proxy-connection`.
 5. Warn at startup when `auth` is empty, instead of only warning after the service answers 401 or 403. Accept the `OSTR_AUTH` env variable next to `SPIDERABLE_SERVICE_AUTH` and `PRERENDER_SERVICE_AUTH`. Do not throw, that would be a breaking change.
 6. Retry connection errors while no headers were sent. Add a `retries` option, default `1`. Never retry after the response started.
 8. Add a `logger` option, an object with `info` and `warn` methods, defaulting to `console`.

@@ -381,6 +381,14 @@ describe('Rendering', () => {
     assert.match(stub.requests[0].headers['user-agent'], /^spiderable-middleware\//);
   });
 
+  it('drops hop-by-hop headers', () => {
+    const { headersRE } = create();
+    for (const header of ['connection', 'keep-alive', 'proxy-authenticate', 'proxy-authorization', 'proxy-connection', 'te', 'trailer', 'transfer-encoding', 'upgrade']) {
+      assert.isTrue(headersRE.test(header), header);
+    }
+    assert.isFalse(headersRE.test('content-type'));
+  });
+
   it('renders pages matching `only` and `onlyRE` rules', async () => {
     const app = await startApp(create({ onlyRE: /^\/blog/, only: ['/exact', /^\/re\//] }));
     for (const path of ['/blog/post', '/exact', '/re/1']) {
