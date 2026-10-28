@@ -24,14 +24,14 @@ When paired with the global CDN and smart caching layer from [`ostr.io`](https:/
 ## Related packages and docs
 
 - __Related Packages__
-  - [Next.js Integration](https://github.com/veliovgroup/ostrio/blob/master/docs/prerendering/nextjs-prerendering.md)
-  - [Meteor.js Integration via Atmosphere Package](https://github.com/veliovgroup/ostrio/blob/master/docs/prerendering/meteor-atmosphere.md)
+  - [Next.js Integration](https://github.com/ostr-io/ostrio-docs/blob/master/docs/prerendering/nextjs-prerendering.md)
+  - [Meteor.js Integration via Atmosphere Package](https://github.com/ostr-io/ostrio-docs/blob/master/docs/prerendering/meteor-atmosphere.md)
 - __Cloud Integrations__
-  - [CloudFlare Worker Integration](https://github.com/veliovgroup/ostrio/blob/master/docs/prerendering/cloudflare-worker.md)
-  - [Netlify Integration](https://github.com/veliovgroup/ostrio/blob/master/docs/prerendering/netlify-prerendering.md)
+  - [CloudFlare Worker Integration](https://github.com/ostr-io/ostrio-docs/blob/master/docs/prerendering/cloudflare-worker.md)
+  - [Netlify Integration](https://github.com/ostr-io/ostrio-docs/blob/master/docs/prerendering/netlify-prerendering.md)
 - __Web Server Integrations__
-  - [Nginx Integration](https://github.com/veliovgroup/ostrio/blob/master/docs/prerendering/nginx.md)
-  - [Apache Integration](https://github.com/veliovgroup/ostrio/blob/master/docs/prerendering/apache.md)
+  - [Nginx Integration](https://github.com/ostr-io/ostrio-docs/blob/master/docs/prerendering/nginx.md)
+  - [Apache Integration](https://github.com/ostr-io/ostrio-docs/blob/master/docs/prerendering/apache.md)
 
 ## ToC
 
@@ -43,7 +43,7 @@ When paired with the global CDN and smart caching layer from [`ostr.io`](https:/
   - [Middleware](https://github.com/veliovgroup/spiderable-middleware?tab=readme-ov-file#handle)
   - [TS Types](https://github.com/veliovgroup/spiderable-middleware?tab=readme-ov-file#types)
 - [Return genuine status code](https://github.com/veliovgroup/spiderable-middleware?tab=readme-ov-file#return-genuine-status-code)
-- [Speed-up rendering](https://github.com/veliovgroup/ostrio/blob/master/docs/prerendering/optimization.md)
+- [Speed-up rendering](https://github.com/ostr-io/ostrio-docs/blob/master/docs/prerendering/optimization.md)
 - [Detect request from Prerendering engine during runtime](https://github.com/veliovgroup/spiderable-middleware?tab=readme-ov-file#detect-request-from-pre-rendering-engine-during-runtime)
 - [Detect type of Prerendering engine](https://github.com/veliovgroup/spiderable-middleware?tab=readme-ov-file#detect-type-of-the-pre-rendering-engine)
 - [JavaScript redirects](https://github.com/veliovgroup/spiderable-middleware?tab=readme-ov-file#javascript-redirects)
@@ -146,7 +146,7 @@ app.listen(3000);
 ```
 
 > [!TIP]
-> We provide various options for `serviceURL` as "[Rendering Endpoints](https://github.com/veliovgroup/ostrio/blob/master/docs/prerendering/rendering-endpoints.md)", each endpoint has its own features to fit different project needs
+> We provide various options for `serviceURL` as "[Rendering Endpoints](https://github.com/ostr-io/ostrio-docs/blob/master/docs/prerendering/rendering-endpoints.md)", each endpoint has its own features to fit different project needs
 
 ## Return genuine status code
 
@@ -429,7 +429,7 @@ https://example.com/amp/articles/article-title.amp.html
 
 To change default endpoint, grab [integration examples code](https://github.com/veliovgroup/spiderable-middleware/tree/master/examples) and replace `render.ostr.io`, with endpoint from the list above. For NPM integration change value of [`serviceURL`](https://github.com/veliovgroup/spiderable-middleware?tab=readme-ov-file#constructor) option.
 
-__Note:__ Described differences in caching behavior related to intermediate proxy caching, `Cache-Control` header will be always set to the value defined in "Cache TTL". Cached results at the "Pre-rendering Engine" end can be [purged at any time](https://github.com/veliovgroup/ostrio/blob/master/docs/prerendering/cache-purge.md).
+__Note:__ Described differences in caching behavior related to intermediate proxy caching, `Cache-Control` header will be always set to the value defined in "Cache TTL". Cached results at the "Pre-rendering Engine" end can be [purged at any time](https://github.com/ostr-io/ostrio-docs/blob/master/docs/prerendering/cache-purge.md).
 
 ## Convert dynamic website to static
 
