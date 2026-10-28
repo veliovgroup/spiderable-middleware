@@ -1,7 +1,144 @@
-declare module 'spiderable-middleware' {
+/// <reference path="./meteor.d.ts" />
 
-  import type { IncomingMessage, ServerResponse, RequestOptions } from 'http';
-  import type { URL } from 'url';
+declare class Spiderable {
+  constructor(options?: Spiderable.SpiderableOptions);
+
+  /**
+   * Package name.
+   */
+  NAME: string;
+  /**
+   * User agent sent to the rendering service.
+   */
+  userAgent: string;
+  /**
+   * Authentication credentials.
+   */
+  auth: string;
+  /**
+   * When true, enables debug logging.
+   */
+  debug: boolean;
+  /**
+   * Array of "only" rules, or false if not defined.
+   */
+  only: (string | RegExp)[] | false;
+  /**
+   * RegExp built from "only" rules, or false if not defined.
+   */
+  onlyRE: RegExp | false;
+  /**
+   * Bot user-agent patterns.
+   */
+  botsUA: string[];
+  /**
+   * Application root URL.
+   */
+  rootURL: string;
+  /**
+   * Request timeout in milliseconds.
+   */
+  timeout: number;
+  /**
+   * Static file extension matcher.
+   */
+  staticExt: RegExp;
+  /**
+   * Rendering service URL.
+   */
+  serviceURL: string;
+  /**
+   * When true, duplicate slashes in URLs are sanitized.
+   */
+  sanitizeUrls: boolean;
+  /**
+   * Header names ignored while proxying responses.
+   */
+  ignoredHeaders: string[];
+  /**
+   * Extra HTTPS request options.
+   */
+  requestOptions: Spiderable.RequestOptions;
+  /**
+   * RegExp built from `ignoredHeaders`.
+   */
+  headersRE: RegExp;
+  /**
+   * RegExp built from `botsUA`.
+   */
+  botsRE: RegExp;
+  /**
+   * RegExp built from `ignore`, or false if not defined.
+   */
+  ignoreRE: RegExp | false;
+
+  /**
+   * Builds rendering-service request URL.
+   */
+  getServiceURL(urlObj: globalThis.URL, bua?: string): string;
+
+  /**
+   * Parses request URL and returns URL object when request qualifies for rendering.
+   */
+  getRequestURL(req: Spiderable.IncomingMessageLike): globalThis.URL | false;
+
+  /**
+   * Express/connect-style middleware.
+   */
+  middleware(
+    req: Spiderable.IncomingMessageLike,
+    res: Spiderable.ServerResponseLike,
+    next: Spiderable.NextFunction
+  ): boolean;
+
+  /**
+   * Alias for `middleware`.
+   */
+  handler: (
+    req: Spiderable.IncomingMessageLike,
+    res: Spiderable.ServerResponseLike,
+    next: Spiderable.NextFunction
+  ) => boolean;
+
+  /**
+   * Alias for `middleware`.
+   */
+  handle: (
+    req: Spiderable.IncomingMessageLike,
+    res: Spiderable.ServerResponseLike,
+    next: Spiderable.NextFunction
+  ) => void;
+}
+
+declare namespace Spiderable {
+  export interface IncomingMessageLike {
+    method?: string;
+    url?: string;
+    headers: Record<string, string | string[] | undefined>;
+    aborted?: boolean;
+    destroyed?: boolean;
+    writableEnded?: boolean;
+    on(event: 'aborted', listener: () => void): unknown;
+    on(event: 'error', listener: (error: Error) => void): unknown;
+    setTimeout?(msecs: number, callback?: () => void): unknown;
+  }
+
+  export interface ServerResponseLike {
+    headersSent: boolean;
+    finished: boolean;
+    writableEnded: boolean;
+    setHeader(name: string, value: number | string | readonly string[]): void;
+    writeHead(statusCode?: number): unknown;
+    write(chunk: string | Uint8Array): unknown;
+    end(chunk?: string | Uint8Array): unknown;
+    on(event: 'error', listener: (error: Error) => void): unknown;
+    setTimeout?(msecs: number, callback?: () => void): unknown;
+  }
+
+  export interface RequestOptions {
+    headers?: Record<string, number | string | readonly string[] | undefined>;
+    [key: string]: unknown;
+  }
 
   /**
    * Configuration options for Spiderable.
@@ -50,7 +187,7 @@ declare module 'spiderable-middleware' {
      */
     timeout?: number;
     /**
-     * Additional request options (merged into the HTTP request payload).
+     * Additional HTTPS request options merged into the rendering-service request.
      */
     requestOptions?: RequestOptions;
     /**
@@ -59,144 +196,11 @@ declare module 'spiderable-middleware' {
     debug?: boolean;
     /**
      * A regular expression to match static file extensions.
-     * (Not documented in the JS doc but used internally.)
      */
     staticExt?: RegExp;
   }
 
   export type NextFunction = (err?: unknown) => void;
-
-  /**
-   * Spiderable middleware class for rendering pages for bots/crawlers.
-   *
-   * @example
-   * import Spiderable from 'spiderable-middleware';
-   * const spiderable = new Spiderable({
-   *   rootURL: 'http://example.com',
-   *   auth: 'test:test'
-   * });
-   *
-   * WebApp.connectHandlers.use(spiderable.handler);
-   */
-  export default class Spiderable {
-    constructor(options?: SpiderableOptions);
-    /**
-     * Package name (set from package details).
-     */
-    NAME: string;
-    /**
-     * The user agent used when sending requests to the rendering service.
-     */
-    userAgent: string;
-    /**
-     * Authentication credentials.
-     */
-    auth: string;
-    /**
-     * When true, enables debug logging.
-     */
-    debug: boolean;
-    /**
-     * An array of "only" rules (strings or RegExp) or false if not defined.
-     */
-    only: (string | RegExp)[] | false;
-    /**
-     * A RegExp built from the "only" rules or false if not defined.
-     */
-    onlyRE: RegExp | false;
-    /**
-     * An array of bot user-agent patterns.
-     */
-    botsUA: string[];
-    /**
-     * The root URL of the application.
-     */
-    rootURL: string;
-    /**
-     * Request timeout (in milliseconds).
-     */
-    timeout: number;
-    /**
-     * A RegExp to match static file extensions.
-     */
-    staticExt: RegExp;
-    /**
-     * The rendering service URL.
-     */
-    serviceURL: string;
-    /**
-     * When true, URLs are sanitized (removing duplicate slashes).
-     */
-    sanitizeUrls: boolean;
-    /**
-     * An array of header names to ignore.
-     */
-    ignoredHeaders: string[];
-    /**
-     * Additional options to be merged into the HTTP request payload.
-     */
-    requestOptions: RequestOptions;
-    /**
-     * A RegExp built from the `ignoredHeaders` array.
-     */
-    headersRE: RegExp;
-    /**
-     * A RegExp built from the `botsUA` array.
-     */
-    botsRE: RegExp;
-    /**
-     * A RegExp built from the `ignore` option or false if not defined.
-     */
-    ignoreRE: RegExp | false;
-
-    /**
-     * Constructs the complete service URL used to request a rendered page.
-     *
-     * @param urlObj - A URL object representing the original request.
-     * @param bua - Optional bot user-agent string (from the request headers).
-     * @returns A complete URL string to the rendering service.
-     */
-    getServiceURL(urlObj: URL, bua?: string): string;
-
-    /**
-     * Processes the incoming request URL.
-     *
-     * @param req - The original HTTP request.
-     * @returns A URL object if the request qualifies for rendering, or false otherwise.
-     */
-    getRequestURL(req: IncomingMessage): URL | false;
-
-    /**
-     * Express/connect–style middleware function.
-     *
-     * Processes the request and proxies a rendered response if applicable.
-     *
-     * @param req - The incoming HTTP request.
-     * @param res - The HTTP response.
-     * @param next - A function to call the next middleware.
-     * @returns true if the middleware handled the request, false otherwise.
-     */
-    middleware(
-      req: IncomingMessage,
-      res: ServerResponse,
-      next: NextFunction
-    ): boolean;
-
-    /**
-     * Alias for `middleware`. Can be used when mounting the middleware.
-     */
-    handler: (req: IncomingMessage, res: ServerResponse, next: NextFunction) => boolean;
-
-    /**
-     * Alias for `middleware`.
-     */
-    handle: (req: IncomingMessage, res: ServerResponse, next: NextFunction) => void;
-  }
 }
 
-declare module 'meteor/ostrio:spiderable-middleware' {
-  export * from 'spiderable-middleware';
-
-  import Spiderable from 'spiderable-middleware';
-  export default Spiderable;
-}
+export = Spiderable;

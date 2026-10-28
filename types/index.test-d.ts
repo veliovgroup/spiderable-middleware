@@ -1,8 +1,13 @@
 import { expectType, expectError } from 'tsd';
-import Spiderable from 'spiderable-middleware';
-import type { SpiderableOptions, NextFunction } from 'spiderable-middleware';
-import type { IncomingMessage, ServerResponse, RequestOptions } from 'http';
-import { URL } from 'url';
+import Spiderable from '..';
+import type {
+  IncomingMessageLike,
+  NextFunction,
+  RequestOptions,
+  ServerResponseLike,
+  SpiderableOptions
+} from '..';
+import type { IncomingMessage, ServerResponse } from 'http';
 
 // Test SpiderableOptions interface with all optional properties.
 const options: SpiderableOptions = {
@@ -61,12 +66,12 @@ expectType<string>(serviceURLStr);
 
 // Test the getRequestURL method.
 // Create a dummy IncomingMessage. In real use this would be a proper request object.
-const req = { url: 'http://myapp.com/page' } as IncomingMessage;
+const req = { url: 'http://myapp.com/page', headers: {} } as IncomingMessageLike;
 const requestURL = spiderable.getRequestURL(req);
-expectType<URL | false>(requestURL);
+expectType<globalThis.URL | false>(requestURL);
 
 // Test the middleware function and its aliases.
-const res = {} as ServerResponse;
+const res = {} as ServerResponseLike;
 const next: NextFunction = (_err?: unknown) => {
   /* noop */
 };
@@ -74,6 +79,10 @@ const next: NextFunction = (_err?: unknown) => {
 expectType<boolean>(spiderable.middleware(req, res, next));
 expectType<boolean>(spiderable.handler(req, res, next));
 expectType<void>(spiderable.handle(req, res, next));
+
+const nodeReq = {} as IncomingMessage;
+const nodeRes = {} as ServerResponse;
+expectType<boolean>(spiderable.middleware(nodeReq, nodeRes, next));
 
 // Test NextFunction type.
 const nextFunction: NextFunction = (err?: unknown) => {

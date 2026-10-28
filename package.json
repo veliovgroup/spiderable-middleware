@@ -3,13 +3,24 @@
   "version": "2.3.1",
   "description": "Boost organic traffic from SERPs, AI Chat Bots, and GPT",
   "main": "lib/index.js",
-  "types": "types/index.d.ts",
+  "types": "./types/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./types/index.d.ts",
+      "import": "./lib/index.js",
+      "require": "./lib/index.js",
+      "default": "./lib/index.js"
+    }
+  },
   "files": [
     "lib/index.js",
-    "types/index.d.ts"
+    "types/index.d.ts",
+    "types/meteor.d.ts"
   ],
   "scripts": {
-    "test": "mocha"
+    "build": "tsc --noEmit",
+    "test": "mocha",
+    "test:types": "tsd"
   },
   "repository": {
     "type": "git",

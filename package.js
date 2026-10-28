@@ -12,7 +12,7 @@ Package.onUse((api) => {
   api.mainModule('lib/index.js', 'server');
 
   api.use(['zodern:types@1.0.13', 'typescript'], 'server', { weak: true });
-  api.addAssets('types/index.d.ts', 'server');
+  api.addAssets(['types/index.d.ts', 'types/meteor.d.ts'], 'server');
 });
 
 Package.onTest((api) => {

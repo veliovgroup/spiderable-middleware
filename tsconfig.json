@@ -3,14 +3,19 @@
     "preserveSymlinks": true,
     "esModuleInterop": true,
     "strict": true,
+    "baseUrl": ".",
+    "moduleResolution": "node",
     "outDir": "./dist",
     "typeRoots": ["./node_modules/@types", "./types"],
     "paths": {
+      "spiderable-middleware": [
+        "types/index.d.ts"
+      ],
       "meteor/*": [
         "node_modules/@types/meteor/*",
         ".meteor/local/types/packages.d.ts"
       ]
     }
   },
-  "include": ["test/*.ts", "types"]
+  "include": ["test/npm.ts", "types/index.d.ts", "types/meteor.d.ts"]
 }
