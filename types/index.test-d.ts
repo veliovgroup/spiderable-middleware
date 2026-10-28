@@ -29,6 +29,7 @@ const options: SpiderableOptions = {
   },
   debug: false,
   logger: console,
+  retries: 2,
   staticExt: /\.(css|js)$/,
 };
 
@@ -58,6 +59,7 @@ expectType<boolean>(spiderable.sanitizeUrls);
 expectType<string[]>(spiderable.ignoredHeaders);
 expectType<RequestOptions>(spiderable.requestOptions);
 expectType<Logger>(spiderable.logger);
+expectType<number>(spiderable.retries);
 expectType<RegExp>(spiderable.headersRE);
 expectType<RegExp>(spiderable.botsRE);
 expectType<RegExp | false>(spiderable.ignoreRE);

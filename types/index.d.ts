@@ -76,6 +76,10 @@ declare class Spiderable extends Function {
    */
   logger: Spiderable.Logger;
   /**
+   * Extra attempts after a connection error, before the rendering service answered.
+   */
+  retries: number;
+  /**
    * RegExp built from `ignoredHeaders`.
    */
   headersRE: RegExp;
@@ -212,6 +216,12 @@ declare namespace Spiderable {
      * When true, debug logging is enabled.
      */
     debug?: boolean;
+    /**
+     * Extra attempts when the connection to the rendering service fails
+     * before it answered. Never retries after the response started.
+     * Defaults to `1`.
+     */
+    retries?: number;
     /**
      * Object with `info` and `warn` methods receiving log messages.
      * Defaults to `console`.

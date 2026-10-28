@@ -6,9 +6,7 @@ Constraints for every item: CommonJS, no runtime dependencies, no syntax or APIs
 
 ## Next release
 
-Ideas from the sibling [`seo-middleware-nextjs`](https://github.com/veliovgroup/seo-middleware-nextjs) package and bugs found while comparing the two.
-
-6. Retry connection errors while no headers were sent. Add a `retries` option, default `1`. Never retry after the response started.
+Nothing queued. Items from the [`seo-middleware-nextjs`](https://github.com/veliovgroup/seo-middleware-nextjs) comparison shipped in v2.4.0.
 
 ## Not planned
 

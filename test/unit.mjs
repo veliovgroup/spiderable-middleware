@@ -248,6 +248,16 @@ describe('Constructor', () => {
     assert.throws(() => create({ serviceURL: 'render.ostr.io' }), /\{serviceURL\} is malformed/);
   });
 
+  it('validates `retries`', () => {
+    assert.strictEqual(create().retries, 1);
+    assert.strictEqual(create({ retries: 0 }).retries, 0);
+    for (const retries of [-1, 1.5, '2']) {
+      logs.warn = [];
+      assert.strictEqual(create({ retries }).retries, 1);
+      assert.isTrue(hasLog('warn', 'opts.retries'));
+    }
+  });
+
   it('falls back to defaults and warns on invalid options', () => {
     const spiderable = create({
       staticExt: 'css',
@@ -597,6 +607,53 @@ describe('Failures', () => {
     assert.strictEqual(resp.body, APP_BODY);
     assert.strictEqual(app.nextCalls, 1);
     assert.isTrue(hasLog('warn', 'didn\'t respond within 200ms'));
+  });
+
+  it('retries once when the connection fails before a response', async () => {
+    let attempts = 0;
+    stub.handle = (req, res) => {
+      attempts++;
+      if (attempts === 1) {
+        req.socket.destroy();
+        return;
+      }
+      res.writeHead(200, { 'content-type': 'text/html' });
+      res.end('<html>RENDERED</html>');
+    };
+    const app = await startApp(create());
+    const resp = await get(app.port, '/');
+    assert.strictEqual(resp.body, '<html>RENDERED</html>');
+    assert.strictEqual(attempts, 2);
+    assert.strictEqual(app.nextCalls, 0);
+    assert.lengthOf(logs.warn, 0, 'a successful retry is not a failure');
+  });
+
+  it('passes request to the app after `retries` failed attempts', async () => {
+    for (const retries of [0, 2]) {
+      let attempts = 0;
+      stub.handle = (req) => {
+        attempts++;
+        req.socket.destroy();
+      };
+      const app = await startApp(create({ retries }));
+      const resp = await get(app.port, '/');
+      assert.strictEqual(resp.body, APP_BODY, `retries: ${retries}`);
+      assert.strictEqual(attempts, retries + 1, `retries: ${retries}`);
+      assert.isTrue(hasLog('warn', 'Error while connecting to external service'));
+    }
+  });
+
+  it('does not retry after the rendering service answered', async () => {
+    let attempts = 0;
+    stub.handle = (_req, res) => {
+      attempts++;
+      res.writeHead(200, { 'content-type': 'text/html' });
+      res.write('<html>partial');
+      setTimeout(() => res.socket.destroy(), 50);
+    };
+    const app = await startApp(create());
+    await get(app.port, '/');
+    assert.strictEqual(attempts, 1);
   });
 
   it('ends the response when the rendering service stalls after headers', async () => {
