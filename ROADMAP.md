@@ -16,7 +16,6 @@ Ideas from the sibling [`seo-middleware-nextjs`](https://github.com/veliovgroup/
 4. Add hop-by-hop headers to `ignoredHeaders`: `te`, `trailer`, `upgrade`, `proxy-authenticate`, `proxy-authorization`, `proxy-connection`.
 5. Warn at startup when `auth` is empty, instead of only warning after the service answers 401 or 403. Accept the `OSTR_AUTH` env variable next to `SPIDERABLE_SERVICE_AUTH` and `PRERENDER_SERVICE_AUTH`. Do not throw, that would be a breaking change.
 6. Retry connection errors while no headers were sent. Add a `retries` option, default `1`. Never retry after the response started.
-7. Offline tests against a local stub service, so the suite runs without network access or credentials.
 8. Add a `logger` option, an object with `info` and `warn` methods, defaulting to `console`.
 
 ## Not planned
