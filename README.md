@@ -268,7 +268,7 @@ new Spiderable(opts?: SpiderableOptions);
 - `opts` {*SpiderableOptions?*} - [Optional] Configuration options
 - `opts.serviceURL` {*string*} - Valid `http://` or `https://` URL to Spiderable endpoint (local or foreign). Default: `https://render.ostr.io`. Can be set via environment variables: `SPIDERABLE_SERVICE_URL` or `PRERENDER_SERVICE_URL`
 - `opts.rootURL` {*string*} - Valid root URL of a website. Can be set via an environment variable: `ROOT_URL`
-- `opts.auth` {*string*} - Auth string in next format: `user:pass`. Can be set via an environment variables: `SPIDERABLE_SERVICE_AUTH` or `PRERENDER_SERVICE_AUTH`. Default `null`
+- `opts.auth` {*string*} - Auth string in next format: `user:pass`. Can be set via an environment variables: `SPIDERABLE_SERVICE_AUTH`, `PRERENDER_SERVICE_AUTH`, or `OSTR_AUTH`. Logs a warning at startup when empty
 - `opts.sanitizeUrls` {*boolean*} - Sanitize URLs in order to "fix" badly composed URLs. Default `false`
 - `opts.botsUA` {*string[]*} - An array of strings (case insensitive) with additional User-Agent names of crawlers that needs to get intercepted. See default [bot's names](https://github.com/veliovgroup/spiderable-middleware/blob/master/lib/index.js#L198). Set to `['.*']` to match all browsers and robots, to serve static pages to all users/visitors
 - `opts.ignoredHeaders` {*string[]*} - An array of strings (case insensitive) with HTTP header names to exclude from response. See default [list of ignored headers](https://github.com/veliovgroup/spiderable-middleware/blob/master/lib/index.js#L206). Set to `['.*']` to ignore all headers

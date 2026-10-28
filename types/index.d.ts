@@ -173,6 +173,7 @@ declare namespace Spiderable {
     rootURL?: string;
     /**
      * Authentication credentials in the form "username:password".
+     * Defaults to the environment variable `SPIDERABLE_SERVICE_AUTH`, `PRERENDER_SERVICE_AUTH`, or `OSTR_AUTH`.
      */
     auth?: string;
     /**

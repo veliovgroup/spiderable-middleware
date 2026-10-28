@@ -8,7 +8,6 @@ Constraints for every item: CommonJS, no runtime dependencies, no syntax or APIs
 
 Ideas from the sibling [`seo-middleware-nextjs`](https://github.com/veliovgroup/seo-middleware-nextjs) package and bugs found while comparing the two.
 
-5. Warn at startup when `auth` is empty, instead of only warning after the service answers 401 or 403. Accept the `OSTR_AUTH` env variable next to `SPIDERABLE_SERVICE_AUTH` and `PRERENDER_SERVICE_AUTH`. Do not throw, that would be a breaking change.
 6. Retry connection errors while no headers were sent. Add a `retries` option, default `1`. Never retry after the response started.
 
 ## Not planned

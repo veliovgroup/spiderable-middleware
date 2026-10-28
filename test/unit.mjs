@@ -76,7 +76,7 @@ beforeEach(() => {
   };
 });
 
-const ENV_KEYS = ['ROOT_URL', 'SPIDERABLE_SERVICE_URL', 'PRERENDER_SERVICE_URL', 'SPIDERABLE_SERVICE_AUTH', 'PRERENDER_SERVICE_AUTH', 'DEBUG'];
+const ENV_KEYS = ['ROOT_URL', 'SPIDERABLE_SERVICE_URL', 'PRERENDER_SERVICE_URL', 'SPIDERABLE_SERVICE_AUTH', 'PRERENDER_SERVICE_AUTH', 'OSTR_AUTH', 'DEBUG'];
 const withEnv = (env, fn) => {
   const saved = {};
   for (const key of ENV_KEYS) {
@@ -100,6 +100,7 @@ const withEnv = (env, fn) => {
 const create = (opts = {}) => withEnv({}, () => new Spiderable({
   rootURL: 'http://example.com',
   serviceURL: stub.url,
+  auth: 'test:test',
   timeout: 1000,
   requestOptions: { rejectUnauthorized: false },
   ...opts,
@@ -219,6 +220,20 @@ describe('Constructor', () => {
     }, () => new Spiderable('not an object'));
     assert.strictEqual(spiderable.serviceURL, 'https://prerender.example.com');
     assert.strictEqual(spiderable.auth, 'pre:auth');
+  });
+
+  it('reads OSTR_AUTH env variable', () => {
+    const spiderable = withEnv({ ROOT_URL: 'http://env.example.com', OSTR_AUTH: 'ostr:auth' }, () => new Spiderable());
+    assert.strictEqual(spiderable.auth, 'ostr:auth');
+    assert.isFalse(hasLog('warn', 'opts.auth'));
+  });
+
+  it('warns at startup when `auth` is empty', () => {
+    create({ auth: '' });
+    assert.isTrue(hasLog('warn', '`opts.auth` is empty'));
+    logs.warn = [];
+    create();
+    assert.isFalse(hasLog('warn', '`opts.auth` is empty'));
   });
 
   it('throws without rootURL', () => {
