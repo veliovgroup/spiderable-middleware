@@ -158,7 +158,7 @@ servers.push(createServer(appConnect).listen(Number(connectURL.port)));
 
 // Express server.
 const appExpress = express();
-appExpress.use(prerenders.express.handle);
+appExpress.use(prerenders.express);
 appExpress.get('*', (_req: Request, res: Response) => {
   res.send(respExpress);
 });

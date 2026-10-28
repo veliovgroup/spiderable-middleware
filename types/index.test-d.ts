@@ -80,6 +80,14 @@ expectType<boolean>(spiderable.middleware(req, res, next));
 expectType<boolean>(spiderable.handler(req, res, next));
 expectType<void>(spiderable.handle(req, res, next));
 
+// The instance itself is a middleware function
+expectType<void>(spiderable(req, res, next));
+expectType<void>(spiderable(nodeReqAsLike(), res, next));
+
+function nodeReqAsLike(): IncomingMessageLike {
+  return {} as IncomingMessage;
+}
+
 const nodeReq = {} as IncomingMessage;
 const nodeRes = {} as ServerResponse;
 expectType<boolean>(spiderable.middleware(nodeReq, nodeRes, next));

@@ -1,6 +1,18 @@
 /// <reference path="./meteor.d.ts" />
 
-declare class Spiderable {
+/**
+ * Instances are callable middleware functions,
+ * pass the instance directly to `app.use()`.
+ */
+interface Spiderable {
+  (
+    req: Spiderable.IncomingMessageLike,
+    res: Spiderable.ServerResponseLike,
+    next: Spiderable.NextFunction
+  ): void;
+}
+
+declare class Spiderable extends Function {
   constructor(options?: Spiderable.SpiderableOptions);
 
   /**

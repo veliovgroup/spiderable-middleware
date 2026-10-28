@@ -69,11 +69,9 @@ const testURLs: { valid: string[]; invalid: string[] } = {
   ]
 };
 
-if (Meteor.release.includes('@1') || Meteor.release.includes('@2')) {
-  WebApp.connectHandlers.use(prerendering);
-} else {
-  WebApp.connectHandlers.use(prerendering.handler);
-}
+// Spiderable instance is a middleware function, it works with
+// Express-based `WebApp.handlers` (meteor@3) and connect-based `WebApp.connectHandlers` (meteor@1, meteor@2)
+((WebApp as any).handlers || WebApp.connectHandlers).use(prerendering);
 
 const callOpts: HTTP.HTTPRequest = {
   followRedirects: false,

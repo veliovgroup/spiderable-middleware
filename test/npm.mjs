@@ -135,16 +135,16 @@ servers.push(listen(createServer((req, res) => {
   });
 }), Number(vanillaURL.port)));
 
-// Connect server
+// Connect server, the instance is passed directly
 const appConnect = connect();
 appConnect
-  .use(prerenders.connect.handler)
+  .use(prerenders.connect)
   .use((_req, res) => res.end(respConnect));
 servers.push(listen(createServer(appConnect), Number(connectURL.port)));
 
-// Express server
+// Express server, the instance is passed directly (as in Meteor@3 `WebApp.handlers.use()`)
 const appExpress = express();
-appExpress.use(prerenders.express.handler).get('*', (_req, res) => {
+appExpress.use(prerenders.express).get('*', (_req, res) => {
   res.send(respExpress);
 });
 servers.push(listen(createServer(appExpress), Number(expressURL.port)));
@@ -168,6 +168,14 @@ describe('Has Spiderable Instance', () => {
       expectedRootURL,
       'rootURL is set and has right value'
     );
+  });
+
+  it('instance is a middleware function', () => {
+    assert.isFunction(prerenders.vanilla, 'instance is callable');
+    assert.isFunction(prerenders.vanilla.call, 'instance keeps Function.prototype methods');
+    assert.strictEqual(prerenders.vanilla.length, 3, 'instance has (req, res, next) arity, not an error handler');
+    assert.isFunction(prerenders.vanilla.handle, 'instance has .handle()');
+    assert.isFunction(prerenders.vanilla.handler, 'instance has .handler()');
   });
 });
 

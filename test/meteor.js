@@ -65,11 +65,9 @@ const callOpts = {
   },
 };
 
-if (Meteor.release.includes('@1') || Meteor.release.includes('@2')) {
-  WebApp.connectHandlers.use(prerendering);
-} else {
-  WebApp.connectHandlers.use(prerendering.handler);
-}
+// Spiderable instance is a middleware function, it works with
+// Express-based `WebApp.handlers` (meteor@3) and connect-based `WebApp.connectHandlers` (meteor@1, meteor@2)
+(WebApp.handlers || WebApp.connectHandlers).use(prerendering);
 
 Meteor.startup(function(){
   if (Meteor.isServer) {
