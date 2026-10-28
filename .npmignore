@@ -6,7 +6,7 @@
 .gitignore
 .meteor
 .meteorignore
-.mocharc.json
+.mocharc.cjs
 .npm
 .versions
 ascii

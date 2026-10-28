@@ -488,6 +488,8 @@ https.get('https://test:test@render-bypass.ostr.io/?url=http://example.com', (re
 
 ### Node.js/Mocha
 
+Test suite requires Node.js@>=18 (global `fetch`), the package itself supports older releases.
+
 ```sh
 # Install development NPM dependencies:
 npm install --save-dev
@@ -499,6 +501,7 @@ npm link
 npm link spiderable-middleware
 
 # Run tests:
+# ROOT_URL port and ports +1, +5, 3010, 3011, 3015 must be free
 ROOT_URL=http://127.0.0.1:3003 npm test
 
 # Run same tests with extra-logging

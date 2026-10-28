@@ -3,7 +3,7 @@ import connect from 'connect';
 import express from 'express';
 import Spiderable from 'spiderable-middleware';
 import { assert } from 'chai';
-import { describe, it } from 'mocha';
+import { after, describe, it } from 'mocha';
 
 const ROOT_URL = process.env.ROOT_URL;
 if (!ROOT_URL) {
@@ -102,28 +102,52 @@ const fetchOptions = {
   headers: { 'User-Agent': 'GoogleBot' },
 };
 
+const servers = [];
+
+const listen = (server, port) => {
+  server.on('error', (error) => {
+    if (error.code === 'EADDRINUSE') {
+      throw new Error(`Port ${port} is already in use, run tests with ROOT_URL pointing to a free port, like \`ROOT_URL=http://localhost:3200 npm test\``);
+    }
+    throw error;
+  });
+  return server.listen(port);
+};
+
+after(async () => {
+  await Promise.all(servers.map((server) => new Promise((resolve, reject) => {
+    server.close((error) => {
+      if (error) {
+        reject(error);
+        return;
+      }
+      resolve();
+    });
+  })));
+});
+
 // Create Servers
 // Vanilla HTTP server
-createServer((req, res) => {
+servers.push(listen(createServer((req, res) => {
   prerenders.vanilla.handler(req, res, () => {
     res.writeHead(200, { 'Content-Type': 'text/plain; charset=UTF-8' });
     res.end(respVanilla);
   });
-}).listen(Number(vanillaURL.port));
+}), Number(vanillaURL.port)));
 
 // Connect server
 const appConnect = connect();
 appConnect
   .use(prerenders.connect.handler)
   .use((_req, res) => res.end(respConnect));
-createServer(appConnect).listen(Number(connectURL.port));
+servers.push(listen(createServer(appConnect), Number(connectURL.port)));
 
 // Express server
 const appExpress = express();
 appExpress.use(prerenders.express.handler).get('*', (_req, res) => {
   res.send(respExpress);
 });
-appExpress.listen(Number(expressURL.port));
+servers.push(listen(createServer(appExpress), Number(expressURL.port)));
 
 // Tests using Mocha and Chai with async/await and native fetch
 describe('Has Spiderable Object', () => {

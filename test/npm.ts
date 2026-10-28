@@ -3,7 +3,7 @@ import connect from 'connect';
 import express from 'express';
 import Spiderable from 'spiderable-middleware';
 import { assert } from 'chai';
-import { describe, it } from 'mocha';
+import { after, describe, it } from 'mocha';
 
 import type { IncomingMessage, ServerResponse } from 'http';
 import type { Request, Response } from 'express';
@@ -125,22 +125,36 @@ const fetchOptions: RequestInit = {
   headers: { 'User-Agent': 'GoogleBot' },
 };
 
+const servers: ReturnType<typeof createServer>[] = [];
+
+after(async () => {
+  await Promise.all(servers.map((server) => new Promise<void>((resolve, reject) => {
+    server.close((error?: Error) => {
+      if (error) {
+        reject(error);
+        return;
+      }
+      resolve();
+    });
+  })));
+});
+
 // Create Servers
 
 // Vanilla HTTP server.
-createServer((req: IncomingMessage, res: ServerResponse) => {
+servers.push(createServer((req: IncomingMessage, res: ServerResponse) => {
   prerenders.vanilla.handler(req, res, () => {
     res.writeHead(200, { 'Content-Type': 'text/plain; charset=UTF-8' });
     res.end(respVanilla);
   });
-}).listen(Number(vanillaURL.port));
+}).listen(Number(vanillaURL.port)));
 
 // Connect server.
 const appConnect = connect();
 appConnect
   .use(prerenders.connect.handler as NextHandleFunction)
   .use(( _req: IncomingMessage, res: ServerResponse) => res.end(respConnect));
-createServer(appConnect).listen(Number(connectURL.port));
+servers.push(createServer(appConnect).listen(Number(connectURL.port)));
 
 // Express server.
 const appExpress = express();
@@ -148,7 +162,7 @@ appExpress.use(prerenders.express.handle);
 appExpress.get('*', (_req: Request, res: Response) => {
   res.send(respExpress);
 });
-appExpress.listen(Number(expressURL.port));
+servers.push(appExpress.listen(Number(expressURL.port)));
 
 // Tests using Mocha and Chai with async/await and native fetch
 describe('[TS] Has Spiderable Object', () => {
