@@ -138,12 +138,15 @@ const spiderable = new Spiderable({
 const app = express();
 // ensure this is the most top registered handle
 // to reduce response time and server load
-app.use(spiderable.handle).get('/', (req, res) => {
+app.use(spiderable).get('/', (req, res) => {
   res.send('Hello World');
 });
 
 app.listen(3000);
 ```
+
+> [!NOTE]
+> `Spiderable` instance is a middleware function, pass it to `.use()` directly. `spiderable.handle` and `spiderable.handler` are kept as aliases.
 
 > [!TIP]
 > We provide various options for `serviceURL` as "[Rendering Endpoints](https://github.com/ostr-io/ostrio-docs/blob/master/docs/prerendering/rendering-endpoints.md)", each endpoint has its own features to fit different project needs
@@ -329,10 +332,11 @@ PRERENDER_SERVICE_AUTH='APIUser:APIPass'
 
 ### handle
 
-Middleware handle
+Middleware handle. The instance itself is callable with the same arguments
 
 ```ts
 const spiderable = new Spiderable();
+spiderable(req: IncomingMessage, res: ServerResponse, next: NextFunction): void;
 spiderable.handle(req: IncomingMessage, res: ServerResponse, next: NextFunction): void;
 
 // Alias that returns {boolean} 
@@ -350,11 +354,11 @@ const app = express();
 // const app = connect();
 const spiderable = new Spiderable();
 
-app.use(spiderable.handle).use((_req, res) => {
+app.use(spiderable).use((_req, res) => {
   res.end('Hello from Connect!\n');
 });
 
-createServer(app).listen(3000;
+createServer(app).listen(3000);
 ```
 
 Example using node.js `http` server:

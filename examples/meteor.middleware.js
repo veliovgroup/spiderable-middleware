@@ -10,7 +10,7 @@ const spiderable = new Spiderable({
 });
 
 // meteor@>=3
-WebApp.connectHandlers.use(spiderable.handle);
+WebApp.handlers.use(spiderable);
 
 // meteor@<3, meteor@1.x, meteor@2.x
-WebApp.connectHandlers.use(spiderable);
+// WebApp.connectHandlers.use(spiderable);

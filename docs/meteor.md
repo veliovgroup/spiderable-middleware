@@ -34,11 +34,14 @@ const spiderable = new Spiderable({
 });
 
 // meteor@>=3 use the next line for modern version of Meteor
-WebApp.connectHandlers.use(spiderable.handle);
+WebApp.handlers.use(spiderable);
 
 // meteor@<3 use the next line for meteor@2.x and meteor@1.x releases
-WebApp.connectHandlers.use(spiderable);
+// WebApp.connectHandlers.use(spiderable);
 ```
+
+> [!NOTE]
+> Meteor@3 serves requests with Express. `WebApp.connectHandlers` is a deprecated alias of `WebApp.handlers` and still works. Express accepts only functions, the `Spiderable` instance is a middleware function since `v2.4.0`. When using older releases of this package with Meteor@3, pass `spiderable.handle` instead of the instance.
 
 ## Detect request from Pre-rendering engine in Meteor.js
 
