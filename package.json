@@ -85,7 +85,7 @@
     "url": "https://github.com/veliovgroup/spiderable-middleware/issues"
   },
   "engines": {
-    "node": ">=7.1.0"
+    "node": ">=10.9.0"
   },
   "devDependencies": {
     "@types/chai": "^5.0.1",

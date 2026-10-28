@@ -18,7 +18,6 @@ Ideas from the sibling [`seo-middleware-nextjs`](https://github.com/veliovgroup/
 6. Retry connection errors while no headers were sent. Add a `retries` option, default `1`. Never retry after the response started.
 7. Offline tests against a local stub service, so the suite runs without network access or credentials.
 8. Add a `logger` option, an object with `info` and `warn` methods, defaulting to `console`.
-9. Fix `engines.node`. It says `>=7.1.0`, but `https.request(url, options, callback)` needs Node.js 10.9 or newer. Set it to `>=10.9.0`.
 
 ## Not planned
 
