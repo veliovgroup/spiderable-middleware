@@ -1,6 +1,6 @@
 // Offline unit tests: a local HTTPS stub plays the rendering service,
 // so the suite needs no network access and no ostr.io credentials
-import { createServer as createHttpServer, request as httpRequest } from 'http';
+import { Agent as HttpAgent, createServer as createHttpServer, request as httpRequest } from 'http';
 import { createServer as createHttpsServer } from 'https';
 import { readFileSync } from 'fs';
 import { createRequire } from 'module';
@@ -496,6 +496,53 @@ describe('Rendering', () => {
     const resp = await get(app.port, '/', { ua: HUMAN_UA });
     assert.strictEqual(resp.body, APP_BODY);
     assert.lengthOf(stub.requests, 0);
+  });
+});
+
+describe('Rendering service over plain HTTP', () => {
+  let httpStub;
+  let httpStubURL;
+  const seen = [];
+
+  before(async () => {
+    httpStub = createHttpServer((req, res) => {
+      seen.push(new URL(req.url, 'http://localhost').searchParams.get('url'));
+      res.writeHead(200, { 'content-type': 'text/html' });
+      res.end('<html>RENDERED OVER HTTP</html>');
+    });
+    httpStubURL = `http://127.0.0.1:${await listen(httpStub)}`;
+  });
+
+  after(() => {
+    httpStub.close();
+  });
+
+  it('renders through an `http://` serviceURL', async () => {
+    const app = await startApp(create({ serviceURL: httpStubURL, requestOptions: {} }));
+    const resp = await get(app.port, '/page');
+    assert.strictEqual(resp.body, '<html>RENDERED OVER HTTP</html>');
+    assert.deepEqual(seen.slice(-1), ['http://example.com/page']);
+    assert.strictEqual(app.nextCalls, 0);
+  });
+
+  it('uses the agent from `requestOptions` as-is', async () => {
+    const agent = new HttpAgent({ keepAlive: false });
+    let used = 0;
+    const createConnection = agent.createConnection.bind(agent);
+    agent.createConnection = (...args) => {
+      used++;
+      return createConnection(...args);
+    };
+    const app = await startApp(create({ serviceURL: httpStubURL, requestOptions: { agent } }));
+    const resp = await get(app.port, '/');
+    assert.strictEqual(resp.body, '<html>RENDERED OVER HTTP</html>');
+    assert.strictEqual(used, 1);
+  });
+
+  it('accepts `agent: false` in `requestOptions`', async () => {
+    const app = await startApp(create({ serviceURL: httpStubURL, requestOptions: { agent: false } }));
+    const resp = await get(app.port, '/');
+    assert.strictEqual(resp.body, '<html>RENDERED OVER HTTP</html>');
   });
 });
 

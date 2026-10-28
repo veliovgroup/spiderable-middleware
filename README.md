@@ -266,7 +266,7 @@ new Spiderable(opts?: SpiderableOptions);
 ```
 
 - `opts` {*SpiderableOptions?*} - [Optional] Configuration options
-- `opts.serviceURL` {*string*} - Valid URL to Spiderable endpoint (local or foreign). Default: `https://render.ostr.io`. Can be set via environment variables: `SPIDERABLE_SERVICE_URL` or `PRERENDER_SERVICE_URL`
+- `opts.serviceURL` {*string*} - Valid `http://` or `https://` URL to Spiderable endpoint (local or foreign). Default: `https://render.ostr.io`. Can be set via environment variables: `SPIDERABLE_SERVICE_URL` or `PRERENDER_SERVICE_URL`
 - `opts.rootURL` {*string*} - Valid root URL of a website. Can be set via an environment variable: `ROOT_URL`
 - `opts.auth` {*string*} - Auth string in next format: `user:pass`. Can be set via an environment variables: `SPIDERABLE_SERVICE_AUTH` or `PRERENDER_SERVICE_AUTH`. Default `null`
 - `opts.sanitizeUrls` {*boolean*} - Sanitize URLs in order to "fix" badly composed URLs. Default `false`
@@ -276,7 +276,7 @@ new Spiderable(opts?: SpiderableOptions);
 - `opts.only` {*(String|RegExp)[]*} - An array of strings (case __sensitive__) or regular expressions (*could be mixed*). Define __exclusive__ route rules for pre-rendering. Could be used with `opts.onlyRE` rules. __Note:__ To define "safe" rules as {*RegExp*} it should start with `^` and end with `$` symbols, examples: `[/^\/articles\/?$/, /^\/article\/[A-z0-9]{16}\/?$/]`
 - `opts.onlyRE` {*RegExp*} - Regular Expression with __exclusive__ route rules for pre-rendering. Could be used with `opts.only` rules
 - `opts.timeout` {*number*} - Number, proxy-request timeout to rendering endpoint in milliseconds. Default: `180000`
-- `opts.requestOptions` {*RequestOptions*} - Options for request module (like: `timeout`, `lookup`, `insecureHTTPParser`), for all available options see [`http` API docs](https://nodejs.org/docs/latest-v14.x/api/http.html#http_http_request_url_options_callback)
+- `opts.requestOptions` {*RequestOptions*} - Options for request module (like: `timeout`, `lookup`, `insecureHTTPParser`), for all available options see [`http` API docs](https://nodejs.org/docs/latest-v14.x/api/http.html#http_http_request_url_options_callback). Pass `agent` to replace the default keep-alive agent, or `agent: false` to disable connection reuse
 - `opts.staticExt` {*RegExp*} - Regular Expression matching paths of static files, these requests are never pre-rendered. See default [list of extensions](https://github.com/ostr-io/ostrio-docs/blob/master/docs/prerendering/shared/static-extensions-regex.md)
 - `opts.debug` {*boolean*} - [Optional] Enable debug and extra logging, default: `false`
 
