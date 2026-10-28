@@ -9,7 +9,6 @@ Constraints for every item: CommonJS, no runtime dependencies, no syntax or APIs
 Ideas from the sibling [`seo-middleware-nextjs`](https://github.com/veliovgroup/seo-middleware-nextjs) package and bugs found while comparing the two.
 
 1. Support `http://` service URLs. `RE.proto` accepts `http://`, but `https.request` throws for it, and every bot request silently falls back to the app. Pick `http` or `https` from the URL protocol. This also allows offline tests against a local stub.
-3. Skip `/.well-known/` paths, so ACME and other verification files are never pre-rendered. Skip requests whose host is `ostr.io` or a subdomain of it, to prevent render loops.
 5. Warn at startup when `auth` is empty, instead of only warning after the service answers 401 or 403. Accept the `OSTR_AUTH` env variable next to `SPIDERABLE_SERVICE_AUTH` and `PRERENDER_SERVICE_AUTH`. Do not throw, that would be a breaking change.
 6. Retry connection errors while no headers were sent. Add a `retries` option, default `1`. Never retry after the response started.
 8. Add a `logger` option, an object with `info` and `warn` methods, defaulting to `console`.

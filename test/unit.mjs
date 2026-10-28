@@ -311,9 +311,9 @@ describe('getRequestURL()', () => {
 });
 
 describe('middleware() rules', () => {
-  const run = (spiderable, path, { method = 'GET', ua = BOT_UA } = {}) => {
+  const run = (spiderable, path, { method = 'GET', ua = BOT_UA, host } = {}) => {
     let nextCalls = 0;
-    const result = spiderable.handler({ method, url: path, headers: { 'user-agent': ua } }, {}, () => {
+    const result = spiderable.handler({ method, url: path, headers: { 'user-agent': ua, host } }, {}, () => {
       nextCalls++;
     });
     return { result, nextCalls };
@@ -339,6 +339,16 @@ describe('middleware() rules', () => {
   it('skips static files', () => {
     assert.deepEqual(run(create(), '/logo.png'), { result: false, nextCalls: 1 });
     assert.deepEqual(run(create({ staticExt: /\.html$/ }), '/page.html'), { result: false, nextCalls: 1 });
+  });
+
+  it('skips `/.well-known/` paths', () => {
+    assert.deepEqual(run(create(), '/.well-known/acme-challenge/token'), { result: false, nextCalls: 1 });
+  });
+
+  it('skips requests to ostr.io hosts', () => {
+    for (const host of ['ostr.io', 'render.ostr.io', 'OSTR.IO:443']) {
+      assert.deepEqual(run(create(), '/', { host }), { result: false, nextCalls: 1 }, host);
+    }
   });
 
   it('applies `onlyRE`', () => {
@@ -465,6 +475,20 @@ describe('Rendering', () => {
       const resp = await get(app.port, '/');
       assert.strictEqual(resp.body, '<html>RENDERED</html>', method);
     }
+  });
+
+  it('renders hosts that only look like ostr.io', async () => {
+    const app = await startApp(create());
+    const resp = await new Promise((resolve) => {
+      httpRequest({ host: '127.0.0.1', port: app.port, path: '/', headers: { 'user-agent': BOT_UA, host: 'notostr.io' } }, (res) => {
+        let body = '';
+        res.on('data', (chunk) => {
+          body += chunk;
+        });
+        res.on('end', () => resolve(body));
+      }).end();
+    });
+    assert.strictEqual(resp, '<html>RENDERED</html>');
   });
 
   it('passes regular visitors to the app', async () => {
