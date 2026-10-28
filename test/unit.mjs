@@ -296,9 +296,11 @@ describe('getRequestURL()', () => {
     assert.strictEqual(urlObj.search, '?q=1');
   });
 
-  it('treats empty `_escaped_fragment_` as a render request', () => {
-    const urlObj = spiderable.getRequestURL({ url: '/page?_escaped_fragment_=', headers: { 'user-agent': HUMAN_UA } });
+  it('treats empty `_escaped_fragment_` as a render request and removes it', () => {
+    const urlObj = spiderable.getRequestURL({ url: '/page?_escaped_fragment_=&q=1', headers: { 'user-agent': HUMAN_UA } });
     assert.strictEqual(urlObj.pathname, '/page');
+    assert.strictEqual(urlObj.search, '?q=1');
+    assert.strictEqual(spiderable.getRequestURL({ url: '/page?_escaped_fragment_=', headers: { 'user-agent': HUMAN_UA } }).search, '');
   });
 
   it('collapses repeated slashes with `sanitizeUrls`', () => {
@@ -396,6 +398,22 @@ describe('Rendering', () => {
       assert.strictEqual(resp.body, '<html>RENDERED</html>', path);
     }
     assert.strictEqual(app.nextCalls, 0);
+  });
+
+  it('gives the same answer on every request for RegExp rules with `g` and `y` flags', async () => {
+    const app = await startApp(create({ onlyRE: /^\/blog/g, only: [/^\/re\//gy], staticExt: /\.png$/g }));
+    for (let attempt = 0; attempt < 3; attempt++) {
+      assert.strictEqual((await get(app.port, '/blog/post')).body, '<html>RENDERED</html>', `onlyRE, attempt ${attempt}`);
+      assert.strictEqual((await get(app.port, '/re/1')).body, '<html>RENDERED</html>', `only, attempt ${attempt}`);
+      assert.strictEqual((await get(app.port, '/blog/logo.png')).body, APP_BODY, `staticExt, attempt ${attempt}`);
+    }
+    assert.lengthOf(stub.requests, 6);
+  });
+
+  it('sends the URL without `_escaped_fragment_` to the rendering service', async () => {
+    const app = await startApp(create());
+    await get(app.port, '/page?_escaped_fragment_=&q=1', { ua: HUMAN_UA });
+    assert.strictEqual(stub.requests[0].url, 'http://example.com/page?q=1');
   });
 
   it('sends Basic auth and merges `requestOptions`', async () => {
