@@ -127,24 +127,20 @@ declare namespace Spiderable {
     method?: string;
     url?: string;
     headers: Record<string, string | string[] | undefined>;
-    aborted?: boolean;
-    destroyed?: boolean;
-    writableEnded?: boolean;
-    on(event: 'aborted', listener: () => void): unknown;
     on(event: 'error', listener: (error: Error) => void): unknown;
-    setTimeout?(msecs: number, callback?: () => void): unknown;
   }
 
   export interface ServerResponseLike {
     headersSent: boolean;
-    finished: boolean;
     writableEnded: boolean;
     setHeader(name: string, value: number | string | readonly string[]): void;
     writeHead(statusCode?: number): unknown;
     write(chunk: string | Uint8Array): unknown;
     end(chunk?: string | Uint8Array): unknown;
     on(event: 'error', listener: (error: Error) => void): unknown;
-    setTimeout?(msecs: number, callback?: () => void): unknown;
+    on(event: 'close' | 'finish', listener: () => void): unknown;
+    destroy(error?: Error): unknown;
+    setTimeout(msecs: number, callback?: () => void): unknown;
   }
 
   export interface RequestOptions {
