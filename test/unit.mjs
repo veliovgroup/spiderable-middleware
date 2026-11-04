@@ -672,15 +672,37 @@ describe('Failures', () => {
     assert.strictEqual(attempts, 1);
   });
 
-  it('ends the response when the rendering service stalls after headers', async () => {
+  it('destroys the response when the rendering service stalls after headers', async () => {
     stub.handle = (_req, res) => {
       res.writeHead(200, { 'content-type': 'text/html' });
       res.write('<html>partial');
     };
     const app = await startApp(create({ timeout: 300 }));
     const resp = await get(app.port, '/');
-    assert.strictEqual(resp.body, '<html>partial');
+    assert.isDefined(resp.error, 'crawler sees a failed response, not a complete page');
     assert.strictEqual(app.nextCalls, 0, 'no second response');
+  });
+
+  it('destroys the response when the rendering service resets the connection mid-body', async () => {
+    // TLS sockets can't send RST, use a plain HTTP rendering service
+    const rstStub = createHttpServer((_req, res) => {
+      res.writeHead(200, { 'content-type': 'text/html' });
+      res.write('<html>partial');
+      setTimeout(() => {
+        // RST instead of FIN on Node.js@>=16.17
+        if (typeof res.socket.resetAndDestroy === 'function') {
+          res.socket.resetAndDestroy();
+        } else {
+          res.socket.destroy();
+        }
+      }, 50);
+    });
+    apps.push(rstStub);
+    const stubPort = await listen(rstStub);
+    const app = await startApp(create({ serviceURL: `http://127.0.0.1:${stubPort}`, requestOptions: {} }));
+    const resp = await get(app.port, '/');
+    assert.isDefined(resp.error, 'crawler sees a failed response, not a complete page');
+    assert.strictEqual(app.nextCalls, 0);
   });
 
   it('passes request to the app when the rendering service is unreachable', async () => {

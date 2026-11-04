@@ -288,6 +288,12 @@ new Spiderable(opts?: SpiderableOptions);
 > [!NOTE]
 > Requests for static files (`opts.staticExt`), paths under `/.well-known/`, and requests to `ostr.io` hosts always pass to the app without pre-rendering.
 
+When the rendering endpoint fails, crawlers never get a broken page cached:
+
+- Connection error before the endpoint answered: the request is retried `opts.retries` times, then passed to the app with `next()`.
+- No answer within `opts.timeout`: the request is passed to the app with `next()`.
+- Failure after the response started, a timeout or a dropped connection mid-body: the connection to the crawler is destroyed instead of ending a partial page. Crawlers retry such requests later.
+
 ```js
 // CommonJS
 // const Spiderable = require('spiderable-middleware');
