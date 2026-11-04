@@ -236,9 +236,12 @@ describe('Constructor', () => {
     assert.isFalse(hasLog('warn', 'opts.auth'));
   });
 
-  it('warns at startup when `auth` is empty', () => {
-    create({ auth: '' });
+  it('warns at startup when `auth` is empty and the renderer is ostr.io', () => {
+    create({ auth: '', serviceURL: 'https://render.ostr.io' });
     assert.isTrue(hasLog('warn', '`opts.auth` is empty'));
+    logs.warn = [];
+    create({ auth: '' });
+    assert.isFalse(hasLog('warn', '`opts.auth` is empty'), 'self-hosted renderer may not need auth');
     logs.warn = [];
     create();
     assert.isFalse(hasLog('warn', '`opts.auth` is empty'));
