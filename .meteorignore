@@ -4,7 +4,9 @@
 .eslintrc
 .github
 .gitignore
-.mocharc.json
+.mocharc.cjs
+.c8rc.json
+coverage
 .npm
 .npmignore
 ascii
