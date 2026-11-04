@@ -10,7 +10,12 @@
       "import": "./lib/index.js",
       "require": "./lib/index.js",
       "default": "./lib/index.js"
-    }
+    },
+    "./lib/index.js": "./lib/index.js",
+    "./types/index.d.ts": "./types/index.d.ts",
+    "./types/meteor.d.ts": "./types/meteor.d.ts",
+    "./types/meteor": "./types/meteor.d.ts",
+    "./package.json": "./package.json"
   },
   "files": [
     "lib/index.js",
