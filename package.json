@@ -27,7 +27,8 @@
     "test": "mocha test/unit.mjs",
     "test:coverage": "c8 mocha test/unit.mjs",
     "test:integration": "mocha --require ts-node/register test/npm.mjs test/npm.ts",
-    "test:types": "tsd"
+    "test:types": "tsd",
+    "test:compat": "node test/compat.cjs"
   },
   "repository": {
     "type": "git",

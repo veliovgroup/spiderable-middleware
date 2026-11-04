@@ -528,4 +528,10 @@ npm run build
 npm run test:types
 ```
 
-GitHub Actions runs all of the above on every push, plus unit tests on Node.js 12, 14, and 16.
+Dependency-free smoke test, runs on every Node.js release down to 10.9:
+
+```sh
+npm run test:compat
+```
+
+GitHub Actions runs all of the above on every push, plus unit tests on Node.js 12, 14, 16, and 18, and the smoke test on Node.js 10.9 to 26.
