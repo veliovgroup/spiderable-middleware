@@ -305,6 +305,20 @@ describe('Constructor', () => {
     assert.strictEqual(spiderable.logger, logger);
   });
 
+  it('sends option warnings to a valid custom `logger`', () => {
+    const lines = [];
+    const logger = {
+      warn(...args) {
+        lines.push(args.join(' '));
+      },
+      info() {},
+    };
+    create({ logger, retries: -1, auth: '', serviceURL: 'https://render.ostr.io' });
+    assert.isTrue(lines.some((line) => line.includes('opts.retries')));
+    assert.isTrue(lines.some((line) => line.includes('`opts.auth` is empty')));
+    assert.lengthOf(logs.warn, 0);
+  });
+
   it('falls back to `console` when `logger` lacks `info` or `warn`', () => {
     for (const logger of ['console', { warn() {} }, { info() {} }]) {
       logs.warn = [];
