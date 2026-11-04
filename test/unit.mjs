@@ -8,6 +8,8 @@ import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
 import { assert } from 'chai';
 import { after, afterEach, before, beforeEach, describe, it } from 'mocha';
+import connect from 'connect';
+import express from 'express';
 import Spiderable from 'spiderable-middleware';
 
 const fixtures = join(dirname(fileURLToPath(import.meta.url)), 'fixtures');
@@ -519,6 +521,20 @@ describe('Rendering', () => {
     const app = await startApp(create());
     const resp = await get(app.port, '/');
     assert.strictEqual(resp.body.length, page.length);
+  });
+
+  it('accepts the instance in Express `app.use()` (Meteor@3 `WebApp.handlers`) and connect', async () => {
+    for (const [name, app] of [['express', express()], ['connect', connect()]]) {
+      app.use(create());
+      app.use((_req, res) => {
+        res.end(APP_BODY);
+      });
+      const server = createHttpServer(app);
+      apps.push(server);
+      const port = await listen(server);
+      assert.strictEqual((await get(port, '/')).body, '<html>RENDERED</html>', `${name}: crawler`);
+      assert.strictEqual((await get(port, '/', { ua: HUMAN_UA })).body, APP_BODY, `${name}: visitor`);
+    }
   });
 
   it('works through `.handle()` and `.handler()` aliases', async () => {

@@ -498,7 +498,7 @@ https.get('https://test:test@render-bypass.ostr.io/?url=http://example.com', (re
 
 ### Node.js/Mocha
 
-Unit tests run offline against a local stub of the rendering service. Integration tests call the public ostr.io test endpoint and need network access. Both need Node.js@>=18, the package itself runs on older releases.
+Unit tests run offline against a local stub of the rendering service. Integration tests call the public ostr.io test endpoint and need network access. Both need Node.js@>=20.19, the package itself runs on Node.js@>=10.9.
 
 ```sh
 # Install development dependencies

@@ -144,7 +144,7 @@ servers.push(listen(createServer(appConnect), Number(connectURL.port)));
 
 // Express server, the instance is passed directly (as in Meteor@3 `WebApp.handlers.use()`)
 const appExpress = express();
-appExpress.use(prerenders.express).get('*', (_req, res) => {
+appExpress.use(prerenders.express).use((_req, res) => {
   res.send(respExpress);
 });
 servers.push(listen(createServer(appExpress), Number(expressURL.port)));
