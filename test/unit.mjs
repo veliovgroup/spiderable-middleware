@@ -112,6 +112,12 @@ const create = (opts = {}) => withEnv({}, () => new Spiderable({
 const startApp = async (spiderable, onRequest) => {
   const state = { nextCalls: 0, returned: [] };
   const server = createHttpServer((req, res) => {
+    res.on('finish', () => {
+      // Runs after the package's own "finish" listener
+      setImmediate(() => {
+        state.timeoutListenersAfterFinish = res.listenerCount('timeout');
+      });
+    });
     state.returned.push(spiderable(req, res, () => {
       state.nextCalls++;
       if (!res.headersSent) {
@@ -443,6 +449,7 @@ describe('Rendering', () => {
     assert.isUndefined(resp.headers['x-empty']);
     assert.strictEqual(app.nextCalls, 0);
     assert.deepEqual(app.returned, [true]);
+    assert.strictEqual(app.timeoutListenersAfterFinish, 0, 'timeout listener removed');
     assert.strictEqual(stub.requests[0].url, 'http://example.com/page?q=1');
     assert.strictEqual(stub.requests[0].bot, BOT_UA);
     assert.match(stub.requests[0].headers['user-agent'], /^spiderable-middleware\//);
@@ -618,8 +625,14 @@ describe('Rendering service over plain HTTP', () => {
 describe('Failures', () => {
   it('passes request to the app when the rendering service times out', async () => {
     stub.handle = () => {};
-    const app = await startApp(create({ timeout: 200 }));
+    let timeoutListeners = -1;
+    const app = await startApp(create({ timeout: 200 }), (_req, res) => {
+      res.on('finish', () => {
+        timeoutListeners = res.listenerCount('timeout');
+      });
+    });
     const resp = await get(app.port, '/');
+    assert.strictEqual(timeoutListeners, 0, 'the app owns the socket timeout after `next()`');
     assert.strictEqual(resp.body, APP_BODY);
     assert.strictEqual(app.nextCalls, 1);
     assert.isTrue(hasLog('warn', 'didn\'t respond within 200ms'));
