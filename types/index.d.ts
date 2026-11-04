@@ -1,5 +1,3 @@
-/// <reference path="./meteor.d.ts" />
-
 /**
  * Instances are callable middleware functions,
  * pass the instance directly to `app.use()`.

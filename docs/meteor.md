@@ -43,6 +43,10 @@ WebApp.handlers.use(spiderable);
 > [!NOTE]
 > Meteor@3 serves requests with Express. `WebApp.connectHandlers` is a deprecated alias of `WebApp.handlers` and still works. Express accepts only functions, the `Spiderable` instance is a middleware function since `v2.4.0`. When using older releases of this package with Meteor@3, pass `spiderable.handle` instead of the instance.
 
+## TypeScript
+
+With [`zodern:types`](https://github.com/zodern/meteor-types), types for `meteor/ostrio:spiderable-middleware` come with the Atmosphere package. When the NPM package is installed instead, add `/// <reference types="spiderable-middleware/types/meteor" />` to use the same import path.
+
 ## Detect request from Pre-rendering engine in Meteor.js
 
 Pre-rendering engine will set `window.IS_PRERENDERING` global variable to `true`. As in Meteor/Blaze everything should be reactive, let's bound it with `ReactiveVar`:
