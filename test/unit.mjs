@@ -465,7 +465,7 @@ describe('Rendering', () => {
     assert.isUndefined(resp.headers['set-cookie']);
     assert.isUndefined(resp.headers['x-empty']);
     assert.strictEqual(app.nextCalls, 0);
-    assert.deepEqual(app.returned, [true]);
+    assert.deepEqual(app.returned, [undefined], 'callable instance returns nothing');
     assert.strictEqual(app.timeoutListenersAfterFinish, 0, 'timeout listener removed');
     assert.strictEqual(stub.requests[0].url, 'http://example.com/page?q=1');
     assert.strictEqual(stub.requests[0].bot, BOT_UA);
@@ -755,7 +755,7 @@ describe('Failures', () => {
     const app = await startApp(create({ requestOptions: { agent: 'not an agent' } }));
     const resp = await get(app.port, '/');
     assert.strictEqual(resp.body, APP_BODY);
-    assert.deepEqual(app.returned, [false]);
+    assert.deepEqual(app.returned, [undefined], 'callable instance returns nothing');
     assert.isTrue(hasLog('warn', 'Exception while connecting to external service'));
   });
 
