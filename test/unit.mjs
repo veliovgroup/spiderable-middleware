@@ -517,6 +517,12 @@ describe('Rendering', () => {
     assert.strictEqual(headers.accept, '*/*');
   });
 
+  it('sends a ready `Basic xxx` auth value as is', async () => {
+    const app = await startApp(create({ auth: 'Basic dXNlcjpwYXNz' }));
+    await get(app.port, '/');
+    assert.strictEqual(stub.requests[0].headers.authorization, 'Basic dXNlcjpwYXNz');
+  });
+
   it('warns on 401 and 403 from the rendering service', async () => {
     stub.handle = (_req, res) => {
       res.writeHead(401);

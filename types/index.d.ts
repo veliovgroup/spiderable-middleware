@@ -174,7 +174,8 @@ declare namespace Spiderable {
      */
     rootURL?: string;
     /**
-     * Authentication credentials in the form "username:password".
+     * Authentication credentials in the form "username:password",
+     * or a ready "Basic xxx" header value as shown in the ostr.io panel.
      * Defaults to the environment variable `SPIDERABLE_SERVICE_AUTH`, `PRERENDER_SERVICE_AUTH`, or `OSTR_AUTH`.
      */
     auth?: string;
