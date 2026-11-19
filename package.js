@@ -1,6 +1,6 @@
 Package.describe({
   name: 'ostrio:spiderable-middleware',
-  version: '2.4.1',
+  version: '2.4.2',
   summary: 'Boost organic traffic and enable SEO for Meteor.js application',
   git: 'https://github.com/veliovgroup/spiderable-middleware',
   documentation: 'README.md'
