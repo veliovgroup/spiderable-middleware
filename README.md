@@ -38,6 +38,7 @@ When paired with the global CDN and smart caching layer from [`ostr.io`](https:/
 - [Installation](https://github.com/veliovgroup/spiderable-middleware?tab=readme-ov-file#installation)
 - [Basic usage](https://github.com/veliovgroup/spiderable-middleware?tab=readme-ov-file#usage)
 - [Meteor.js usage](https://github.com/veliovgroup/spiderable-middleware/blob/master/docs/meteor.md)
+- [Koa, Fastify, h3, NestJS](https://github.com/veliovgroup/spiderable-middleware?tab=readme-ov-file#other-frameworks)
 - [__API__](https://github.com/veliovgroup/spiderable-middleware?tab=readme-ov-file#api)
   - [Constructor `new Spiderable()`](https://github.com/veliovgroup/spiderable-middleware?tab=readme-ov-file#constructor)
   - [Middleware](https://github.com/veliovgroup/spiderable-middleware?tab=readme-ov-file#handle)
@@ -147,6 +148,26 @@ app.listen(3000);
 
 > [!NOTE]
 > `Spiderable` instance is a middleware function, pass it to `.use()` directly. `spiderable.handle` and `spiderable.handler` are kept as aliases.
+
+### Other frameworks
+
+Frameworks with their own middleware signature take the instance through an adapter:
+
+```js
+// Koa, via koa-connect
+import c2k from 'koa-connect';
+app.use(c2k(spiderable));
+
+// Fastify, via @fastify/middie
+await fastify.register(import('@fastify/middie'));
+fastify.use(spiderable);
+
+// h3 v1 (Nuxt server, Nitro), via fromNodeMiddleware, needs v2.4.2 or newer
+import { fromNodeMiddleware } from 'h3';
+app.use(fromNodeMiddleware(spiderable));
+```
+
+NestJS on its default Express platform accepts the instance in `app.use(spiderable)`.
 
 > [!TIP]
 > We provide various options for `serviceURL` as "[Rendering Endpoints](https://github.com/ostr-io/ostrio-docs/blob/master/docs/prerendering/rendering-endpoints.md)", each endpoint has its own features to fit different project needs
