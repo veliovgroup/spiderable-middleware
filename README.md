@@ -492,10 +492,10 @@ Pass `{ debug: true }` or set `DEBUG=true` environment variable to enable debugg
 
 ```shell
 # cURL example:
-curl -v "https://test:test@render-bypass.ostr.io/?url=http://example.com"
+curl -v -u test:test "https://render-bypass.ostr.io/?url=http://example.com"
 ```
 
-In this example we're using `render-bypass.ostr.io` endpoint to avoid any possible cached results, [read more about rendering endpoints](https://github.com/veliovgroup/spiderable-middleware#rendering-endpoints). As API credentials we're using `test:test`, this part of URL can be replaced with `auth` option from Node.js example.
+In this example we're using `render-bypass.ostr.io` endpoint to avoid any possible cached results, [read more about rendering endpoints](https://github.com/veliovgroup/spiderable-middleware#rendering-endpoints). As API credentials we're using `test:test`, the public test login: it returns a "Prerendering test page" and has no account behind it. Replace it with the `auth` value from your Node.js setup to test your own domain.
 
 > [!TIP]
 > The API credentials and instructions can be found at the very bottom of [Pre-rendering Panel](https://ostr.io/service/prerender), — click on the name of your website, then on <kbd>Integration Guide</kbd> at the bottom of the page
@@ -504,7 +504,7 @@ In this example we're using `render-bypass.ostr.io` endpoint to avoid any possib
 // Node.js example:
 const https = require('https');
 
-https.get('https://test:test@render-bypass.ostr.io/?url=http://example.com', (resp) => {
+https.get('https://render-bypass.ostr.io/?url=http://example.com', { auth: 'test:test' }, (resp) => {
   let data = '';
 
   resp.on('data', (chunk) => {
